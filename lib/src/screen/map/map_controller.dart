@@ -2,12 +2,16 @@ import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:getx_map/src/screen/search/search_controller.dart';
+import 'package:getx_map/src/screen/search/search_screen.dart';
+import 'package:getx_map/src/service/api/route_api_service.dart';
 import 'package:getx_map/src/service/map_service.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapController extends GetxController {
   final MapService service = MapService();
+
   static MapController get to => Get.find();
 
   Position? currentPosition;
@@ -49,5 +53,21 @@ class MapController extends GetxController {
     // _addPolyLine(position);
     // await _addMarker(position);
     update();
+  }
+
+  Future<void> toSearch() async {
+    final result = await Get.toNamed(SearchScreen.routeName);
+
+    if (result is OriginAndDestinationResponse) {
+      final RouteAPI routeService = RouteAPI();
+
+      /// get route api
+      await routeService.getRoutes(
+        origin: result.origin.position,
+        destination: result.destination.position,
+      );
+
+      update();
+    }
   }
 }

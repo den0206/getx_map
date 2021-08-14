@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/screen/map/map_controller.dart';
-import 'package:getx_map/src/screen/search/search_screen.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatelessWidget {
@@ -23,6 +23,7 @@ class MapScreen extends StatelessWidget {
                 initialCameraPosition: controller.service.initialCameraPosition,
                 mapType: MapType.normal,
                 myLocationButtonEnabled: true,
+                zoomControlsEnabled: false,
                 myLocationEnabled: true,
                 compassEnabled: false,
                 padding: EdgeInsets.only(top: controller.service.topPadding),
@@ -61,8 +62,8 @@ class MapScreen extends StatelessWidget {
                             style: TextStyle(color: Colors.black),
                           ),
                         ),
-                        onPressed: () {
-                          Get.toNamed(SearchScreen.routeName);
+                        onPressed: () async {
+                          await controller.toSearch();
                         },
                       ),
                     ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
 import 'package:getx_map/src/screen/search/search_controller.dart';
+import 'package:getx_map/src/utils/distance_format.dart';
 
 class SearchScreen extends GetView<SearchController> {
   const SearchScreen({Key? key}) : super(key: key);
@@ -12,53 +13,76 @@ class SearchScreen extends GetView<SearchController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black87),
-        elevation: 0,
-        actions: [
-          CupertinoButton(
-            child: Text("Save"),
-            onPressed: () {},
-          )
-        ],
-      ),
+      appBar: _appbar(),
       body: Column(
         children: [
           _inputsFields(),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 1,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Text("AA"),
-                );
-              },
-            ),
-          )
+          _resultList(),
         ],
       ),
     );
   }
 
-  Column _inputsFields() {
-    return Column(
-      children: [
-        SearchInput(
-          controller: controller.originController,
-          title: "Origin",
-          enable: !controller.settedOrigin,
-        ),
-        SearchInput(
-          controller: controller.destinationCOntroller,
-          title: "Destination",
-          enable: controller.settedOrigin,
-        ),
-        SizedBox(
-          height: 10,
-        ),
+  AppBar _appbar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      iconTheme: IconThemeData(color: Colors.black87),
+      elevation: 0,
+      actions: [
+        Obx(
+          () => CupertinoButton(
+            child: Text("Save"),
+            onPressed: controller.canSubmit
+                ? () {
+                    controller.saveAction();
+                  }
+                : null,
+          ),
+        )
       ],
     );
+  }
+
+  Obx _resultList() {
+    return Obx(
+      () => Expanded(
+        child: ListView.builder(
+          itemCount: controller.queryPlaces.length,
+          itemBuilder: (BuildContext context, int index) {
+            final place = controller.queryPlaces[index];
+            return ListTile(
+              leading: Text(distanceFormat(place.distance)),
+              title: Text(place.title),
+              subtitle: Text(place.address),
+              onTap: () {
+                controller.pickPlace(place);
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _inputsFields() {
+    return Obx(() => Column(
+          children: [
+            SearchInput(
+              controller: controller.originController,
+              title: "Origin",
+              enable: !controller.settedOrigin,
+              onChanged: controller.queryChanged,
+            ),
+            SearchInput(
+              controller: controller.destinationCOntroller,
+              title: "Destination",
+              enable: controller.settedOrigin,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+          ],
+        ));
   }
 }
 
