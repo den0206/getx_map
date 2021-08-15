@@ -23,15 +23,14 @@ class MapScreen extends StatelessWidget {
                 initialCameraPosition: controller.service.initialCameraPosition,
                 mapType: MapType.normal,
                 myLocationButtonEnabled: true,
-                zoomControlsEnabled: false,
                 myLocationEnabled: true,
-                compassEnabled: false,
-                padding: EdgeInsets.only(top: controller.service.topPadding),
+                zoomControlsEnabled: true,
+                padding: EdgeInsets.only(bottom: controller.service.topPadding),
                 onMapCreated: controller.onMapCreated,
                 markers: controller.service.markers,
                 polylines: controller.service.polylines,
                 polygons: controller.service.polygons,
-                onTap: controller.onTap,
+                circles: controller.service.circles,
               ),
               Positioned(
                 bottom: 35,
@@ -39,8 +38,32 @@ class MapScreen extends StatelessWidget {
                 right: 20,
                 child: SafeArea(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      CupertinoButton(
+                        color: Colors.white,
+                        padding: const EdgeInsets.all(10),
+                        child: const Icon(
+                          Icons.add,
+                          color: Colors.black87,
+                        ),
+                        onPressed: () async {
+                          await controller.zoomUp();
+                        },
+                      ),
+                      const SizedBox(height: 5),
+                      CupertinoButton(
+                        color: Colors.white,
+                        padding: const EdgeInsets.all(10),
+                        child: const Icon(
+                          Icons.remove,
+                          color: Colors.black87,
+                        ),
+                        onPressed: () async {
+                          await controller.zoomDown();
+                        },
+                      ),
+                      const SizedBox(height: 20),
                       CupertinoButton(
                         padding: EdgeInsets.zero,
                         color: Colors.white,

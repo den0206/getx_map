@@ -65,24 +65,26 @@ class SearchScreen extends GetView<SearchController> {
   }
 
   Widget _inputsFields() {
-    return Obx(() => Column(
-          children: [
-            SearchInput(
-              controller: controller.originController,
-              title: "Origin",
-              enable: !controller.settedOrigin,
-              onChanged: controller.queryChanged,
-            ),
-            SearchInput(
-              controller: controller.destinationCOntroller,
-              title: "Destination",
-              enable: controller.settedOrigin,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-          ],
-        ));
+    return Obx(
+      () => Column(
+        children: [
+          SearchInput(
+            controller: controller.originController,
+            title: "Origin",
+            enable: !controller.settedOrigin,
+            onChanged: controller.queryChanged,
+          ),
+          SearchInput(
+            controller: controller.destinationCOntroller,
+            title: "Destination",
+            enable: controller.settedOrigin,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
+    );
   }
 }
 

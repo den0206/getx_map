@@ -48,26 +48,38 @@ class MapController extends GetxController {
     await service.updateCamera(currentPosition!, zoom);
   }
 
-  void onTap(LatLng position) async {
-    service.addMarker(position, icon: _homeIcon);
-    // _addPolyLine(position);
-    // await _addMarker(position);
-    update();
+  Future<void> zoomUp() async {
+    await service.setZoom(true);
+  }
+
+  Future<void> zoomDown() async {
+    await service.setZoom(false);
   }
 
   Future<void> toSearch() async {
     final result = await Get.toNamed(SearchScreen.routeName);
+    final routeAPI = RouteAPI();
 
     if (result is OriginAndDestinationResponse) {
-      final RouteAPI routeService = RouteAPI();
+      final origin = result.origin;
+      final destination = result.destination;
 
-      /// get route api
-      await routeService.getRoutes(
-        origin: result.origin.position,
-        destination: result.destination.position,
-      );
+      final routes = await routeAPI.getRoutes(
+          origin: origin.position, destination: destination.position);
 
-      update();
+      if (routes != null) {
+        service.presentRout(origin, destination, routes.first.points);
+
+        update();
+      }
     }
   }
 }
+
+
+  // void onTap(LatLng position) async {
+  //   // service.addMarker(position, icon: _homeIcon);
+  //   // _addPolyLine(position);
+  //   // await _addMarker(position);
+  //   update();
+  // }

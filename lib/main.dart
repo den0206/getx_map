@@ -15,7 +15,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // final String key = FlutterConfig.get('GOOGLE_MAPS_IOS_KEY');
     return GetMaterialApp(
       title: 'getx-map',
       theme: ThemeData(

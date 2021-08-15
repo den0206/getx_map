@@ -1,12 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:getx_map/src/model/here_route.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 class RouteAPI {
   final apiKey = FlutterConfig.get('HERE_API_KEY');
 
-  Future<List<Route>?> getRoutes({
+  Future<List<HereRoute>?> getRoutes({
     required LatLng origin,
     required LatLng destination,
   }) async {
@@ -27,5 +29,9 @@ class RouteAPI {
       final Exception error = Exception("StatusCode is ${response.statusCode}");
       throw error;
     }
+    final List<dynamic> jsonData = json.decode(response.body)["routes"];
+    final ref = jsonData.map((json) => HereRoute.fromJson(json)).toList();
+
+    return ref;
   }
 }
