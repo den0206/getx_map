@@ -36,6 +36,8 @@ class MapService {
   Future<Position> getCurrentPostion() async {
     Position current = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.bestForNavigation);
+
+    updateCamera(LatLng(current.latitude, current.longitude));
     return current;
   }
 
@@ -48,7 +50,9 @@ class MapService {
     return _iconMaker.future;
   }
 
-  Future<void> updateCamera(Position position, double zoom) async {
+  Future<void> updateCamera(LatLng position) async {
+    final zoom = await controller.getZoomLevel();
+
     final cameraUpdate = CameraUpdate.newLatLngZoom(
         LatLng(position.latitude, position.longitude), zoom);
 
@@ -74,13 +78,17 @@ class MapService {
     _polygons[polygonId] = polygon;
   }
 
-  void presentRout(Place origin, Place destination, List<LatLng> points) {
+  Future<void> presentRout(
+      Place origin, Place destination, List<LatLng> points) async {
+    resetMap();
+
     /// add polyline
     addPolyLine(points);
 
     /// zoom
     final zoomBounds = getCameraZoom(origin.position, destination.position);
-    controller.animateCamera(CameraUpdate.newLatLngBounds(zoomBounds, 70));
+    await controller
+        .animateCamera(CameraUpdate.newLatLngBounds(zoomBounds, 70));
 
     /// add Marke
     addMarker(
@@ -102,6 +110,13 @@ class MapService {
 }
 
 extension MapServiceEXT on MapService {
+  void resetMap() {
+    _markers.clear();
+    _polyLines.clear();
+    _polygons.clear();
+    _circles.clear();
+  }
+
   LatLngBounds getCameraZoom(LatLng origin, LatLng destination) {
     LatLngBounds bounds;
 
@@ -196,7 +211,47 @@ extension MapServiceEXT on MapService {
     );
     final cameraUpdate = CameraUpdate.newLatLngZoom(center, zoom);
     await controller.animateCamera(cameraUpdate);
-    print("COMPLETE");
+  }
+
+  Future<LatLng> getCenter() async {
+    LatLngBounds visibleRegion = await controller.getVisibleRegion();
+
+    LatLng centerLatLng = LatLng(
+      (visibleRegion.northeast.latitude + visibleRegion.southwest.latitude) / 2,
+      (visibleRegion.northeast.longitude + visibleRegion.southwest.longitude) /
+          2,
+    );
+
+    return centerLatLng;
+  }
+
+  void addCenterMarker(LatLng latLng) {
+    final markerId = MarkerId("center");
+    final marker = Marker(
+      markerId: markerId,
+      position: latLng,
+      draggable: true,
+      icon: BitmapDescriptor.defaultMarker,
+      rotation: 22.0,
+      infoWindow: InfoWindow(
+        title: "center",
+        snippet: "center",
+      ),
+    );
+
+    final circleId = CircleId("center");
+    final circle = Circle(
+      circleId: circleId,
+      strokeColor: Colors.red,
+      strokeWidth: 3,
+      radius: 400,
+      center: latLng,
+      fillColor: Color(0xFF21ba45),
+    );
+
+    _markers[markerId] = marker;
+
+    _circles[circleId] = circle;
   }
 }
 

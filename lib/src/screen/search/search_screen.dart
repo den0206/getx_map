@@ -78,6 +78,7 @@ class SearchScreen extends GetView<SearchController> {
             controller: controller.destinationCOntroller,
             title: "Destination",
             enable: controller.settedOrigin,
+            onChanged: controller.queryChanged,
           ),
           SizedBox(
             height: 10,

@@ -26,6 +26,8 @@ class SearchAPI {
     final uri = Uri.https(
         "autosuggest.search.hereapi.com", "/v1/autosuggest", queryParameters);
 
+    print(uri);
+
     final response = await http.get(uri);
 
     if (response.statusCode != 200) {

@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:getx_map/src/model/place.dart';
 import 'package:getx_map/src/screen/search/search_controller.dart';
 import 'package:getx_map/src/screen/search/search_screen.dart';
+import 'package:getx_map/src/service/api/reverse_api_service.dart';
 import 'package:getx_map/src/service/api/route_api_service.dart';
 import 'package:getx_map/src/service/map_service.dart';
 import 'package:get/get.dart';
@@ -16,7 +18,6 @@ class MapController extends GetxController {
 
   Position? currentPosition;
 
-  double zoom = 15;
   late BitmapDescriptor _homeIcon;
 
   void onMapCreated(GoogleMapController controller) async {
@@ -33,19 +34,32 @@ class MapController extends GetxController {
 
   Future<void> checkPermission() async {
     final gpsEnable = await Geolocator.isLocationServiceEnabled();
+    // final permission = await checkPermission();
 
     if (!gpsEnable) {
       await Geolocator.openLocationSettings();
       return;
     }
-    zoom = await service.controller.getZoomLevel();
+
     print("CAN");
+  }
+
+  Future<bool> hasPermission() async {
+    final status = await Geolocator.checkPermission();
+    print(status);
+    return status == LocationPermission.always ||
+        status == LocationPermission.whileInUse;
   }
 
   Future<void> setPosition() async {
     currentPosition = await service.getCurrentPostion();
 
-    await service.updateCamera(currentPosition!, zoom);
+    if (currentPosition != null) {
+      final Place? currentPlace = await ReverseAPI().getDetailPlace(
+          at: LatLng(currentPosition!.latitude, currentPosition!.longitude));
+
+      print(currentPlace?.address);
+    }
   }
 
   Future<void> zoomUp() async {
@@ -68,8 +82,12 @@ class MapController extends GetxController {
           origin: origin.position, destination: destination.position);
 
       if (routes != null) {
-        service.presentRout(origin, destination, routes.first.points);
+        /// centrer
 
+        await service.presentRout(origin, destination, routes.first.points);
+        final center = await service.getCenter();
+
+        service.addCenterMarker(center);
         update();
       }
     }
