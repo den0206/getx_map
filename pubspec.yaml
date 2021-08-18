@@ -9,7 +9,14 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  convert: ^3.0.1
+  crypto: ^3.0.1
   cupertino_icons: ^1.0.2
+  dio: ^4.0.0
+  flexible_polyline:
+    git:
+      url: https://github.com/heremaps/flexible-polyline.git
+      path: dart
   flutter:
     sdk: flutter
   flutter_cache_manager: ^3.1.2
@@ -19,10 +26,6 @@ dependencies:
   get: ^4.3.7
   google_maps_flutter: ^2.0.6
   permission_handler: ^8.1.4+2
-  flexible_polyline:
-    git:
-      url: https://github.com/heremaps/flexible-polyline.git
-      path: dart
 
 dev_dependencies:
   flutter_test:

@@ -48,7 +48,7 @@ class SearchController extends GetxController {
   void onInit() {
     super.onInit();
 
-    print(MapController.to.currentPosition);
+    // print(MapController.to.currentPosition);
   }
 
   @override
