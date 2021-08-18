@@ -42,9 +42,9 @@ class GetStationScreen extends GetView<GetStationController> {
                   itemBuilder: (BuildContext context, int index) {
                     final suggest = controller.suggestions[index];
                     return ListTile(
-                      title: Text(suggest.stationName),
-                      onTap: () {
-                        controller.selectSuggest(suggest);
+                      title: Text(suggest.name),
+                      onTap: () async {
+                        await controller.selectSuggest(suggest);
                       },
                     );
                   },

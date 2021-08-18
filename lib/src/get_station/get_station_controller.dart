@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/model/suggestion.dart';
-import 'package:getx_map/src/service/api/suggestion_api.dart';
+import 'package:getx_map/src/service/api/station/staion_api.dart';
 
 class GetStationBinding extends Bindings {
   @override
@@ -16,7 +16,8 @@ class GetStationBinding extends Bindings {
 class GetStationController extends GetxController {
   RxList<Suggest> suggestions = RxList<Suggest>();
   final TextEditingController tX = TextEditingController();
-  final apiSearvice = SuggestionAPI();
+
+  final stationAPI = StaionAPI();
 
   String _searchText = "";
   Timer? _searchTimer;
@@ -36,7 +37,7 @@ class GetStationController extends GetxController {
     try {
       if (_searchText.length >= 2)
         _searchTimer = Timer(Duration(seconds: 1), () async {
-          final temp = await apiSearvice.getStationSuggestion(_searchText);
+          final temp = await stationAPI.getStationSuggestion(_searchText);
           suggestions.addAll(temp);
         });
     } catch (e) {
@@ -44,7 +45,9 @@ class GetStationController extends GetxController {
     }
   }
 
-  void selectSuggest(Suggest suggest) {
-    print(suggest.id);
+  Future selectSuggest(Suggest suggest) async {
+    final station = await stationAPI.getStationDetail(suggest.id);
+
+    Get.back(result: station);
   }
 }

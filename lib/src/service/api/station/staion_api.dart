@@ -1,9 +1,10 @@
 import 'package:flutter_config/flutter_config.dart';
+import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/model/suggestion.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class SuggestionAPI {
+class StaionAPI {
   final stationKey = FlutterConfig.get("STATION_KEY");
 
   Future<List<Suggest>> getStationSuggestion(String q) async {
@@ -41,5 +42,32 @@ class SuggestionAPI {
 
       return [one];
     }
+  }
+
+  Future<Station> getStationDetail(String id) async {
+    final queryParametes = {
+      "key": stationKey,
+      "code": id,
+    };
+
+    final uri = Uri.https(
+      "api.ekispert.jp",
+      "v1/json/station",
+      queryParametes,
+    );
+
+    final response = await http.get(uri);
+    if (response.statusCode != 200) {
+      final Exception error = Exception("StatusCode is ${response.statusCode}");
+      throw error;
+    }
+
+    final Map<String, dynamic> jsonData =
+        json.decode(response.body)["ResultSet"]["Point"];
+
+    print(jsonData);
+
+    final temp = Station.fromJson(jsonData);
+    return temp;
   }
 }

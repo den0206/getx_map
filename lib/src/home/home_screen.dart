@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
 import 'package:get/get.dart';
-import 'package:getx_map/src/get_station/get_station_screen.dart';
-import 'package:getx_map/src/home/home_controller.dart';
 
-class HomeScreen extends GetView<HomeController> {
+import 'package:getx_map/src/home/home_controller.dart';
+import 'package:getx_map/src/model/station.dart';
+
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   static const routeName = '/Home';
@@ -14,19 +14,21 @@ class HomeScreen extends GetView<HomeController> {
     return Scaffold(
       body: GetX<HomeController>(
         init: HomeController(),
-        builder: (_) {
+        builder: (controller) {
           return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: controller.stations.length,
                   itemBuilder: (context, index) {
-                    return Text("exist");
+                    final staion = controller.stations[index];
+                    return CommonCell(station: staion);
                   },
                 ),
               ),
-              AddCell(),
+              if (controller.stations.length <= 5) CommonCell(),
             ],
           );
         },
@@ -35,10 +37,10 @@ class HomeScreen extends GetView<HomeController> {
   }
 }
 
-class AddCell extends StatelessWidget {
-  const AddCell({
-    Key? key,
-  }) : super(key: key);
+class CommonCell extends GetView<HomeController> {
+  const CommonCell({Key? key, this.station}) : super(key: key);
+
+  final Station? station;
 
   @override
   Widget build(BuildContext context) {
@@ -47,34 +49,52 @@ class AddCell extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: InkWell(
-              onTap: () {
-                Get.toNamed(GetStationScreen.routeName);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 5,
-                      spreadRadius: 0.5,
-                      offset: Offset(0.7, 0.7),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: InkWell(
+                onTap: () {
+                  if (station == null) {
+                    controller.pushGetScreen();
+                  } else {}
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 5,
+                        spreadRadius: 0.5,
+                        offset: Offset(0.7, 0.7),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Text(
+                      station == null ? "駅名を入力してください" : station!.name,
+                      textAlign: TextAlign.center,
                     ),
-                  ],
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Text(
-                    "駅名を入力してください",
-                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
             ),
           ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.arrow_forward_ios))
+          station == null
+              ? Icon(Icons.arrow_forward_ios)
+              : CircleAvatar(
+                  backgroundColor: Colors.red,
+                  radius: 15,
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: Icon(Icons.close),
+                    color: Colors.white,
+                    onPressed: () {
+                      controller.removeStation(station);
+                    },
+                  ),
+                ),
         ],
       ),
     );
