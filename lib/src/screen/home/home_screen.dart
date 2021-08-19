@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:getx_map/src/home/home_controller.dart';
 import 'package:getx_map/src/model/station.dart';
+import 'package:getx_map/src/screen/home/home_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,11 +11,25 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GetX<HomeController>(
-        init: HomeController(),
-        builder: (controller) {
-          return Column(
+    return GetX<HomeController>(
+      init: HomeController(),
+      builder: (controller) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            actions: [
+              TextButton(
+                child: Text("検索"),
+                onPressed: controller.stations.length < 2
+                    ? null
+                    : () {
+                        controller.pushMapScreen();
+                      },
+              )
+            ],
+          ),
+          body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(
@@ -23,16 +37,16 @@ class HomeScreen extends StatelessWidget {
                   shrinkWrap: true,
                   itemCount: controller.stations.length,
                   itemBuilder: (context, index) {
-                    final staion = controller.stations[index];
+                    final staion = controller.stations.elementAt(index);
                     return CommonCell(station: staion);
                   },
                 ),
               ),
               if (controller.stations.length <= 5) CommonCell(),
             ],
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -53,9 +67,7 @@ class CommonCell extends GetView<HomeController> {
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: InkWell(
                 onTap: () {
-                  if (station == null) {
-                    controller.pushGetScreen();
-                  } else {}
+                  controller.pushGetScreen(station);
                 },
                 child: Container(
                   decoration: BoxDecoration(

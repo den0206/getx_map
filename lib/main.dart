@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:get/get.dart';
-import 'package:getx_map/src/get_station/get_station_controller.dart';
-import 'package:getx_map/src/get_station/get_station_screen.dart';
-import 'package:getx_map/src/home/home_screen.dart';
+import 'package:getx_map/src/screen/get_station/get_station_controller.dart';
+import 'package:getx_map/src/screen/get_station/get_station_screen.dart';
+import 'package:getx_map/src/screen/home/home_screen.dart';
+import 'package:getx_map/src/screen/map/map_controller.dart';
 import 'package:getx_map/src/screen/map/map_screen.dart';
+
 import 'package:getx_map/src/screen/search/search_controller.dart';
 import 'package:getx_map/src/screen/search/search_screen.dart';
 import 'package:getx_map/src/service/api/token_service.dart';
@@ -24,16 +26,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+
       getPages: [
-        GetPage(
-          name: MapScreen.routeName,
-          page: () => MapScreen(),
-        ),
-        GetPage(
-          name: SearchScreen.routeName,
-          page: () => SearchScreen(),
-          binding: SearchBinding(),
-        ),
         GetPage(
           name: HomeScreen.routeName,
           page: () => HomeScreen(),
@@ -42,6 +36,16 @@ class MyApp extends StatelessWidget {
           name: GetStationScreen.routeName,
           page: () => GetStationScreen(),
           binding: GetStationBinding(),
+        ),
+        GetPage(
+          name: MapScreen.routeName,
+          page: () => MapScreen(),
+          // binding: MapBinding(),
+        ),
+        GetPage(
+          name: SearchScreen.routeName,
+          page: () => SearchScreen(),
+          binding: SearchBinding(),
         ),
       ],
       // initialRoute: MapScreen.routeName,

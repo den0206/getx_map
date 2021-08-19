@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/model/place.dart';
+import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/utils/image_to_bytes.dart';
 import 'package:getx_map/src/utils/map_style.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -22,7 +24,7 @@ class MapService {
   Set<Circle> get circles => _circles.values.toSet();
 
   final initialCameraPosition = const CameraPosition(
-    target: LatLng(-0.2053476, -78.4894387),
+    target: LatLng(35.6875, 139.703056),
     zoom: 15,
   );
 
@@ -76,6 +78,12 @@ class MapService {
           fillColor: color.withOpacity(0.4));
     }
     _polygons[polygonId] = polygon;
+  }
+
+  Future fitMarkerBounds() async {
+    final zoomBounds = getMarkersBounds(markers.toList());
+    await controller
+        .animateCamera((CameraUpdate.newLatLngBounds(zoomBounds, 70)));
   }
 
   Future<void> presentRout(
@@ -140,6 +148,23 @@ extension MapServiceEXT on MapService {
     return bounds;
   }
 
+  LatLngBounds getMarkersBounds(List<Marker> markers) {
+    var lngs = markers.map<double>((m) => m.position.longitude).toList();
+    var lats = markers.map<double>((m) => m.position.latitude).toList();
+
+    double topMost = lngs.reduce(max);
+    double leftMost = lats.reduce(min);
+    double rightMost = lats.reduce(max);
+    double bottomMost = lngs.reduce(min);
+
+    LatLngBounds bounds = LatLngBounds(
+      northeast: LatLng(rightMost, topMost),
+      southwest: LatLng(leftMost, bottomMost),
+    );
+
+    return bounds;
+  }
+
   void addPolyLine(List<LatLng> points) {
     final id = "polyid";
     final polylineId = PolylineId(id);
@@ -172,6 +197,22 @@ extension MapServiceEXT on MapService {
       infoWindow: InfoWindow(
         title: place.title,
         snippet: snippet,
+      ),
+    );
+
+    _markers[markerId] = marker;
+  }
+
+  void addStationMarker(Station station, {BitmapDescriptor? icon}) {
+    final markerId = MarkerId(station.id);
+    final marker = Marker(
+      markerId: markerId,
+      position: station.latLng,
+      draggable: true,
+      icon: icon ?? BitmapDescriptor.defaultMarker,
+      rotation: 22.0,
+      infoWindow: InfoWindow(
+        title: station.name,
       ),
     );
 
@@ -231,7 +272,7 @@ extension MapServiceEXT on MapService {
       markerId: markerId,
       position: latLng,
       draggable: true,
-      icon: BitmapDescriptor.defaultMarker,
+      icon: BitmapDescriptor.defaultMarkerWithHue(100),
       rotation: 22.0,
       infoWindow: InfoWindow(
         title: "center",
@@ -242,11 +283,11 @@ extension MapServiceEXT on MapService {
     final circleId = CircleId("center");
     final circle = Circle(
       circleId: circleId,
-      strokeColor: Colors.red,
+      strokeColor: Colors.white,
       strokeWidth: 3,
-      radius: 400,
+      radius: 800,
       center: latLng,
-      fillColor: Color(0xFF21ba45),
+      fillColor: Colors.green.withOpacity(0.5),
     );
 
     _markers[markerId] = marker;

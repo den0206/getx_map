@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:getx_map/src/get_station/get_station_controller.dart';
+import 'package:getx_map/src/screen/get_station/get_station_controller.dart';
 
 class GetStationScreen extends GetView<GetStationController> {
   const GetStationScreen({Key? key}) : super(key: key);
@@ -20,6 +20,8 @@ class GetStationScreen extends GetView<GetStationController> {
             Padding(
               padding: EdgeInsets.all(8),
               child: TextField(
+                focusNode: controller.focusNode,
+                controller: controller.tX,
                 decoration: InputDecoration(
                   labelText: "駅名を検索",
                   labelStyle: TextStyle(color: Colors.black),

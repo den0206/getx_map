@@ -6,7 +6,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/model/place.dart';
-import 'package:getx_map/src/screen/map/map_controller.dart';
+import 'package:getx_map/src/screen/example_map/exapmple_map_controller.dart';
 import 'package:getx_map/src/service/api/search_api_service.dart';
 
 class OriginAndDestinationResponse {
@@ -22,7 +22,7 @@ class SearchBinding extends Bindings {
 }
 
 class SearchController extends GetxController {
-  final Position? currentPosition = MapController.to.currentPosition;
+  final Position? currentPosition = ExampleMapController.to.currentPosition;
 
   final SearchAPI api = SearchAPI();
   final TextEditingController originController = TextEditingController();
