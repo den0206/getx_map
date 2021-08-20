@@ -52,11 +52,11 @@ class MapService {
     return _iconMaker.future;
   }
 
-  Future<void> updateCamera(LatLng position) async {
+  Future<void> updateCamera(LatLng latLng, {double? setZoom}) async {
     final zoom = await controller.getZoomLevel();
 
     final cameraUpdate = CameraUpdate.newLatLngZoom(
-        LatLng(position.latitude, position.longitude), zoom);
+        LatLng(latLng.latitude, latLng.longitude), setZoom ?? zoom);
 
     controller.animateCamera(cameraUpdate);
   }

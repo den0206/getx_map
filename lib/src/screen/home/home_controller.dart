@@ -4,11 +4,13 @@ import 'package:getx_map/src/model/station.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/screen/get_station/get_station_screen.dart';
 import 'package:getx_map/src/screen/map/map_screen.dart';
+import 'package:getx_map/src/service/api/station/staion_api.dart';
 import 'package:getx_map/src/utils/sample_staion.dart';
 
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
   RxList<Station> stations = RxList<Station>();
+  final stationAPI = StaionAPI();
 
   @override
   void onInit() {
@@ -38,6 +40,11 @@ class HomeController extends GetxController {
       MapScreen.routeName,
       arguments: value,
     );
+  }
+
+  Future<void> getStationInfo(Station station) async {
+    final lines = await stationAPI.getStationLines(station);
+    station.lines.addAll(lines);
   }
 
   void addStation(Station station) {

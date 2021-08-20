@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:getx_map/src/screen/get_station/get_station_controller.dart';
 import 'package:getx_map/src/screen/get_station/get_station_screen.dart';
 import 'package:getx_map/src/screen/home/home_screen.dart';
-import 'package:getx_map/src/screen/map/map_controller.dart';
 import 'package:getx_map/src/screen/map/map_screen.dart';
 
 import 'package:getx_map/src/screen/search/search_controller.dart';
