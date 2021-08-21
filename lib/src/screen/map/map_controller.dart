@@ -2,6 +2,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/model/station.dart';
+import 'package:getx_map/src/screen/shops/shops_screen.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
 import 'package:getx_map/src/service/map_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -57,13 +58,20 @@ class MapController extends GetxController {
 
     nearStations.addAll(temp);
     nearStations.forEach((station) {
-      service.addStationMarker(station);
+      service.addStationMarker(
+        station,
+        onTap: () => pushShopScreen(
+          station.latLng,
+        ),
+      );
     });
     update();
   }
 
-  void zoomPositon(LatLng latLng) {
-    service.updateCamera(latLng, setZoom: 15);
+  void pushShopScreen(LatLng latLng) {
+    final value = latLng;
+
+    Get.toNamed(ShopsScreen.routeName, arguments: value);
   }
 
   void zoomStation(Station station) {

@@ -136,7 +136,7 @@ class MapScreen extends StatelessWidget {
                                 child: Text(station.name),
                               ),
                               onTap: () {
-                                controller.zoomPositon(station.latLng);
+                                controller.zoomStation(station);
                               },
                             );
                           },

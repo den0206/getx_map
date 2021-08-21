@@ -203,7 +203,8 @@ extension MapServiceEXT on MapService {
     _markers[markerId] = marker;
   }
 
-  void addStationMarker(Station station, {BitmapDescriptor? icon}) {
+  void addStationMarker(Station station,
+      {BitmapDescriptor? icon, Function()? onTap}) {
     final markerId = MarkerId(station.id);
     final marker = Marker(
       markerId: markerId,
@@ -214,6 +215,7 @@ extension MapServiceEXT on MapService {
       infoWindow: InfoWindow(
         title: station.name,
       ),
+      onTap: onTap,
     );
 
     _markers[markerId] = marker;

@@ -8,6 +8,8 @@ import 'package:getx_map/src/screen/map/map_screen.dart';
 
 import 'package:getx_map/src/screen/search/search_controller.dart';
 import 'package:getx_map/src/screen/search/search_screen.dart';
+import 'package:getx_map/src/screen/shops/shops_controller.dart';
+import 'package:getx_map/src/screen/shops/shops_screen.dart';
 import 'package:getx_map/src/service/api/token_service.dart';
 
 void main() async {
@@ -45,6 +47,11 @@ class MyApp extends StatelessWidget {
           name: SearchScreen.routeName,
           page: () => SearchScreen(),
           binding: SearchBinding(),
+        ),
+        GetPage(
+          name: ShopsScreen.routeName,
+          page: () => ShopsScreen(),
+          binding: ShopsBinding(),
         ),
       ],
       // initialRoute: MapScreen.routeName,

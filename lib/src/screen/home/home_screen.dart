@@ -30,8 +30,47 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                height: MediaQuery.of(context).size.height / 6,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          WidgetSpan(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: Icon(
+                                Icons.group,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                          TextSpan(
+                            text: "現在の人数",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 25,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Obx(
+                      () => Text(
+                        "${controller.stations.length.toString()} 人",
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.w800),
+                      ),
+                    )
+                  ],
+                ),
+              ),
               Flexible(
                 child: ListView.builder(
                   shrinkWrap: true,
