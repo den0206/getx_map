@@ -9,7 +9,13 @@ import 'package:getx_map/src/utils/sample_staion.dart';
 
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
-  RxList<Station> stations = RxList<Station>();
+  RxList<Station?> stations = RxList<Station?>();
+
+  RxList<Station> get completeStations {
+    final a = stations.whereType<Station>().toList();
+    return a.obs;
+  }
+
   final stationAPI = StaionAPI();
 
   @override
@@ -20,21 +26,26 @@ class HomeController extends GetxController {
     stations.addAll(sampleStaion);
   }
 
-  Future<void> pushGetScreen(Station? station) async {
+  Future<void> pushGetScreen(Station? station, int index) async {
     if (station == null) {
       final station = await Get.toNamed(GetStationScreen.routeName);
 
       if (station is Station) {
-        addStation(station);
+        if (!stations.map((station) => station?.id).contains(station.id))
+          stations[index] = station;
       }
     } else {
-      final int selectedIndex = stations.indexOf(station);
-      Get.toNamed(GetStationScreen.routeName, arguments: selectedIndex);
+      // final int selectedIndex = stations.indexOf(station);
+      Get.toNamed(GetStationScreen.routeName, arguments: index);
     }
   }
 
   void pushMapScreen() {
-    final value = stations.map((station) => station).toList();
+    if (completeStations.length < 2) {
+      return;
+    }
+
+    final value = completeStations.map((station) => station).toList();
 
     Get.toNamed(
       MapScreen.routeName,
@@ -47,12 +58,8 @@ class HomeController extends GetxController {
     station.lines.addAll(lines);
   }
 
-  void addStation(Station station) {
-    if (!stations.map((station) => station.id).contains(station.id))
-      stations.add(station);
-  }
-
-  void removeStation(Station? station) {
+  void removeStation({Station? station, int? index}) {
     if (station != null) stations.remove(station);
+    if (index != null) stations.removeAt(index);
   }
 }

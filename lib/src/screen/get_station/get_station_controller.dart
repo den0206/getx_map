@@ -45,7 +45,7 @@ class GetStationController extends GetxController {
   void _setSelectedIndex() {
     if (selectedIndex != null) {
       final selectStation = HomeController.to.stations[selectedIndex!];
-      tX.text = selectStation.name;
+      tX.text = selectStation!.name;
     }
   }
 

@@ -11,6 +11,9 @@ class ShopAPI {
   int currentIndex = 1;
 
   Future<List<Shop>> getShops(LatLng latLng) async {
+    /// wait a little call api;
+    if (currentIndex != 1) await Future.delayed(Duration(milliseconds: 500));
+
     List<Shop> temp = [];
 
     final queryParametes = {
@@ -41,10 +44,8 @@ class ShopAPI {
 
     if (jsonData.isNotEmpty)
       temp = jsonData.map((json) => Shop.fromJson(json)).toList();
-    currentIndex += temp.length;
-    print(currentIndex);
 
-    print(temp.first.stationName);
+    currentIndex += temp.length;
 
     return temp;
   }

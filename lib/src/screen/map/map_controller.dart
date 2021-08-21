@@ -34,6 +34,7 @@ class MapController extends GetxController {
     await setCenterCircle();
 
     await getNearStations();
+    print(service.markers.map((e) => e.markerId));
   }
 
   Future addStationMarkers() async {
@@ -51,6 +52,23 @@ class MapController extends GetxController {
 
     service.addCenterMarker(center);
     // update();
+  }
+
+  Future<void> onMapLongPress(LatLng latLng) async {
+    print(latLng);
+
+    /// clear markers
+    await Future.forEach(nearStations,
+        (Station station) async => service.removeStationMarker(station));
+    // nearStations.forEach((station) => service.removeStationMarker(station));
+    nearStations.clear();
+
+    update();
+
+    centerLatLng = latLng;
+    service.addCenterMarker(centerLatLng);
+    await getNearStations();
+    update();
   }
 
   Future<void> getNearStations() async {

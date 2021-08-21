@@ -221,6 +221,12 @@ extension MapServiceEXT on MapService {
     _markers[markerId] = marker;
   }
 
+  void removeStationMarker(Station station) {
+    final markerId = MarkerId(station.id);
+
+    _markers.remove(markerId);
+  }
+
   void addCircle(Place place) {
     final circleId = CircleId(place.id);
     final circle = Circle(

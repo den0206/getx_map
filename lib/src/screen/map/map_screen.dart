@@ -27,11 +27,15 @@ class MapScreen extends StatelessWidget {
                 mapType: MapType.normal,
                 myLocationButtonEnabled: false,
                 myLocationEnabled: false,
+                markers: controller.service.markers,
+                circles: controller.service.circles,
                 onMapCreated: (map) async {
                   await controller.onMapCreate(map);
                 },
-                markers: controller.service.markers,
-                circles: controller.service.circles,
+                onLongPress: (latLng) async {
+                  /// change center circle;
+                  await controller.onMapLongPress(latLng);
+                },
               ),
               Positioned(
                 top: 0.0,
