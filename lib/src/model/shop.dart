@@ -67,3 +67,61 @@ class Genre {
     return data;
   }
 }
+
+// https://webservice.recruit.co.jp/hotpepper/genre/v1/?key=
+final allGenre = RestautantGenre.values;
+
+enum RestautantGenre {
+  izaka,
+  cafe,
+  bar,
+  yakiniku,
+  ramen,
+  italian,
+  europian,
+  washoku,
+}
+
+extension RestautantGenreEXT on RestautantGenre {
+  String get title {
+    switch (this) {
+      case RestautantGenre.izaka:
+        return "居酒屋";
+      case RestautantGenre.cafe:
+        return "カフェ";
+      case RestautantGenre.bar:
+        return "バー";
+      case RestautantGenre.yakiniku:
+        return "焼肉";
+      case RestautantGenre.ramen:
+        return "ラーメン";
+      case RestautantGenre.italian:
+        return "イタリアン";
+      case RestautantGenre.europian:
+        return "洋食";
+      case RestautantGenre.washoku:
+        return "和食";
+    }
+  }
+
+  String get genreCode {
+    switch (this) {
+      case RestautantGenre.izaka:
+        return "G001";
+      case RestautantGenre.cafe:
+        return "G014";
+      case RestautantGenre.bar:
+        return "G012";
+      case RestautantGenre.yakiniku:
+        return "G008";
+      case RestautantGenre.ramen:
+        return "G013";
+      case RestautantGenre.italian:
+        return "G006";
+      case RestautantGenre.europian:
+        return "G005";
+      case RestautantGenre.washoku:
+        return "G004";
+    }
+  }
+}

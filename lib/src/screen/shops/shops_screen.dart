@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/screen/shops/shops_controller.dart';
+import 'package:getx_map/src/screen/widget/common_chip.dart';
+import 'package:getx_map/src/screen/widget/loading_widhet.dart';
 
 class ShopsScreen extends GetView<ShopsController> {
   const ShopsScreen({Key? key}) : super(key: key);
@@ -15,16 +17,40 @@ class ShopsScreen extends GetView<ShopsController> {
         title: Text('Title'),
       ),
       body: Obx(
-        () => ListView.builder(
-          itemCount: controller.shops.length,
-          itemBuilder: (BuildContext context, int index) {
-            final shop = controller.shops[index];
+        () => Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.07,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: allGenre.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final genre = allGenre[index];
+                    return CommonChip(
+                      label: genre.title,
+                      selected: false,
+                    );
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: controller.shops.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final shop = controller.shops[index];
 
-            if (index == controller.shops.length - 1) {
-              controller.fetchShops();
-            }
-            return ShopCell(shop: shop);
-          },
+                  if (index == controller.shops.length - 1) {
+                    controller.fetchShops();
+                    if (controller.isLoading) return LoadingCellWidget();
+                  }
+                  return ShopCell(shop: shop);
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -91,6 +117,7 @@ class ShopCell extends StatelessWidget {
                 ),
               ),
               Container(
+                constraints: BoxConstraints(maxWidth: 100),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
@@ -101,13 +128,18 @@ class ShopCell extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
                         Icons.directions_transit,
                         color: Colors.grey[400],
                       ),
-                      Text(
-                        shop.stationName,
+                      Flexible(
+                        child: Text(
+                          shop.stationName,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                        ),
                       )
                     ],
                   ),

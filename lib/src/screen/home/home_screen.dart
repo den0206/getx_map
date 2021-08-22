@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/home/home_controller.dart';
+import 'package:getx_map/src/screen/widget/background_video_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,101 +16,126 @@ class HomeScreen extends StatelessWidget {
       init: HomeController(),
       builder: (controller) {
         return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            actions: [
-              TextButton(
-                child: Text("検索"),
-                onPressed: controller.completeStations.length < 2
-                    ? null
-                    : () {
-                        controller.pushMapScreen();
-                      },
-              )
-            ],
-          ),
-          body: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
+          // appBar: AppBar(
+          //   backgroundColor: Colors.transparent,
+          //   elevation: 0,
+          //   actions: [
+          //     TextButton(
+          //       child: Text("検索"),
+          //       onPressed: controller.completeStations.length < 2
+          //           ? null
+          //           : () {
+          //               controller.pushMapScreen();
+          //             },
+          //     )
+          //   ],
+          // ),
+          body: Stack(
             children: [
-              Container(
-                height: MediaQuery.of(context).size.height / 6,
+              BackgroundVideoScreen(videoPath: "assets/videos/station-0.mp4"),
+              SafeArea(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    RichText(
-                      text: TextSpan(
+                    Container(
+                      height: MediaQuery.of(context).size.height / 6.5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          WidgetSpan(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: Icon(
-                                Icons.group,
-                                size: 20,
-                              ),
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                WidgetSpan(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Icon(
+                                      Icons.group,
+                                      size: 35,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: "現在の人数",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          TextSpan(
-                            text: "現在の人数",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 25,
-                              fontWeight: FontWeight.w800,
+                          Obx(
+                            () => Text(
+                              "${controller.completeStations.length.toString()} 人",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w800),
                             ),
-                          ),
+                          )
                         ],
                       ),
                     ),
-                    Obx(
-                      () => Text(
-                        "${controller.completeStations.length.toString()} 人",
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w800),
+                    if (controller.stations.length < 5)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.blue,
+                            radius: 25,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(Icons.add),
+                              color: Colors.white,
+                              onPressed: () {
+                                /// add empty cell;
+                                controller.stations.add(null);
+                              },
+                            ),
+                          ),
+                        ),
                       ),
-                    )
-                  ],
-                ),
-              ),
-              if (controller.stations.length < 5)
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.blue,
-                      radius: 25,
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        icon: Icon(Icons.add),
-                        color: Colors.white,
-                        onPressed: () {
-                          /// add empty cell;
-                          controller.stations.add(null);
+                    Flexible(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: controller.stations.length,
+                        itemBuilder: (context, index) {
+                          final staion = controller.stations.elementAt(index);
+                          if (staion != null) {
+                            return StationCell(
+                              station: staion,
+                            );
+                          } else {
+                            return EmptyCell(
+                              index: index,
+                            );
+                          }
                         },
                       ),
                     ),
-                  ),
-                ),
-              Flexible(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: controller.stations.length,
-                  itemBuilder: (context, index) {
-                    final staion = controller.stations.elementAt(index);
-                    if (staion != null) {
-                      return StationCell(
-                        station: staion,
-                      );
-                    } else {
-                      return EmptyCell(
-                        index: index,
-                      );
-                    }
-                  },
+                    // if (controller.stations.length <= 5) CommonCell(),
+                  ],
                 ),
               ),
-              // if (controller.stations.length <= 5) CommonCell(),
+              Positioned(
+                top: 30,
+                right: 20,
+                child: TextButton(
+                  child: Text(
+                    "検索",
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  onPressed: controller.completeStations.length < 2
+                      ? null
+                      : () {
+                          controller.pushMapScreen();
+                        },
+                ),
+              ),
             ],
           ),
         );

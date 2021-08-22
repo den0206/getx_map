@@ -20,6 +20,9 @@ class MapController extends GetxController {
   final service = MapService();
   final stationAPI = StaionAPI();
 
+  bool showMenu = true;
+  int? selectedIndex;
+
   late LatLng centerLatLng;
 
   @override
@@ -86,6 +89,14 @@ class MapController extends GetxController {
     update();
   }
 
+  void selectedChip(int index) async {
+    selectedIndex = index;
+
+    final sta = stations[index];
+    await service.updateCamera(sta.latLng, setZoom: 15);
+    update();
+  }
+
   void pushShopScreen(LatLng latLng) {
     final value = latLng;
 
@@ -102,5 +113,10 @@ class MapController extends GetxController {
 
   Future<void> zoomDown() async {
     await service.setZoom(false);
+  }
+
+  void toggleMenuBar() {
+    showMenu = !showMenu;
+    update();
   }
 }
