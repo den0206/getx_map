@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:getx_map/src/utils/consts_color.dart';
 
 class CommonChip extends StatelessWidget {
   const CommonChip({
@@ -21,8 +22,9 @@ class CommonChip extends StatelessWidget {
       child: ChoiceChip(
         labelPadding: EdgeInsets.all(5.0),
         avatar: leadingIcon,
-        backgroundColor: Colors.white,
-        labelStyle: TextStyle(color: Colors.black),
+        backgroundColor: Colors.black,
+        selectedColor: ColorsConsts.themeYellow,
+        labelStyle: TextStyle(color: Colors.white),
         label: Text(label),
         elevation: 6.0,
         shadowColor: Colors.grey[60],

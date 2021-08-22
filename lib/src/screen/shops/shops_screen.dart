@@ -14,7 +14,8 @@ class ShopsScreen extends GetView<ShopsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Title'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: Column(
         children: [
@@ -69,6 +70,7 @@ class ShopCell extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Card(
+        color: Colors.grey[200],
         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),

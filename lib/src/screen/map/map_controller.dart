@@ -100,6 +100,7 @@ class MapController extends GetxController {
 
     final sta = stations[index];
     await service.updateCamera(sta.latLng, setZoom: 15);
+    service.showInfoService(sta.id);
     update();
   }
 

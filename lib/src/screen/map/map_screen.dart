@@ -116,7 +116,7 @@ class MapScreen extends GetView<MapController> {
           height: ksheetHeight,
           margin: EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-            color: Colors.grey[300],
+            color: Colors.grey,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15),
               topRight: Radius.circular(15),
@@ -135,7 +135,9 @@ class MapScreen extends GetView<MapController> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 8),
-                child: Text("最寄り駅"),
+                child: Text(
+                  "最寄り駅",
+                ),
               ),
               Flexible(
                 child: ListView.builder(
@@ -145,7 +147,9 @@ class MapScreen extends GetView<MapController> {
                     final station = controller.nearStations[index];
                     return ListTile(
                       title: Center(
-                        child: Text(station.name),
+                        child: Text(
+                          station.name,
+                        ),
                       ),
                       onTap: () {
                         controller.zoomStation(station);
@@ -170,11 +174,11 @@ class MapScreen extends GetView<MapController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CupertinoButton(
-              color: Colors.white,
+              color: Colors.black87,
               padding: const EdgeInsets.all(10),
               child: const Icon(
                 Icons.add,
-                color: Colors.black87,
+                color: Colors.yellow,
               ),
               onPressed: () async {
                 await controller.zoomUp();
@@ -182,11 +186,11 @@ class MapScreen extends GetView<MapController> {
             ),
             const SizedBox(height: 5),
             CupertinoButton(
-              color: Colors.white,
+              color: Colors.black87,
               padding: const EdgeInsets.all(10),
               child: const Icon(
                 Icons.remove,
-                color: Colors.black87,
+                color: Colors.yellow,
               ),
               onPressed: () async {
                 await controller.zoomDown();
@@ -204,11 +208,17 @@ class MapScreen extends GetView<MapController> {
       right: 20,
       child: SafeArea(
         child: FloatingActionButton.extended(
-          backgroundColor: Colors.green[300],
+          backgroundColor: ColorsConsts.themeYellow,
+          // backgroundColor: Colors.green[300],
           onPressed: () {
             controller.service.fitMarkerBounds();
           },
-          label: Text('Default Position'),
+          label: Text(
+            'Default Position',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
           icon: Icon(
             Icons.location_on,
             color: Colors.red,

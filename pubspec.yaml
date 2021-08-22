@@ -28,6 +28,7 @@ dependencies:
   permission_handler: ^8.1.4+2
   url_launcher: ^6.0.9
   video_player: ^2.1.14
+  flutter_launcher_icons: any
 
 dev_dependencies:
   flutter_test:
@@ -40,3 +41,8 @@ flutter:
   assets:
     - assets/images/
     - assets/videos/
+
+flutter_icons:
+  android: true 
+  ios: true
+  image_path: "assets/icon/get_map_icon_0.png"

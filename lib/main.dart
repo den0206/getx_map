@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor: ColorsConsts.themeYellow,
+        cardColor: Colors.grey,
         // scaffoldBackgroundColor: hexToColor("#f7b611"),
       ),
       initialBinding: MarkersBinding(),

@@ -169,9 +169,10 @@ class StationCell extends GetView<HomeController> {
                 ],
               ),
               child: Card(
-                color: Colors.grey,
-
-                // color: Colors.grey[200],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                color: Colors.blue[200],
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -188,14 +189,16 @@ class StationCell extends GetView<HomeController> {
                           children: [
                             Icon(
                               Icons.directions_transit,
-                              color: Colors.grey[400],
+                              color: Colors.black,
+                              // color: Colors.grey[400],
                             ),
                             SizedBox(
                               width: 5,
                             ),
                             Text(
                               "${station.name} 駅",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                             Spacer(),
                             Icon(
@@ -216,7 +219,12 @@ class StationCell extends GetView<HomeController> {
                                       textStyle: TextStyle(
                                         fontSize: 10,
                                       )),
-                                  child: Text("路線を表示する"),
+                                  child: Text(
+                                    "路線を表示する",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                   onPressed: () async {
                                     await controller.getStationInfo(station);
                                   },
@@ -312,8 +320,10 @@ class EmptyCell extends GetView<HomeController> {
                   ],
                 ),
                 child: Card(
-                  color: Colors.grey,
-                  // color: Colors.grey[200],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  color: Colors.blue[200],
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 10),

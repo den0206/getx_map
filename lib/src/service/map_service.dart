@@ -62,6 +62,10 @@ class MapService {
     controller.animateCamera(cameraUpdate);
   }
 
+  void showInfoService(String id) {
+    controller.showMarkerInfoWindow(MarkerId(id));
+  }
+
   void addPolygon(LatLng position) {
     final id = "0";
     final polygonId = PolygonId(id);
