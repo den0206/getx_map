@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/model/place.dart';
 import 'package:getx_map/src/model/station.dart';
+import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:getx_map/src/utils/image_to_bytes.dart';
 import 'package:getx_map/src/utils/map_style.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -193,7 +194,6 @@ extension MapServiceEXT on MapService {
       position: place.position,
       draggable: true,
       icon: icon ?? BitmapDescriptor.defaultMarker,
-      rotation: 22.0,
       infoWindow: InfoWindow(
         title: place.title,
         snippet: snippet,
@@ -211,7 +211,6 @@ extension MapServiceEXT on MapService {
       position: station.latLng,
       draggable: true,
       icon: icon ?? BitmapDescriptor.defaultMarker,
-      rotation: 22.0,
       infoWindow: InfoWindow(
         title: station.name,
       ),
@@ -280,8 +279,7 @@ extension MapServiceEXT on MapService {
       markerId: markerId,
       position: latLng,
       draggable: true,
-      icon: BitmapDescriptor.defaultMarkerWithHue(100),
-      rotation: 22.0,
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
       infoWindow: InfoWindow(
         title: "center",
         snippet: "center",
@@ -291,11 +289,11 @@ extension MapServiceEXT on MapService {
     final circleId = CircleId("center");
     final circle = Circle(
       circleId: circleId,
-      strokeColor: Colors.white,
+      strokeColor: Colors.grey,
       strokeWidth: 3,
-      radius: 800,
+      radius: 1000,
       center: latLng,
-      fillColor: Colors.green.withOpacity(0.5),
+      fillColor: ColorsConsts.themeYellow.withOpacity(0.5),
     );
 
     _markers[markerId] = marker;

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/home/home_controller.dart';
-import 'package:getx_map/src/screen/widget/background_video_screen.dart';
+import 'package:getx_map/src/utils/consts_color.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,23 +16,9 @@ class HomeScreen extends StatelessWidget {
       init: HomeController(),
       builder: (controller) {
         return Scaffold(
-          // appBar: AppBar(
-          //   backgroundColor: Colors.transparent,
-          //   elevation: 0,
-          //   actions: [
-          //     TextButton(
-          //       child: Text("検索"),
-          //       onPressed: controller.completeStations.length < 2
-          //           ? null
-          //           : () {
-          //               controller.pushMapScreen();
-          //             },
-          //     )
-          //   ],
-          // ),
           body: Stack(
             children: [
-              BackgroundVideoScreen(videoPath: "assets/videos/station-0.mp4"),
+              // BackgroundVideoScreen(videoPath: "assets/videos/station-0.mp4"),
               SafeArea(
                 child: Column(
                   // mainAxisAlignment: MainAxisAlignment.center,
@@ -52,15 +38,14 @@ class HomeScreen extends StatelessWidget {
                                     child: Icon(
                                       Icons.group,
                                       size: 35,
-                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
                                 TextSpan(
                                   text: "現在の人数",
                                   style: TextStyle(
-                                    color: Colors.white,
                                     fontSize: 25,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.w800,
                                   ),
                                 ),
@@ -71,9 +56,7 @@ class HomeScreen extends StatelessWidget {
                             () => Text(
                               "${controller.completeStations.length.toString()} 人",
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w800),
+                                  fontSize: 30, fontWeight: FontWeight.w800),
                             ),
                           )
                         ],
@@ -85,12 +68,12 @@ class HomeScreen extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: CircleAvatar(
-                            backgroundColor: Colors.blue,
+                            backgroundColor: Colors.black,
                             radius: 25,
                             child: IconButton(
                               padding: EdgeInsets.zero,
                               icon: Icon(Icons.add),
-                              color: Colors.white,
+                              color: ColorsConsts.themeYellow,
                               onPressed: () {
                                 /// add empty cell;
                                 controller.stations.add(null);
@@ -108,6 +91,7 @@ class HomeScreen extends StatelessWidget {
                           if (staion != null) {
                             return StationCell(
                               station: staion,
+                              index: index,
                             );
                           } else {
                             return EmptyCell(
@@ -125,9 +109,12 @@ class HomeScreen extends StatelessWidget {
                 top: 30,
                 right: 20,
                 child: TextButton(
+                  style: TextButton.styleFrom(
+                    textStyle: TextStyle(
+                        fontWeight: FontWeight.w500, color: Colors.black),
+                  ),
                   child: Text(
                     "検索",
-                    style: TextStyle(fontWeight: FontWeight.w500),
                   ),
                   onPressed: controller.completeStations.length < 2
                       ? null
@@ -150,9 +137,11 @@ class StationCell extends GetView<HomeController> {
   const StationCell({
     Key? key,
     required this.station,
+    required this.index,
   }) : super(key: key);
 
   final Station station;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +169,9 @@ class StationCell extends GetView<HomeController> {
                 ],
               ),
               child: Card(
-                color: Colors.grey[200],
+                color: Colors.grey,
+
+                // color: Colors.grey[200],
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -205,6 +196,13 @@ class StationCell extends GetView<HomeController> {
                             Text(
                               "${station.name} 駅",
                               style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Spacer(),
+                            Icon(
+                              Icons.person,
+                              size: 40,
+                              color: ColorsConsts.iconColors[index]
+                                  .withOpacity(0.8),
                             ),
                           ],
                         ),
@@ -232,26 +230,15 @@ class StationCell extends GetView<HomeController> {
 
                                     return Padding(
                                       padding: const EdgeInsets.only(left: 5),
-                                      child: Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 30),
-                                        padding: const EdgeInsets.all(10.0),
-                                        decoration: BoxDecoration(
-                                          color: line.lineColor,
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          border: Border.all(
-                                            color: Colors.black,
-                                            width: 1,
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            line.name,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10,
-                                            ),
+                                      child: Chip(
+                                        backgroundColor: line.lineColor,
+                                        side: BorderSide(
+                                            color: Colors.black, width: 1),
+                                        label: Text(
+                                          line.name,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10,
                                           ),
                                         ),
                                       ),
@@ -325,23 +312,42 @@ class EmptyCell extends GetView<HomeController> {
                   ],
                 ),
                 child: Card(
-                  color: Colors.grey[200],
+                  color: Colors.grey,
+                  // color: Colors.grey[200],
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 10),
-                    child: Row(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(
-                          Icons.directions_transit,
-                          color: Colors.grey[400],
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Icon(
+                            Icons.person,
+                            size: 40,
+                            color:
+                                ColorsConsts.iconColors[index].withOpacity(0.8),
+                          ),
                         ),
-                        SizedBox(
-                          width: 5,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.directions_transit,
+                                color: Colors.grey[400],
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "駅名を入力してください",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
                         ),
-                        Text(
-                          "駅名を入力してください",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                        Spacer(),
                       ],
                     ),
                   ),

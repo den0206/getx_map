@@ -16,42 +16,41 @@ class ShopsScreen extends GetView<ShopsController> {
       appBar: AppBar(
         title: Text('Title'),
       ),
-      body: Obx(
-        () => Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.07,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: allGenre.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final genre = allGenre[index];
-                    return CommonChip(
-                      label: genre.title,
-                      selected: false,
-                    );
-                  },
-                ),
-              ),
-            ),
-            Expanded(
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.07,
               child: ListView.builder(
-                itemCount: controller.shops.length,
+                scrollDirection: Axis.horizontal,
+                itemCount: allGenre.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final shop = controller.shops[index];
-
-                  if (index == controller.shops.length - 1) {
-                    controller.fetchShops();
-                    if (controller.isLoading) return LoadingCellWidget();
-                  }
-                  return ShopCell(shop: shop);
+                  final genre = allGenre[index];
+                  return Obx(() => CommonChip(
+                        label: genre.title,
+                        selected: controller.currentGenreIndex.value == index,
+                        onselected: (selected) => controller.changeGenre(index),
+                      ));
                 },
               ),
             ),
-          ],
-        ),
+          ),
+          Obx(() => Expanded(
+                child: ListView.builder(
+                  itemCount: controller.shops.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final shop = controller.shops[index];
+
+                    if (index == controller.shops.length - 1) {
+                      controller.fetchShops();
+                      if (controller.isLoading) return LoadingCellWidget();
+                    }
+                    return ShopCell(shop: shop);
+                  },
+                ),
+              )),
+        ],
       ),
     );
   }

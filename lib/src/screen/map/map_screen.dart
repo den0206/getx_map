@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/screen/widget/common_chip.dart';
+import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/map/map_controller.dart';
 
 class MapScreen extends GetView<MapController> {
@@ -75,8 +75,8 @@ class MapScreen extends GetView<MapController> {
                               label: station.name,
                               selected: controller.selectedIndex == index,
                               leadingIcon: Icon(
-                                Icons.directions_transit,
-                                color: Colors.grey[400],
+                                Icons.person,
+                                color: ColorsConsts.iconColors[index],
                               ),
                               onselected: (selected) =>
                                   controller.selectedChip(index),
@@ -209,7 +209,10 @@ class MapScreen extends GetView<MapController> {
             controller.service.fitMarkerBounds();
           },
           label: Text('Default Position'),
-          icon: Icon(Icons.location_on),
+          icon: Icon(
+            Icons.location_on,
+            color: Colors.red,
+          ),
         ),
       ),
     );

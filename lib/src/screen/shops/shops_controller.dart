@@ -13,11 +13,18 @@ class ShopsBinding extends Bindings {
 
 class ShopsController extends GetxController {
   final LatLng latLng = Get.arguments;
+  RxList<Shop> shops = RxList<Shop>();
+
   final shopAPI = ShopAPI();
+
+  final currentGenreIndex = 0.obs;
+
+  RestautantGenre get currentGenre {
+    return allGenre[currentGenreIndex.value];
+  }
+
   bool reachLast = false;
   bool isLoading = false;
-
-  RxList<Shop> shops = RxList<Shop>();
 
   @override
   void onInit() async {
@@ -32,7 +39,7 @@ class ShopsController extends GetxController {
 
     isLoading = true;
     try {
-      final temp = await shopAPI.getShops(latLng);
+      final temp = await shopAPI.getShops(latLng, currentGenre);
 
       if (temp.length < shopAPI.perPage) {
         reachLast = true;
@@ -44,5 +51,16 @@ class ShopsController extends GetxController {
     } finally {
       isLoading = false;
     }
+  }
+
+  void changeGenre(int index) async {
+    currentGenreIndex.value = index;
+    if (reachLast) reachLast = false;
+
+    /// reset param;
+    shopAPI.currentIndex = 1;
+    shops.clear();
+
+    await fetchShops();
   }
 }

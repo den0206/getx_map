@@ -72,6 +72,7 @@ class Genre {
 final allGenre = RestautantGenre.values;
 
 enum RestautantGenre {
+  recomended,
   izaka,
   cafe,
   bar,
@@ -85,6 +86,8 @@ enum RestautantGenre {
 extension RestautantGenreEXT on RestautantGenre {
   String get title {
     switch (this) {
+      case RestautantGenre.recomended:
+        return "オススメ";
       case RestautantGenre.izaka:
         return "居酒屋";
       case RestautantGenre.cafe:
@@ -104,8 +107,10 @@ extension RestautantGenreEXT on RestautantGenre {
     }
   }
 
-  String get genreCode {
+  String? get genreCode {
     switch (this) {
+      case RestautantGenre.recomended:
+        return null;
       case RestautantGenre.izaka:
         return "G001";
       case RestautantGenre.cafe:

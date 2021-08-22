@@ -12,19 +12,21 @@ import 'package:getx_map/src/screen/search/search_screen.dart';
 import 'package:getx_map/src/screen/shops/shops_controller.dart';
 import 'package:getx_map/src/screen/shops/shops_screen.dart';
 import 'package:getx_map/src/service/api/token_service.dart';
+import 'package:getx_map/src/service/markers_service.dart';
+import 'package:getx_map/src/utils/consts_color.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarBrightness: Brightness.dark, //status bar brigtness
-    statusBarIconBrightness: Brightness.dark, //status barIcon Brightness
-    systemNavigationBarDividerColor:
-        Colors.greenAccent, //Navigation bar divider color
-    systemNavigationBarIconBrightness: Brightness.light, //navigation bar icon
-  ));
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //   statusBarBrightness: Brightness.dark, //status bar brigtness
+  //   statusBarIconBrightness: Brightness.dark, //status barIcon Brightness
+  //   systemNavigationBarDividerColor:
+  //       Colors.greenAccent, //Navigation bar divider color
+  //   systemNavigationBarIconBrightness: Brightness.light, //navigation bar icon
+  // ));
   await FlutterConfig.loadEnvVariables();
 
   runApp(MyApp());
@@ -36,9 +38,13 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'getx-map',
       theme: ThemeData(
+        appBarTheme: AppBarTheme(backgroundColor: Colors.grey),
         primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        scaffoldBackgroundColor: ColorsConsts.themeYellow,
+        // scaffoldBackgroundColor: hexToColor("#f7b611"),
       ),
-
+      initialBinding: MarkersBinding(),
       getPages: [
         GetPage(
           name: HomeScreen.routeName,

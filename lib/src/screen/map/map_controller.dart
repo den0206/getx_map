@@ -5,6 +5,7 @@ import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/shops/shops_screen.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
 import 'package:getx_map/src/service/map_service.dart';
+import 'package:getx_map/src/service/markers_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapBinding extends Bindings {
@@ -17,6 +18,8 @@ class MapBinding extends Bindings {
 class MapController extends GetxController {
   final List<Station> stations = Get.arguments;
   final List<Station> nearStations = [];
+
+  final MarkersSearvice markerService = MarkersSearvice.to;
   final service = MapService();
   final stationAPI = StaionAPI();
 
@@ -41,9 +44,10 @@ class MapController extends GetxController {
   }
 
   Future addStationMarkers() async {
-    stations.forEach((station) {
-      service.addStationMarker(station);
+    stations.asMap().forEach((int i, Station station) {
+      service.addStationMarker(station, icon: markerService.userIcons[i]);
     });
+
     await service.fitMarkerBounds();
 
     update();
@@ -78,9 +82,11 @@ class MapController extends GetxController {
     final temp = await stationAPI.getNearStations(centerLatLng);
 
     nearStations.addAll(temp);
+
     nearStations.forEach((station) {
       service.addStationMarker(
         station,
+        icon: markerService.stationIcon,
         onTap: () => pushShopScreen(
           station.latLng,
         ),

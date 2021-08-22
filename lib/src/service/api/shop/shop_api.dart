@@ -10,7 +10,7 @@ class ShopAPI {
 
   int currentIndex = 1;
 
-  Future<List<Shop>> getShops(LatLng latLng) async {
+  Future<List<Shop>> getShops(LatLng latLng, RestautantGenre genre) async {
     /// wait a little call api;
     if (currentIndex != 1) await Future.delayed(Duration(milliseconds: 500));
 
@@ -26,6 +26,10 @@ class ShopAPI {
       "start": currentIndex.toString(),
       "count": perPage.toString(),
     };
+
+    if (genre.genreCode != null) {
+      queryParametes["genre"] = genre.genreCode;
+    }
 
     final uri = Uri.http(
       "webservice.recruit.co.jp",
