@@ -5,13 +5,6 @@ import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:getx_map/src/utils/marker_generator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MarkersBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.put(MarkersSearvice());
-  }
-}
-
 class MarkersSearvice extends GetxService {
   static MarkersSearvice get to => Get.find();
 

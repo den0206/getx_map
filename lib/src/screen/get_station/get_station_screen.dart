@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/get.dart';
@@ -58,15 +59,37 @@ class GetStationScreen extends GetView<GetStationController> {
                 () => Expanded(
                   child: ListView.separated(
                     separatorBuilder: (context, index) => Divider(),
-                    itemCount: controller.suggestions.length,
+                    itemCount: controller.noSuggest
+                        ? controller.predicts.length
+                        : controller.suggestions.length,
                     itemBuilder: (BuildContext context, int index) {
-                      final suggest = controller.suggestions[index];
-                      return ListTile(
-                        leading: Icon(Icons.directions_transit),
-                        title: Text(suggest.name),
-                        onTap: () async {
-                          await controller.selectSuggest(suggest);
-                        },
+                      final base = controller.noSuggest
+                          ? controller.predicts.reversed.toList()[index]
+                          : controller.suggestions[index];
+
+                      return Slidable(
+                        key: Key(base.id),
+                        actionPane: SlidableDrawerActionPane(),
+                        actionExtentRatio: 0.25,
+                        secondaryActions: controller.noSuggest
+                            ? [
+                                IconSlideAction(
+                                  caption: 'delete',
+                                  color: Colors.red,
+                                  icon: Icons.delete,
+                                  onTap: () {
+                                    controller.deleteDatabase(base);
+                                  },
+                                ),
+                              ]
+                            : null,
+                        child: ListTile(
+                          leading: Icon(Icons.directions_transit),
+                          title: Text(base.name),
+                          onTap: () async {
+                            await controller.selectSuggest(base);
+                          },
+                        ),
                       );
                     },
                   ),

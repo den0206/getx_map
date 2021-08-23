@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:getx_map/src/screen/get_station/get_station_screen.dart';
 import 'package:getx_map/src/screen/map/map_screen.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
-import 'package:getx_map/src/utils/sample_staion.dart';
+import 'package:getx_map/src/service/database_service.dart';
 
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
@@ -16,14 +16,19 @@ class HomeController extends GetxController {
     return a.obs;
   }
 
+  final database = DatabaseService.to;
   final stationAPI = StaionAPI();
 
   @override
   void onInit() {
     super.onInit();
 
-    /// add sample
-    stations.addAll(sampleStaion);
+    loadDatabse();
+  }
+
+  void loadDatabse() {
+    final def = database.loadStations(DatabaseKey.home);
+    stations.addAll(def);
   }
 
   Future<void> pushGetScreen(Station? station, int index) async {
@@ -38,6 +43,12 @@ class HomeController extends GetxController {
       // final int selectedIndex = stations.indexOf(station);
       Get.toNamed(GetStationScreen.routeName, arguments: index);
     }
+
+    /// save local
+    database.setStationList(
+      DatabaseKey.home,
+      HomeController.to.completeStations,
+    );
   }
 
   void pushMapScreen() {
@@ -61,5 +72,7 @@ class HomeController extends GetxController {
   void removeStation({Station? station, int? index}) {
     if (station != null) stations.remove(station);
     if (index != null) stations.removeAt(index);
+
+    database.setStationList(DatabaseKey.home, completeStations);
   }
 }

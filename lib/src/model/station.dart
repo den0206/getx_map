@@ -1,8 +1,12 @@
-import 'package:getx_map/src/model/station_line.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:get/get.dart';
+import 'dart:convert';
 
-class Station {
+import 'package:get/get.dart';
+import 'package:getx_map/src/model/suggestion.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'package:getx_map/src/model/station_line.dart';
+
+class Station implements StationBase {
   final String id;
   final String name;
   final String prefacture;
@@ -48,5 +52,38 @@ class Station {
       prefactureCode: "",
       latLng: latlng,
     );
+  }
+
+  factory Station.fromMap(Map<String, dynamic> map) {
+    final double latitude = map["lati"];
+    final double longtude = map["long"];
+
+    return Station(
+        id: map['id'],
+        name: map['name'],
+        prefacture: map['prefacture'],
+        prefactureCode: map['prefactureCode'],
+        latLng: LatLng(latitude, longtude));
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'prefacture': prefacture,
+      'prefactureCode': prefactureCode,
+      'lati': latLng.latitude,
+      'long': latLng.longitude,
+    };
+  }
+
+  static String encode(List<Station> stations) {
+    return json.encode(stations.map((station) => station.toMap()).toList());
+  }
+
+  static List<Station> decode(String stations) {
+    return (json.decode(stations) as List<dynamic>)
+        .map((item) => Station.fromMap(item))
+        .toList();
   }
 }

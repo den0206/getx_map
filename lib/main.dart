@@ -12,6 +12,7 @@ import 'package:getx_map/src/screen/search/search_screen.dart';
 import 'package:getx_map/src/screen/shops/shops_controller.dart';
 import 'package:getx_map/src/screen/shops/shops_screen.dart';
 import 'package:getx_map/src/service/api/token_service.dart';
+import 'package:getx_map/src/service/database_service.dart';
 import 'package:getx_map/src/service/markers_service.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 
@@ -20,13 +21,8 @@ void main() async {
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-  //   statusBarBrightness: Brightness.dark, //status bar brigtness
-  //   statusBarIconBrightness: Brightness.dark, //status barIcon Brightness
-  //   systemNavigationBarDividerColor:
-  //       Colors.greenAccent, //Navigation bar divider color
-  //   systemNavigationBarIconBrightness: Brightness.light, //navigation bar icon
-  // ));
+  await Get.put(DatabaseService()).initStorage();
+
   await FlutterConfig.loadEnvVariables();
 
   runApp(MyApp());
@@ -45,7 +41,7 @@ class MyApp extends StatelessWidget {
         cardColor: Colors.grey,
         // scaffoldBackgroundColor: hexToColor("#f7b611"),
       ),
-      initialBinding: MarkersBinding(),
+      initialBinding: InitialBindings(),
       getPages: [
         GetPage(
           name: HomeScreen.routeName,
@@ -75,6 +71,13 @@ class MyApp extends StatelessWidget {
       // initialRoute: MapScreen.routeName,
       initialRoute: HomeScreen.routeName,
     );
+  }
+}
+
+class InitialBindings extends Bindings {
+  @override
+  void dependencies() {
+    Get.put(MarkersSearvice());
   }
 }
 

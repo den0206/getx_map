@@ -1,4 +1,9 @@
-class Suggest {
+abstract class StationBase {
+  final String id = "";
+  final String name = "";
+}
+
+class Suggest implements StationBase {
   final String id;
   final String name;
   final String prefacture;

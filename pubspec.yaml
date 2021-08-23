@@ -21,14 +21,16 @@ dependencies:
     sdk: flutter
   flutter_cache_manager: ^3.1.2
   flutter_config: ^2.0.0
+  flutter_launcher_icons: any
   flutter_polyline_points: ^1.0.0
+  flutter_slidable: ^0.6.0
   geolocator: ^7.4.0
   get: ^4.3.7
+  get_storage: ^2.0.3
   google_maps_flutter: ^2.0.6
   permission_handler: ^8.1.4+2
   url_launcher: ^6.0.9
   video_player: ^2.1.14
-  flutter_launcher_icons: any
 
 dev_dependencies:
   flutter_test:
@@ -43,6 +45,6 @@ flutter:
     - assets/videos/
 
 flutter_icons:
-  android: true 
+  android: true
   ios: true
   image_path: "assets/icon/get_map_icon_0.png"
