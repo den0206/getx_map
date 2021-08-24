@@ -28,6 +28,7 @@ dependencies:
   get: ^4.3.7
   get_storage: ^2.0.3
   google_maps_flutter: ^2.0.6
+  jp_prefecture: ^2.0.0
   permission_handler: ^8.1.4+2
   url_launcher: ^6.0.9
   video_player: ^2.1.14

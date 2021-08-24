@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'dart:convert';
+
 class Stationline {
   final String name;
   final String code;
@@ -33,5 +35,34 @@ class Stationline {
       code: json["code"],
       lineColor: lineColor,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "Name": name,
+      "code": code,
+      "lineColor": lineColor.toString().substring(6, 16),
+    };
+  }
+
+  factory Stationline.fromMap(Map<String, dynamic> map) {
+    final String colorStr = map["lineColor"];
+    final color = Color(int.parse(colorStr));
+
+    return Stationline(
+      name: map["Name"],
+      code: map["code"],
+      lineColor: color,
+    );
+  }
+
+  static String encode(List<Stationline> lines) {
+    return json.encode(lines.map((line) => line.toMap()).toList());
+  }
+
+  static List<Stationline> decode(String lines) {
+    return (json.decode(lines) as List<dynamic>)
+        .map((item) => Stationline.fromMap(item))
+        .toList();
   }
 }

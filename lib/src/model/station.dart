@@ -5,22 +5,21 @@ import 'package:getx_map/src/model/suggestion.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:getx_map/src/model/station_line.dart';
+import 'package:jp_prefecture/jp_prefecture.dart';
 
 class Station implements StationBase {
   final String id;
   final String name;
-  final String prefacture;
-  final String prefactureCode;
 
   final LatLng latLng;
+  final JpPrefecture prefecture;
 
   final RxList<Stationline> lines = RxList<Stationline>();
 
   Station({
     required this.id,
     required this.name,
-    required this.prefacture,
-    required this.prefactureCode,
+    required this.prefecture,
     required this.latLng,
   });
 
@@ -30,11 +29,12 @@ class Station implements StationBase {
     final double longi = double.parse(json["GeoPoint"]["longi_d"]);
     final latlng = LatLng(lati, longi);
 
+    final prefStr = json['Prefecture']["Name"];
+
     return Station(
       id: json['Station']["code"],
       name: json['Station']["Name"],
-      prefacture: json['Prefecture']["Name"],
-      prefactureCode: json['Prefecture']["code"],
+      prefecture: JpPrefecture.findByName(prefStr) ?? errorPrefecture,
       latLng: latlng,
     );
   }
@@ -45,11 +45,12 @@ class Station implements StationBase {
     final double lati = json["y"];
     final latlng = LatLng(lati, longi);
 
+    final prefStr = json['prefecture'];
+
     return Station(
       id: json['name'],
       name: json['name'],
-      prefacture: json['prefecture'],
-      prefactureCode: "",
+      prefecture: JpPrefecture.findByName(prefStr) ?? errorPrefecture,
       latLng: latlng,
     );
   }
@@ -57,12 +58,12 @@ class Station implements StationBase {
   factory Station.fromMap(Map<String, dynamic> map) {
     final double latitude = map["lati"];
     final double longtude = map["long"];
+    final int prefCode = map["prefactureCode"];
 
     return Station(
         id: map['id'],
         name: map['name'],
-        prefacture: map['prefacture'],
-        prefactureCode: map['prefactureCode'],
+        prefecture: JpPrefecture.findByCode(prefCode) ?? errorPrefecture,
         latLng: LatLng(latitude, longtude));
   }
 
@@ -70,8 +71,7 @@ class Station implements StationBase {
     return {
       'id': id,
       'name': name,
-      'prefacture': prefacture,
-      'prefactureCode': prefactureCode,
+      'prefactureCode': prefecture.code,
       'lati': latLng.latitude,
       'long': latLng.longitude,
     };
@@ -86,4 +86,35 @@ class Station implements StationBase {
         .map((item) => Station.fromMap(item))
         .toList();
   }
+
+  /// save lines
+
+  Map<String, dynamic> toLineMap() {
+    return {"id": id, "lines": Stationline.encode(lines)};
+  }
+
+  static String encodeLine(List<Station> stations) {
+    return json.encode(stations.map((station) => station.toLineMap()).toList());
+  }
+
+  factory Station.fromLineMap(Map<String, dynamic> map) {
+    final sta = Station(
+      id: map['id'],
+      name: "line",
+      prefecture: errorPrefecture,
+      latLng: LatLng(35.693194, 139.817166),
+    );
+
+    sta.lines.addAll(Stationline.decode(map["lines"]));
+    return sta;
+  }
+
+  static List<Station> decodeLine(String stations) {
+    return (json.decode(stations) as List<dynamic>)
+        .map((item) => Station.fromLineMap(item))
+        .toList();
+  }
 }
+
+final errorPrefecture =
+    JpPrefecture(404, 'Error', 'Error', 'Erro', 'Error', 'Error');

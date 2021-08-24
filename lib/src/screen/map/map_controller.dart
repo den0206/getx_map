@@ -25,22 +25,31 @@ class MapController extends GetxController {
 
   bool showMenu = true;
   int? selectedIndex;
+  RxBool overlayLoading = false.obs;
 
   late LatLng centerLatLng;
 
   @override
   void onInit() {
     super.onInit();
+
+    // nearStations.addAll(stations);
+    // update();
   }
 
   Future onMapCreate(GoogleMapController controller) async {
-    service.init(controller);
-    await addStationMarkers();
-    await Future.delayed(Duration(seconds: 1));
-    await setCenterCircle();
-
-    await getNearStations();
-    print(service.markers.map((e) => e.markerId));
+    overlayLoading.value = true;
+    try {
+      service.init(controller);
+      await addStationMarkers();
+      await Future.delayed(Duration(seconds: 1));
+      await setCenterCircle();
+      await getNearStations();
+    } catch (e) {
+      print(e.toString());
+    } finally {
+      overlayLoading.value = false;
+    }
   }
 
   Future addStationMarkers() async {
@@ -50,7 +59,7 @@ class MapController extends GetxController {
 
     await service.fitMarkerBounds();
 
-    update();
+    // update();
   }
 
   Future setCenterCircle() async {
@@ -67,10 +76,9 @@ class MapController extends GetxController {
     /// clear markers
     await Future.forEach(nearStations,
         (Station station) async => service.removeStationMarker(station));
-    // nearStations.forEach((station) => service.removeStationMarker(station));
     nearStations.clear();
 
-    update();
+    // update();
 
     centerLatLng = latLng;
     service.addCenterMarker(centerLatLng);

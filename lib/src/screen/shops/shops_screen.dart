@@ -3,7 +3,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/screen/shops/shops_controller.dart';
 import 'package:getx_map/src/screen/widget/common_chip.dart';
-import 'package:getx_map/src/screen/widget/loading_widhet.dart';
+import 'package:getx_map/src/screen/widget/loading_widget.dart';
 
 class ShopsScreen extends GetView<ShopsController> {
   const ShopsScreen({Key? key}) : super(key: key);

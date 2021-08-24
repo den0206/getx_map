@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/home/home_controller.dart';
+import 'package:getx_map/src/screen/widget/animated_widget.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -195,10 +196,26 @@ class StationCell extends GetView<HomeController> {
                             SizedBox(
                               width: 5,
                             ),
-                            Text(
-                              "${station.name} 駅",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            Container(
+                              constraints: BoxConstraints(maxWidth: 120),
+                              child: Text(
+                                "${station.name} 駅",
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.black,
+                              size: 10,
+                              // color: Colors.grey[400],
                             ),
                             Spacer(),
                             Icon(
@@ -292,94 +309,95 @@ class EmptyCell extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Dismissible(
-        key: UniqueKey(),
-        onDismissed: (direction) {
-          controller.removeStation(index: index);
-        },
-        child: GestureDetector(
-          onTap: () async {
-            await controller.pushGetScreen(null, index);
+    return FadeinWidget(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Dismissible(
+          key: UniqueKey(),
+          onDismissed: (direction) {
+            controller.removeStation(index: index);
           },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width - 180,
-                height: MediaQuery.of(context).size.height / 6.3,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black26,
-                        spreadRadius: 1.0,
-                        blurRadius: 10,
-                        offset: Offset(10, 10))
-                  ],
-                ),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+          child: GestureDetector(
+            onTap: () async {
+              await controller.pushGetScreen(null, index);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width - 180,
+                  height: MediaQuery.of(context).size.height / 6.3,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black26,
+                          spreadRadius: 1.0,
+                          blurRadius: 10,
+                          offset: Offset(10, 10))
+                    ],
                   ),
-                  color: Colors.grey,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Icon(
-                            Icons.person,
-                            size: 40,
-                            color:
-                                ColorsConsts.iconColors[index].withOpacity(0.8),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    color: Colors.grey,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Icon(
+                              Icons.person,
+                              size: 40,
+                              color: ColorsConsts.iconColors[index]
+                                  .withOpacity(0.8),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.directions_transit,
-                                color: Colors.grey[400],
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                "駅名を入力してください",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.directions_transit,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  "駅名を入力してください",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Spacer(),
-                      ],
+                          Spacer(),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              CircleAvatar(
-                backgroundColor: Colors.red,
-                radius: 15,
-                child: IconButton(
-                  padding: EdgeInsets.zero,
-                  icon: Icon(Icons.close),
-                  color: Colors.white,
-                  onPressed: () {
-                    controller.removeStation(index: index);
-                    // controller.removeStation(station);
-                  },
+                SizedBox(
+                  width: 10,
                 ),
-              ),
-            ],
+                CircleAvatar(
+                  backgroundColor: Colors.red,
+                  radius: 15,
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: Icon(Icons.close),
+                    color: Colors.white,
+                    onPressed: () {
+                      controller.removeStation(index: index);
+                      // controller.removeStation(station);
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
