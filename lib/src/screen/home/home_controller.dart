@@ -29,33 +29,33 @@ class HomeController extends GetxController {
   }
 
   void loadDatabse() {
-    final def = database.loadStations(DatabaseKey.home);
-
-    stations.addAll(def);
-
     final lines = database.loadStations(DatabaseKey.lines);
-
     cachedLines.addAll(lines);
+
+    final def = database.loadStations(DatabaseKey.home);
+    def.forEach((station) {
+      station.lines.addAll(checkedCache(station));
+    });
+    stations.addAll(def);
   }
 
   Future<void> pushGetScreen(Station? station, int index) async {
-    if (station == null) {
-      final station = await Get.toNamed(GetStationScreen.routeName);
+    final newStation = await Get.toNamed(GetStationScreen.routeName);
 
-      if (station is Station) {
-        if (!stations.map((station) => station?.id).contains(station.id))
-          stations[index] = station;
+    if (newStation is Station) {
+      if (!completeStations
+          .map((station) => station.id)
+          .contains(newStation.id)) {
+        newStation.lines.addAll(checkedCache(newStation));
+        stations[index] = newStation;
+        database.setStationList(
+          DatabaseKey.home,
+          HomeController.to.completeStations,
+        );
       }
-    } else {
-      // final int selectedIndex = stations.indexOf(station);
-      Get.toNamed(GetStationScreen.routeName, arguments: index);
     }
 
     /// save local
-    database.setStationList(
-      DatabaseKey.home,
-      HomeController.to.completeStations,
-    );
   }
 
   void pushMapScreen() {
@@ -72,18 +72,24 @@ class HomeController extends GetxController {
   }
 
   Future<void> getStationInfo(Station station) async {
-    List<Stationline> lines;
     if (!cachedLines.map((station) => station.id).contains(station.id)) {
-      lines = await stationAPI.getStationLines(station);
+      final lines = await stationAPI.getStationLines(station);
       station.lines.addAll(lines);
       cachedLines.add(station);
       database.setStationList(DatabaseKey.lines, cachedLines);
-    } else {
-      print("Exist");
+    }
+  }
+
+  List<Stationline> checkedCache(Station station) {
+    List<Stationline> lines;
+
+    if (cachedLines.map((ex) => ex.id).contains(station.id)) {
       final temp =
           cachedLines.map((station) => station.id).toList().indexOf(station.id);
       lines = cachedLines[temp].lines;
-      station.lines.addAll(lines);
+      return lines;
+    } else {
+      return [];
     }
   }
 

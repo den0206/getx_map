@@ -16,11 +16,14 @@ class Station implements StationBase {
 
   final RxList<Stationline> lines = RxList<Stationline>();
 
+  String? distance;
+
   Station({
     required this.id,
     required this.name,
     required this.prefecture,
     required this.latLng,
+    this.distance,
   });
 
   ///https://docs.ekispert.com/v1/
@@ -48,11 +51,11 @@ class Station implements StationBase {
     final prefStr = json['prefecture'];
 
     return Station(
-      id: json['name'],
-      name: json['name'],
-      prefecture: JpPrefecture.findByName(prefStr) ?? errorPrefecture,
-      latLng: latlng,
-    );
+        id: json['name'],
+        name: json['name'],
+        prefecture: JpPrefecture.findByName(prefStr) ?? errorPrefecture,
+        latLng: latlng,
+        distance: json["distance"]);
   }
 
   factory Station.fromMap(Map<String, dynamic> map) {
@@ -102,7 +105,7 @@ class Station implements StationBase {
       id: map['id'],
       name: "line",
       prefecture: errorPrefecture,
-      latLng: LatLng(35.693194, 139.817166),
+      latLng: LatLng(0.0, 0.0),
     );
 
     sta.lines.addAll(Stationline.decode(map["lines"]));

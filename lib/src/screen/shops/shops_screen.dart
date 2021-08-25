@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+
 import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/screen/shops/shops_controller.dart';
 import 'package:getx_map/src/screen/widget/common_chip.dart';
@@ -28,30 +29,98 @@ class ShopsScreen extends GetView<ShopsController> {
                 itemCount: allGenre.length,
                 itemBuilder: (BuildContext context, int index) {
                   final genre = allGenre[index];
-                  return Obx(() => CommonChip(
-                        label: genre.title,
-                        selected: controller.currentGenreIndex.value == index,
-                        onselected: (selected) => controller.changeGenre(index),
-                      ));
+                  return Obx(
+                    () => CommonChip(
+                      label: genre.title,
+                      selected: controller.currentGenreIndex.value == index,
+                      onselected: (selected) => controller.changeGenre(index),
+                    ),
+                  );
                 },
               ),
             ),
           ),
-          Obx(() => Expanded(
-                child: ListView.builder(
-                  itemCount: controller.shops.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final shop = controller.shops[index];
-
-                    if (index == controller.shops.length - 1) {
-                      controller.fetchShops();
-                      if (controller.isLoading) return LoadingCellWidget();
-                    }
-                    return ShopCell(shop: shop);
-                  },
+          Obx(
+            () => Expanded(
+              child: GridView.builder(
+                itemCount: controller.shops.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 1,
                 ),
-              )),
+                itemBuilder: (context, index) {
+                  final shop = controller.shops[index];
+
+                  if (index == controller.shops.length - 1) {
+                    controller.fetchShops();
+                    if (controller.isLoading) return LoadingCellWidget();
+                  }
+                  return ShopGridCell(shop: shop);
+                },
+              ),
+            ),
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class ShopGridCell extends StatelessWidget {
+  const ShopGridCell({
+    Key? key,
+    required this.shop,
+  }) : super(key: key);
+
+  final Shop shop;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.grey[400],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AspectRatio(
+              aspectRatio: 18.0 / 12.0,
+              child: Image.network(
+                shop.photo,
+                fit: BoxFit.contain,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(4.0, 8.0, 8.0, 2.0),
+              child: Column(
+                children: [
+                  Text(
+                    shop.name,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    shop.shopDetailMemo,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -153,3 +222,18 @@ class ShopCell extends StatelessWidget {
     );
   }
 }
+
+// Expanded(
+//               child: ListView.builder(
+//                 itemCount: controller.shops.length,
+//                 itemBuilder: (BuildContext context, int index) {
+//                   final shop = controller.shops[index];
+
+//                   if (index == controller.shops.length - 1) {
+//                     controller.fetchShops();
+//                     if (controller.isLoading) return LoadingCellWidget();
+//                   }
+//                   return ShopCell(shop: shop);
+//                 },
+//               ),
+//             ),

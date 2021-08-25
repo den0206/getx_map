@@ -85,14 +85,7 @@ class GetStationController extends GetxController {
     }
     _saveDatabase(station);
 
-    if (selectedIndex == null) {
-      Get.back(result: station);
-    } else {
-      final home = Get.find<HomeController>();
-      if (!home.completeStations.map((ex) => ex.id).contains(station.id))
-        home.stations[selectedIndex!] = station;
-      Get.back();
-    }
+    Get.back(result: station);
   }
 
   void _loadDatabse() {
@@ -114,3 +107,12 @@ class GetStationController extends GetxController {
     }
   }
 }
+
+    // if (selectedIndex == null) {
+    //   Get.back(result: station);
+    // } else {
+    //   final home = Get.find<HomeController>();
+    //   if (!home.completeStations.map((ex) => ex.id).contains(station.id))
+    //     home.stations[selectedIndex!] = station;
+    //   Get.back(result: station);
+    // }
