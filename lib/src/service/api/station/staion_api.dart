@@ -162,7 +162,33 @@ class StaionAPI {
     final temp = Station.fromJson(jsonData);
 
     temp.distance = heartStation.distance;
-    print(temp.toString());
     return temp;
+  }
+
+  Future<String> getRouteUrl({
+    required Station from,
+    required Station to,
+  }) async {
+    final queryParametes = {
+      "key": stationKey,
+      "from": from.id.toString(),
+      "to": to.id.toString(),
+      "contentsMode": "sp",
+    };
+
+    final uri = Uri.https(
+      "api.ekispert.jp",
+      "v1/json/search/course/light",
+      queryParametes,
+    );
+
+    final response = await http.get(uri);
+    if (response.statusCode != 200) {
+      final Exception error = Exception("StatusCode is ${response.statusCode}");
+      throw error;
+    }
+
+    final String url = json.decode(response.body)["ResultSet"]["ResourceURI"];
+    return url;
   }
 }

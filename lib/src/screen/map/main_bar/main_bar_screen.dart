@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:getx_map/src/screen/map/main_bar/main_bar_controller.dart';
 import 'package:getx_map/src/screen/map/map_controller.dart';
 import 'package:getx_map/src/screen/map/map_screen.dart';
@@ -47,7 +46,8 @@ class MainBar extends GetView<MainBarController> {
                   return StationsState();
                 case MenuBarState.showMenu:
                   return MenuState();
-
+                case MenuBarState.route:
+                  return RouteState();
                 default:
                   return Container();
               }
@@ -184,46 +184,148 @@ class StationsState extends GetView<MainBarController> {
                   onTap: () {
                     controller.selectStation(station);
                   },
-                  child: Obx(() => Transform.scale(
-                        scale: controller.currentIndex.value == index ? 1 : 0.8,
-                        child: Container(
-                          margin: EdgeInsets.all(8),
-                          width: ksheetHeight * 0.5,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[400],
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(width: 1),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Icon(
-                                Icons.directions_transit,
-                                size: 45,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                child: Text(
-                                  station.name,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
+                  child: Obx(
+                    () => Transform.scale(
+                      scale: controller.currentIndex.value == index ? 1 : 0.8,
+                      child: BoxCell(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(
+                              Icons.directions_transit,
+                              size: 45,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(
+                                station.name,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 20,
                                 ),
                               ),
-                              if (station.distance != null)
-                                Text("約 ${station.distance!} "),
-                            ],
-                          ),
+                            ),
+                            if (station.distance != null)
+                              Text("約 ${station.distance!} "),
+                          ],
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                 ),
               );
             },
           ),
         ),
       ],
+    );
+  }
+}
+
+class RouteState extends GetView<MainBarController> {
+  const RouteState({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Spacer(),
+                Text(
+                  "${controller.currentNearStation.name}への経路",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 20,
+                  ),
+                ),
+                Spacer(),
+                IconButton(
+                  icon: Icon(
+                    Icons.close,
+                  ),
+                  onPressed: () {
+                    controller.currentState.value = MenuBarState.showMenu;
+                  },
+                )
+              ],
+            )),
+        Flexible(
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: controller.mapController.stations.length,
+            itemBuilder: (context, index) {
+              final station = controller.mapController.stations[index];
+
+              return BoxCell(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        "${station.name}駅 ",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "からの",
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                    TextButton(
+                      child: Text(
+                        "行き方",
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                      onPressed: () {
+                        controller.openUrl(index);
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class BoxCell extends GetView<MainBarController> {
+  const BoxCell({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Container(
+        margin: EdgeInsets.all(8),
+        width: ksheetHeight * 0.5,
+        decoration: BoxDecoration(
+          color: Colors.grey[400],
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(width: 1),
+        ),
+        child: child,
+      ),
     );
   }
 }

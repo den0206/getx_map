@@ -224,8 +224,10 @@ extension MapServiceEXT on MapService {
     _markers[markerId] = marker;
   }
 
-  void editStationMarker(Station newStation,
+  void editStationMarker(Station newStation, Station oldStation,
       {BitmapDescriptor? icon, Function()? onTap}) {
+    _markers.remove(MarkerId(oldStation.name));
+
     final markerId = MarkerId(newStation.id);
     final marker = Marker(
       markerId: markerId,
@@ -238,11 +240,16 @@ extension MapServiceEXT on MapService {
       onTap: onTap,
     );
 
-    _markers[MarkerId(newStation.name)] = marker;
+    _markers[markerId] = marker;
   }
 
   void removeStationMarker(Station station) {
-    final markerId = MarkerId(station.id);
+    MarkerId markerId;
+    if (station.isExpertType) {
+      markerId = MarkerId(station.id);
+    } else {
+      markerId = MarkerId(station.name);
+    }
 
     _markers.remove(markerId);
   }

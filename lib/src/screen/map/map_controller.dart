@@ -79,6 +79,7 @@ class MapController extends GetxController {
     centerLatLng = latLng;
     mapService.addCenterMarker(centerLatLng);
     await getNearStations();
+    mainBarController.reset();
     update();
   }
 
@@ -112,10 +113,11 @@ class MapController extends GetxController {
     mapService.showInfoService(station.id);
   }
 
-  void editNearStation(Station newStation) {
+  void editNearStation(Station newStation, Station oldStation) {
     nearStations[mainBarController.currentIndex.value] = newStation;
     mapService.editStationMarker(
       newStation,
+      oldStation,
       icon: markerService.stationIcon,
       onTap: () => selectStation(newStation),
     );

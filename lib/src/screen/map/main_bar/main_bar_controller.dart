@@ -5,14 +5,18 @@ import 'package:getx_map/src/screen/map/map_controller.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/screen/shops/shops_screen.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum MenuBarState {
   root,
   showMenu,
+  route,
 }
 
 class MainBarController extends GetxController {
   final MapController mapController;
+
+  final Map<Station, List<String>> routes = {};
 
   final stationAPI = StaionAPI();
   final RxInt currentIndex = 0.obs;
@@ -35,11 +39,15 @@ class MainBarController extends GetxController {
     mapController.setMainBar(this);
   }
 
+  void reset() {
+    currentState.value = MenuBarState.root;
+    currentIndex.value = 0;
+  }
+
   void selectStation(Station station) {
-    ///IDがのちの変わる為,名前で判別
+    ///IDが後に変わる為,名前で判別
     final index =
         nearStations.map((ex) => ex.name).toList().indexOf(station.name);
-    print(index);
 
     if (index == currentIndex.value) {
       currentState.value = MenuBarState.showMenu;
@@ -55,12 +63,53 @@ class MainBarController extends GetxController {
     Get.toNamed(ShopsScreen.routeName, arguments: value);
   }
 
+  void openUrl(int index) async {
+    final url = routes[currentNearStation]?[index];
+    if (url == null) {
+      throw 'URLが見つかりません';
+    }
+    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+  }
+
   void searchRoute() async {
-    if (!currentNearStation.isExpertType) {
-      /// タイプを合わせる
-      final Station newStation = await stationAPI.heartRailsToExcpertStation(
-          heartStation: currentNearStation);
-      mapController.editNearStation(newStation);
+    final stations = mapController.stations;
+    mapController.overlayLoading.value = true;
+
+    try {
+      List<String> urls = [];
+      if (!currentNearStation.isExpertType) {
+        final oldStation = currentNearStation;
+
+        /// タイプを合わせる
+        final Station newStation = await stationAPI.heartRailsToExcpertStation(
+            heartStation: currentNearStation);
+        mapController.editNearStation(newStation, oldStation);
+
+        await Future.delayed(Duration(milliseconds: 500));
+      }
+
+      if (routes.containsKey(currentNearStation)) {
+        currentState.value = MenuBarState.route;
+        return;
+      }
+
+      await Future.forEach(
+        stations,
+        (Station station) async {
+          await Future.delayed(Duration(seconds: 2));
+          print("delay");
+          final url = await stationAPI.getRouteUrl(
+              from: station, to: currentNearStation);
+          urls.add(url);
+        },
+      );
+
+      routes[currentNearStation] = urls;
+      currentState.value = MenuBarState.route;
+    } catch (e) {
+      print(e);
+    } finally {
+      mapController.overlayLoading.value = false;
     }
   }
 
