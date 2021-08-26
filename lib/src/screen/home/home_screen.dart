@@ -19,10 +19,8 @@ class HomeScreen extends StatelessWidget {
         return Scaffold(
           body: Stack(
             children: [
-              // BackgroundVideoScreen(videoPath: "assets/videos/station-0.mp4"),
               SafeArea(
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       height: MediaQuery.of(context).size.height / 6.5,
@@ -404,6 +402,9 @@ class EmptyCell extends GetView<HomeController> {
     );
   }
 }
+
+ // BackgroundVideoScreen(videoPath: "assets/videos/station-0.mp4"),
+
 
 // class CommonCell extends GetView<HomeController> {
 //   const CommonCell({Key? key, this.station}) : super(key: key);

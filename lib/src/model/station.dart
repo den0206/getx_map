@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:getx_map/src/model/suggestion.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:jp_prefecture/jp_prefecture.dart';
 
 import 'package:getx_map/src/model/station_line.dart';
-import 'package:jp_prefecture/jp_prefecture.dart';
+import 'package:getx_map/src/model/suggestion.dart';
 
 class Station implements StationBase {
   final String id;
@@ -17,6 +17,10 @@ class Station implements StationBase {
   final RxList<Stationline> lines = RxList<Stationline>();
 
   String? distance;
+
+  bool get isExpertType {
+    return id != name;
+  }
 
   Station({
     required this.id,
@@ -116,6 +120,11 @@ class Station implements StationBase {
     return (json.decode(stations) as List<dynamic>)
         .map((item) => Station.fromLineMap(item))
         .toList();
+  }
+
+  @override
+  String toString() {
+    return 'Station(id: $id, name: $name, latLng: $latLng, prefecture: $prefecture, distance: $distance)';
   }
 }
 

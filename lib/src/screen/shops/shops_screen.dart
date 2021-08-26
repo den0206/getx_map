@@ -13,56 +13,81 @@ class ShopsScreen extends GetView<ShopsController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.07,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: allGenre.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final genre = allGenre[index];
-                  return Obx(
-                    () => CommonChip(
+    return Obx(
+      () => Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(
+              "${controller.station.name} 駅近くの${controller.currentGenre.title}店"),
+          elevation: 0,
+          actions: [
+            IconButton(
+              icon: Icon(
+                controller.cellType.value == CellType.list
+                    ? Icons.list
+                    : Icons.grid_view_rounded,
+              ),
+              onPressed: () {
+                controller.toggleType();
+              },
+            )
+          ],
+        ),
+        body: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.07,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: allGenre.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final genre = allGenre[index];
+                    return CommonChip(
                       label: genre.title,
                       selected: controller.currentGenreIndex.value == index,
                       onselected: (selected) => controller.changeGenre(index),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-          Obx(
-            () => Expanded(
-              child: GridView.builder(
-                itemCount: controller.shops.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1,
+                    );
+                  },
                 ),
-                itemBuilder: (context, index) {
-                  final shop = controller.shops[index];
-
-                  if (index == controller.shops.length - 1) {
-                    controller.fetchShops();
-                    if (controller.isLoading) return LoadingCellWidget();
-                  }
-                  return ShopGridCell(shop: shop);
-                },
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: controller.cellType.value == CellType.list
+                  ? ListView.builder(
+                      itemCount: controller.shops.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final shop = controller.shops[index];
+
+                        if (index == controller.shops.length - 1) {
+                          controller.fetchShops();
+                          if (controller.isLoading) return LoadingCellWidget();
+                        }
+                        return ShopCell(shop: shop);
+                      },
+                    )
+                  : GridView.builder(
+                      itemCount: controller.shops.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 20,
+                        mainAxisSpacing: 10,
+                        childAspectRatio: 1,
+                      ),
+                      itemBuilder: (context, index) {
+                        final shop = controller.shops[index];
+
+                        if (index == controller.shops.length - 1) {
+                          controller.fetchShops();
+                          if (controller.isLoading) return LoadingCellWidget();
+                        }
+                        return ShopGridCell(shop: shop);
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

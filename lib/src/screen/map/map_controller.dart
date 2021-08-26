@@ -107,18 +107,20 @@ class MapController extends GetxController {
     update();
   }
 
-  void setMainBar(MainBarController controller) {
-    this.mainBarController = controller;
-  }
-
-  void selectStation(Station nearStation) {
-    mainBarController.selectStation(nearStation);
-    mainBarController.currentState.value = MenuBarState.showMenu;
-  }
-
   void zoomStation(Station station) {
     mapService.updateCamera(station.latLng, setZoom: 15);
     mapService.showInfoService(station.id);
+  }
+
+  void editNearStation(Station newStation) {
+    nearStations[mainBarController.currentIndex.value] = newStation;
+    mapService.editStationMarker(
+      newStation,
+      icon: markerService.stationIcon,
+      onTap: () => selectStation(newStation),
+    );
+
+    update();
   }
 
   Future<void> zoomUp() async {
@@ -127,5 +129,18 @@ class MapController extends GetxController {
 
   Future<void> zoomDown() async {
     await mapService.setZoom(false);
+  }
+}
+
+extension MapControllerEXT on MapController {
+  /// use main bar controller
+
+  void setMainBar(MainBarController controller) {
+    this.mainBarController = controller;
+  }
+
+  void selectStation(Station nearStation) {
+    mainBarController.selectStation(nearStation);
+    mainBarController.currentState.value = MenuBarState.showMenu;
   }
 }

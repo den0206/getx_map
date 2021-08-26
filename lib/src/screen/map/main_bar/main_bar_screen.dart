@@ -70,13 +70,13 @@ class MenuState extends GetView<MainBarController> {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 8),
-          child: Text(
-            "${controller.currentNearStation.name} 駅",
-            style: TextStyle(
-              fontWeight: FontWeight.w800,
-              fontSize: 28,
-            ),
-          ),
+          child: Obx(() => Text(
+                "${controller.currentNearStation.name} 駅",
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 28,
+                ),
+              )),
         ),
         GridView.count(
           physics: NeverScrollableScrollPhysics(),
@@ -87,7 +87,9 @@ class MenuState extends GetView<MainBarController> {
           children: [
             MenuButton(
               child: Text("経路検索"),
-              onPress: () {},
+              onPress: () {
+                controller.searchRoute();
+              },
             ),
             MenuButton(
               image: DecorationImage(
@@ -112,7 +114,7 @@ class MenuState extends GetView<MainBarController> {
                 ],
               ),
               onPress: () {
-                controller.backtate();
+                controller.backRoot();
               },
             ),
           ],
@@ -161,10 +163,13 @@ class StationsState extends GetView<MainBarController> {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 8),
-          child: Text(
-            "最寄り駅",
-            style: TextStyle(fontWeight: FontWeight.w800),
-          ),
+          child: Obx(() => Text(
+                "最寄り駅が${controller.nearStations.length}駅あります。",
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 20,
+                ),
+              )),
         ),
         Flexible(
           child: ListView.builder(

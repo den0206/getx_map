@@ -224,6 +224,23 @@ extension MapServiceEXT on MapService {
     _markers[markerId] = marker;
   }
 
+  void editStationMarker(Station newStation,
+      {BitmapDescriptor? icon, Function()? onTap}) {
+    final markerId = MarkerId(newStation.id);
+    final marker = Marker(
+      markerId: markerId,
+      position: newStation.latLng,
+      draggable: true,
+      icon: icon ?? BitmapDescriptor.defaultMarker,
+      infoWindow: InfoWindow(
+        title: newStation.name,
+      ),
+      onTap: onTap,
+    );
+
+    _markers[MarkerId(newStation.name)] = marker;
+  }
+
   void removeStationMarker(Station station) {
     final markerId = MarkerId(station.id);
 

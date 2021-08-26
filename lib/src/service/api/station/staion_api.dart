@@ -134,4 +134,35 @@ class StaionAPI {
       return [one];
     }
   }
+
+  Future<Station> heartRailsToExcpertStation({
+    required Station heartStation,
+  }) async {
+    final queryParametes = {
+      "key": stationKey,
+      "name": heartStation.name,
+      "prefectureCode": heartStation.prefecture.code.toString(),
+      "limit": "1",
+    };
+
+    final uri = Uri.https(
+      "api.ekispert.jp",
+      "v1/json/station",
+      queryParametes,
+    );
+
+    final response = await http.get(uri);
+    if (response.statusCode != 200) {
+      final Exception error = Exception("StatusCode is ${response.statusCode}");
+      throw error;
+    }
+
+    final Map<String, dynamic> jsonData =
+        json.decode(response.body)["ResultSet"]["Point"];
+    final temp = Station.fromJson(jsonData);
+
+    temp.distance = heartStation.distance;
+    print(temp.toString());
+    return temp;
+  }
 }
