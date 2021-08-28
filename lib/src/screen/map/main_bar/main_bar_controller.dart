@@ -1,16 +1,19 @@
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/state_manager.dart';
+import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/map/map_controller.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/screen/shops/shops_screen.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
+import 'package:getx_map/src/service/favorite_shop_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum MenuBarState {
   root,
   showMenu,
   route,
+  favoriteShop,
 }
 
 class MainBarController extends GetxController {
@@ -20,9 +23,9 @@ class MainBarController extends GetxController {
 
   final stationAPI = StaionAPI();
 
-  ///To Do RXn
   final RxnInt currentIndex = RxnInt(0);
   final Rx<MenuBarState> currentState = MenuBarState.root.obs;
+  final List<Shop> favorites = FavoriteShopService.to.favoriteShop;
 
   RxList<Station> get nearStations {
     return mapController.nearStations.obs;
@@ -51,8 +54,8 @@ class MainBarController extends GetxController {
 
   void selectStation(Station station) {
     ///IDが後に変わる為,名前で判別
-    final index =
-        nearStations.map((ex) => ex.name).toList().indexOf(station.name);
+
+    final index = nearStations.indexWhere((near) => near.name == station.name);
 
     if (index == currentIndex.value) {
       currentState.value = MenuBarState.showMenu;
@@ -63,11 +66,23 @@ class MainBarController extends GetxController {
     mapController.zoomStation(station);
   }
 
+  void selectFavorite() {
+    currentState.value = MenuBarState.favoriteShop;
+  }
+
+  void selectFavoriteShop(Shop shop) {
+    final index = favorites.indexWhere((favorite) => favorite.id == shop.id);
+    currentIndex.value = index;
+
+    currentState.value = MenuBarState.favoriteShop;
+    mapController.zoomShop(shop);
+  }
+
   void pushShopScreen() async {
     final value = currentNearStation;
     final _ = await Get.toNamed(ShopsScreen.routeName, arguments: value);
 
-    print("back");
+    mapController.addShopMarkers();
   }
 
   void openUrl(int index) async {

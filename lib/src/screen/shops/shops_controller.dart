@@ -17,7 +17,25 @@ class ShopsBinding extends Bindings {
   }
 }
 
-class ShopsController extends GetxController {
+abstract class ShopsBase {
+  void pushShopDetail(Shop shop) {
+    final arg = shop;
+
+    Get.toNamed(ShopDetailScreen.routeName, arguments: arg);
+  }
+
+  void toggeleFavorite(Shop shop) {
+    FavoriteShopService.to.addandRomoveFavorite(shop);
+  }
+
+  void openUrl(Shop shop) async {
+    final url = shop.urls;
+
+    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+  }
+}
+
+class ShopsController extends GetxController with ShopsBase {
   final Station station = Get.arguments;
   RxList<Shop> shops = RxList<Shop>();
 
@@ -42,12 +60,6 @@ class ShopsController extends GetxController {
   void onInit() async {
     super.onInit();
     await fetchShops();
-  }
-
-  void pushShopDetail(Shop shop) {
-    final arg = shop;
-
-    Get.toNamed(ShopDetailScreen.routeName, arguments: arg);
   }
 
   Future<void> fetchShops() async {
@@ -91,15 +103,5 @@ class ShopsController extends GetxController {
         cellType.value = CellType.list;
         break;
     }
-  }
-
-  void toggeleFavorite(Shop shop) {
-    FavoriteShopService.to.addandRomoveFavorite(shop);
-  }
-
-  void openUrl(Shop shop) async {
-    final url = shop.urls;
-
-    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
   }
 }

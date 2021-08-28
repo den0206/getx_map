@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
 
 class CommonIcon {
-  static final IconData stationIcon = CommonIcon.stationIcon;
+  static final IconData stationIcon = Icons.directions_transit;
 }

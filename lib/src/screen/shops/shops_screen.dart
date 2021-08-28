@@ -4,8 +4,8 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 
 import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/screen/shops/shops_controller.dart';
-import 'package:getx_map/src/screen/widget/custom_badges.dart';
 import 'package:getx_map/src/screen/widget/common_chip.dart';
+import 'package:getx_map/src/screen/widget/custom_badges.dart';
 import 'package:getx_map/src/screen/widget/loading_widget.dart';
 import 'package:getx_map/src/utils/common_icon.dart';
 
@@ -68,7 +68,7 @@ class ShopsScreen extends GetView<ShopsController> {
                           controller.fetchShops();
                           if (controller.isLoading) return LoadingCellWidget();
                         }
-                        return ShopCell(shop: shop);
+                        return ShopCell(controller: controller, shop: shop);
                       },
                     )
                   : GridView.builder(
@@ -160,11 +160,14 @@ class ShopGridCell extends GetView<ShopsController> {
   }
 }
 
-class ShopCell extends GetView<ShopsController> {
+class ShopCell extends StatelessWidget {
   const ShopCell({
     Key? key,
+    required this.controller,
     required this.shop,
   }) : super(key: key);
+
+  final ShopsBase controller;
 
   final Shop shop;
 

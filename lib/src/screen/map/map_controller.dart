@@ -1,6 +1,7 @@
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/get.dart';
+import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/map/main_bar/main_bar_controller.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
@@ -43,6 +44,7 @@ class MapController extends GetxController {
       await Future.delayed(Duration(seconds: 1));
       await setCenterCircle();
       await getNearStations();
+      addShopMarkers(oninit: true);
     } catch (e) {
       print(e);
     } finally {
@@ -88,6 +90,8 @@ class MapController extends GetxController {
   Future<void> onMapLongPress(LatLng latLng) async {
     print(latLng);
 
+    FavoriteShopService.to.clearFavorite();
+
     /// clear markers
     await Future.forEach(nearStations,
         (Station station) async => mapService.removeStationMarker(station));
@@ -104,14 +108,18 @@ class MapController extends GetxController {
     selectedIndex = index;
 
     final sta = stations[index];
-    await mapService.updateCamera(sta.latLng, setZoom: 15);
-    mapService.showInfoService(sta.id);
+    await zoomStation(sta);
     update();
   }
 
-  void zoomStation(Station station) {
-    mapService.updateCamera(station.latLng, setZoom: 15);
+  Future<void> zoomStation(Station station) async {
+    await mapService.updateCamera(station.latLng, setZoom: 15);
     mapService.showInfoService(station.id);
+  }
+
+  Future<void> zoomShop(Shop shop) async {
+    await mapService.updateCamera(shop.latLng, setZoom: 15);
+    mapService.showInfoService(shop.id);
   }
 
   Future<void> zoomUp() async {
@@ -136,6 +144,10 @@ extension MapControllerEXT on MapController {
     mainBarController.currentState.value = MenuBarState.showMenu;
   }
 
+  void selectFavorite() {
+    mainBarController.selectFavorite();
+  }
+
   void editNearStation(Station newStation, Station oldStation) {
     if (mainBarController.currentIndex.value == null) {
       return;
@@ -151,22 +163,47 @@ extension MapControllerEXT on MapController {
     update();
   }
 
-  void addShopmarkers() {
+  void addShopMarkers({bool oninit = false}) {
+    bool isUpdate = false;
+
     final FavoriteShopService shopService = FavoriteShopService.to;
 
     /// Delete
     if (shopService.deletedIds.isNotEmpty) {
-      shopService.deletedIds
-          .forEach((deleteId) => mapService.removeShopMarker(deleteId));
+      shopService.deletedIds.forEach(
+        (deleteId) {
+          if (mapService.checkExistMarker(deleteId)) {
+            mapService.removeShopMarker(deleteId);
+            isUpdate = true;
+          }
+        },
+      );
       shopService.deletedIds.clear();
     }
 
     /// Add
     if (shopService.favoriteShop.isNotEmpty) {
-      shopService.favoriteShop.forEach((favoriteShop) {
-        shopService.favoriteShop
-            .forEach((shop) => mapService.addShopmarker(shop));
-      });
+      shopService.favoriteShop.forEach(
+        (favoriteShop) {
+          if (!mapService.checkExistMarker(favoriteShop.id)) {
+            mapService.addShopmarker(favoriteShop,
+                icon: markerService.restaurnatIcon,
+                onTap: () =>
+                    mainBarController.selectFavoriteShop(favoriteShop));
+            isUpdate = true;
+          }
+        },
+      );
+    }
+
+    if (oninit) {
+      return;
+    }
+
+    if (isUpdate) {
+      update();
+    } else {
+      print("Not Update");
     }
   }
 }

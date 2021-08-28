@@ -44,8 +44,8 @@ class MarkersSearvice extends GetxService {
   Future<void> generateRestaurantIcon() async {
     restaurnatIcon = await generator.createBitmapDescriptorFromIconData(
       Icons.dinner_dining_outlined,
-      Colors.black,
-      Colors.black,
+      ColorsConsts.favoritebadgeColor,
+      ColorsConsts.favoritebadgeColor,
       Colors.transparent,
     );
   }

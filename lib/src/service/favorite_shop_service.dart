@@ -14,12 +14,17 @@ class FavoriteShopService extends GetxService {
   @override
   void onInit() {
     super.onInit();
-    favoriteShop.addAll(databse.loadShops(DatabaseKey.favoriteShop));
-    print("INIT FAVORITE SHOP");
+    loadFavorite();
+  }
+
+  void loadFavorite() {
+    final temp = databse.loadShops(DatabaseKey.favoriteShop);
+
+    favoriteShop.addAll(temp);
   }
 
   void addandRomoveFavorite(Shop shop) {
-    if (!favoriteShop.contains(shop)) {
+    if (!existFavorite(shop)) {
       if (favoriteShop.length >= 5) {
         favoriteShop.removeAt(0);
       }
@@ -29,7 +34,7 @@ class FavoriteShopService extends GetxService {
         deletedIds.remove(shop.id);
       }
     } else {
-      favoriteShop.remove(shop);
+      favoriteShop.removeWhere((favorite) => favorite.id == shop.id);
 
       if (!deletedIds.contains(shop.id)) {
         deletedIds.add(shop.id);
@@ -38,5 +43,18 @@ class FavoriteShopService extends GetxService {
 
     /// save local
     databse.setShopList(DatabaseKey.favoriteShop, favoriteShop);
+  }
+
+  bool existFavorite(Shop shop) {
+    return favoriteShop
+        .map((favotrite) => favotrite.id)
+        .toList()
+        .contains(shop.id);
+  }
+
+  void clearFavorite() {
+    favoriteShop.clear();
+    deletedIds.clear();
+    databse.deleteKey(DatabaseKey.favoriteShop);
   }
 }

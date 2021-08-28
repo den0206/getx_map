@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:get/get.dart';
+import 'package:getx_map/src/screen/favorite_shop/favorite_screen.controller.dart';
+import 'package:getx_map/src/screen/favorite_shop/favorite_shop_screen.dart';
 import 'package:getx_map/src/screen/get_station/get_station_controller.dart';
 import 'package:getx_map/src/screen/get_station/get_station_screen.dart';
 import 'package:getx_map/src/screen/home/home_screen.dart';
@@ -74,6 +76,11 @@ class MyApp extends StatelessWidget {
           name: ShopDetailScreen.routeName,
           page: () => ShopDetailScreen(),
           binding: ShopDetailBindings(),
+        ),
+        GetPage(
+          name: FavoriteShopScreen.routeName,
+          page: () => FavoriteShopScreen(),
+          binding: FavoriteShopBinding(),
         ),
       ],
       // initialRoute: MapScreen.routeName,

@@ -12,7 +12,7 @@ class ShopAPI {
 
   Future<List<Shop>> getShops(LatLng latLng, RestautantGenre genre) async {
     /// wait a little call api;
-    if (currentIndex != 1) await Future.delayed(Duration(milliseconds: 500));
+    if (currentIndex != 1) await Future.delayed(Duration(seconds: 1));
 
     List<Shop> temp = [];
 
@@ -20,7 +20,7 @@ class ShopAPI {
       "key": key,
       "lat": latLng.latitude.toString(),
       "lng": latLng.longitude.toString(),
-      "range": "5",
+      "range": "2",
       "order": "4",
       "format": "json",
       "start": currentIndex.toString(),

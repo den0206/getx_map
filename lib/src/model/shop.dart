@@ -21,7 +21,10 @@ class Shop {
   final Genre genre;
 
   bool get isFavorite {
-    return FavoriteShopService.to.favoriteShop.contains(this);
+    return FavoriteShopService.to.favoriteShop
+        .map((favorite) => favorite.id)
+        .toList()
+        .contains(this.id);
   }
 
   Shop({

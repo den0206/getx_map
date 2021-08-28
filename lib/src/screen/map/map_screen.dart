@@ -114,7 +114,11 @@ class MapScreen extends GetView<MapController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FavoriteShopBadge(),
+            FavoriteShopBadge(
+              onTap: () {
+                controller.selectFavorite();
+              },
+            ),
             SizedBox(
               height: 20,
             ),

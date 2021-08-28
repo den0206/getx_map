@@ -241,6 +241,11 @@ extension MapServiceEXT on MapService {
     _markers[markerId] = marker;
   }
 
+  bool checkExistMarker(String id) {
+    final markerId = MarkerId(id);
+    return _markers.containsKey(markerId);
+  }
+
   void editStationMarker(Station newStation, Station oldStation,
       {BitmapDescriptor? icon, Function()? onTap}) {
     _markers.remove(MarkerId(oldStation.name));
