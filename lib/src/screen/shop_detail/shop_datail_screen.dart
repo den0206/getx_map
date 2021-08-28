@@ -65,7 +65,7 @@ class ShopDetailScreen extends GetView<ShopDetailController> {
                             label: Text(controller.shop.stationName),
                             labelStyle: TextStyle(fontWeight: FontWeight.w600),
                             avatar: Icon(
-                              Icons.directions_transit,
+                              CommonIcon.stationIcon,
                             ),
                           ),
                         ],

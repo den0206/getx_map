@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/model/place.dart';
+import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:getx_map/src/utils/image_to_bytes.dart';
@@ -224,6 +225,22 @@ extension MapServiceEXT on MapService {
     _markers[markerId] = marker;
   }
 
+  void addShopmarker(Shop shop, {BitmapDescriptor? icon, Function()? onTap}) {
+    final markerId = MarkerId(shop.id);
+    final marker = Marker(
+      markerId: markerId,
+      position: shop.latLng,
+      draggable: true,
+      icon: icon ?? BitmapDescriptor.defaultMarker,
+      infoWindow: InfoWindow(
+        title: shop.name,
+      ),
+      onTap: onTap,
+    );
+
+    _markers[markerId] = marker;
+  }
+
   void editStationMarker(Station newStation, Station oldStation,
       {BitmapDescriptor? icon, Function()? onTap}) {
     _markers.remove(MarkerId(oldStation.name));
@@ -252,6 +269,12 @@ extension MapServiceEXT on MapService {
     }
 
     _markers.remove(markerId);
+  }
+
+  void removeShopMarker(String id) {
+    final _markerId = MarkerId(id);
+
+    _markers.remove(_markerId);
   }
 
   void addCircle(Place place) {

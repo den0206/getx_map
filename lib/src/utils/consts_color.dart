@@ -6,6 +6,7 @@ Color hexToColor(String code) {
 
 class ColorsConsts {
   static Color themeYellow = hexToColor("#f7ae11");
+  static Color favoritebadgeColor = Color(0xFFE57373);
 
   static List<Color> iconColors = [
     Colors.red,

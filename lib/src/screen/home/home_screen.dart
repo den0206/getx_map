@@ -187,7 +187,7 @@ class StationCell extends GetView<HomeController> {
                         child: Row(
                           children: [
                             Icon(
-                              Icons.directions_transit,
+                              CommonIcon.stationIcon,
                               color: Colors.black,
                               // color: Colors.grey[400],
                             ),
@@ -360,7 +360,7 @@ class EmptyCell extends GetView<HomeController> {
                             child: Row(
                               children: [
                                 Icon(
-                                  Icons.directions_transit,
+                                  CommonIcon.stationIcon,
                                 ),
                                 SizedBox(
                                   width: 5,

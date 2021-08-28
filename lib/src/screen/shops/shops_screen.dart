@@ -1,13 +1,12 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
 import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/screen/shops/shops_controller.dart';
+import 'package:getx_map/src/screen/widget/custom_badges.dart';
 import 'package:getx_map/src/screen/widget/common_chip.dart';
 import 'package:getx_map/src/screen/widget/loading_widget.dart';
-import 'package:getx_map/src/service/favorite_shop_service.dart';
 
 class ShopsScreen extends GetView<ShopsController> {
   const ShopsScreen({Key? key}) : super(key: key);
@@ -24,19 +23,7 @@ class ShopsScreen extends GetView<ShopsController> {
               "${controller.station.name} 駅近くの${controller.currentGenre.title}店"),
           elevation: 0,
           actions: [
-            Badge(
-              badgeColor: Color(0xFFE57373),
-              animationType: BadgeAnimationType.slide,
-              toAnimate: true,
-              badgeContent: Obx(
-                () => Text(
-                  FavoriteShopService.to.favoriteShop.length.toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              position: BadgePosition.topEnd(top: 4, end: -4),
-              child: Icon(Icons.restaurant),
-            ),
+            FavoriteShopBadge(),
             IconButton(
               icon: Icon(
                 controller.cellType.value == CellType.list
@@ -249,12 +236,15 @@ class ShopCell extends GetView<ShopsController> {
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                        Text(
-                          shop.shopDetailMemo,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Colors.grey[400],
-                            fontSize: 12,
+                        Flexible(
+                          child: Text(
+                            shop.shopDetailMemo,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(
+                              color: Colors.grey[400],
+                              fontSize: 12,
+                            ),
                           ),
                         )
                       ],
@@ -275,7 +265,7 @@ class ShopCell extends GetView<ShopsController> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            Icons.directions_transit,
+                            CommonIcon.stationIcon,
                             color: Colors.grey[400],
                           ),
                           Flexible(

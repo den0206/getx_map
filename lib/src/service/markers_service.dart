@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
+import 'package:getx_map/src/utils/common_icon.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:getx_map/src/utils/marker_generator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,6 +11,7 @@ class MarkersSearvice extends GetxService {
 
   List<BitmapDescriptor> userIcons = [];
   late BitmapDescriptor stationIcon;
+  late BitmapDescriptor restaurnatIcon;
   final generator = MarkerGenerator(200);
 
   @override
@@ -17,6 +19,7 @@ class MarkersSearvice extends GetxService {
     super.onInit();
     await generateUserIcons();
     await generateStationIcon();
+    await generateRestaurantIcon();
     print("Generate Icons");
   }
 
@@ -31,7 +34,16 @@ class MarkersSearvice extends GetxService {
 
   Future<void> generateStationIcon() async {
     stationIcon = await generator.createBitmapDescriptorFromIconData(
-      Icons.directions_transit,
+      CommonIcon.stationIcon,
+      Colors.black,
+      Colors.black,
+      Colors.transparent,
+    );
+  }
+
+  Future<void> generateRestaurantIcon() async {
+    restaurnatIcon = await generator.createBitmapDescriptorFromIconData(
+      Icons.dinner_dining_outlined,
       Colors.black,
       Colors.black,
       Colors.transparent,

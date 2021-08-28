@@ -1,5 +1,8 @@
-import 'package:getx_map/src/service/favorite_shop_service.dart';
+import 'dart:convert';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'package:getx_map/src/service/favorite_shop_service.dart';
 
 class Shop {
   final String id;
@@ -37,13 +40,16 @@ class Shop {
   });
 
   factory Shop.fromJson(Map<String, dynamic> json) {
+    final double lat = json['lat'];
+    final double lng = json['lng'];
+    final LatLng latLng = LatLng(lat, lng);
     return Shop(
       id: json['id'],
       access: json['access'],
       address: json['address'],
       charter: json['charter'],
       name: json['name'],
-      latLng: LatLng(json['lat'], json['lng']),
+      latLng: latLng,
       photo: json['photo']["mobile"]["l"],
       headerPhoto: json['photo']["pc"]["l"],
       shopDetailMemo: json['shop_detail_memo'],
@@ -51,6 +57,54 @@ class Shop {
       urls: json['urls']["pc"],
       genre: Genre.fromJson(json['genre']),
     );
+  }
+
+  factory Shop.fromMap(Map<String, dynamic> map) {
+    final double lat = map['lat'];
+    final double lng = map['lng'];
+    final LatLng latLng = LatLng(lat, lng);
+    return Shop(
+      id: map['id'],
+      access: map['access'],
+      address: map['address'],
+      charter: map['charter'],
+      name: map['name'],
+      headerPhoto: map['headerPhoto'],
+      latLng: latLng,
+      photo: map['photo'],
+      shopDetailMemo: map['shopDetailMemo'],
+      stationName: map['stationName'],
+      urls: map['urls'],
+      genre: Genre.fromJson(map['genre']),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'access': access,
+      'address': address,
+      'charter': charter,
+      'name': name,
+      'headerPhoto': headerPhoto,
+      "lat": latLng.latitude,
+      "lng": latLng.longitude,
+      'photo': photo,
+      'shopDetailMemo': shopDetailMemo,
+      'stationName': stationName,
+      'urls': urls,
+      'genre': genre.toMap(),
+    };
+  }
+
+  static String encode(List<Shop> shops) {
+    return json.encode(shops.map((shop) => shop.toMap()).toList());
+  }
+
+  static List<Shop> decode(String shops) {
+    return (json.decode(shops) as List<dynamic>)
+        .map((item) => Shop.fromMap(item))
+        .toList();
   }
 }
 
@@ -73,11 +127,12 @@ class Genre {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
 
     data['code'] = this.code;
     data['name'] = this.name;
+    data['catch'] = this.copy;
     return data;
   }
 }

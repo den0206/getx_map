@@ -192,7 +192,7 @@ class StationsState extends GetView<MainBarController> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Icon(
-                              Icons.directions_transit,
+                              CommonIcon.stationIcon,
                               size: 45,
                             ),
                             Padding(
@@ -267,14 +267,23 @@ class RouteState extends GetView<MainBarController> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Flexible(
-                      child: Text(
-                        "${station.name}駅 ",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 20,
+                        child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Icon(
+                          CommonIcon.stationIcon,
                         ),
-                      ),
-                    ),
+                        Text(
+                          "${station.name}駅 ",
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    )),
                     Text(
                       "からの",
                       overflow: TextOverflow.ellipsis,

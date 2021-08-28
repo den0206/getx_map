@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/map/main_bar/main_bar_controller.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
+import 'package:getx_map/src/service/favorite_shop_service.dart';
 import 'package:getx_map/src/service/map_service.dart';
 import 'package:getx_map/src/service/markers_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -148,5 +149,24 @@ extension MapControllerEXT on MapController {
     );
 
     update();
+  }
+
+  void addShopmarkers() {
+    final FavoriteShopService shopService = FavoriteShopService.to;
+
+    /// Delete
+    if (shopService.deletedIds.isNotEmpty) {
+      shopService.deletedIds
+          .forEach((deleteId) => mapService.removeShopMarker(deleteId));
+      shopService.deletedIds.clear();
+    }
+
+    /// Add
+    if (shopService.favoriteShop.isNotEmpty) {
+      shopService.favoriteShop.forEach((favoriteShop) {
+        shopService.favoriteShop
+            .forEach((shop) => mapService.addShopmarker(shop));
+      });
+    }
   }
 }

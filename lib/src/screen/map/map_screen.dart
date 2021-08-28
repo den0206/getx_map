@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/screen/map/main_bar/main_bar_screen.dart';
 import 'package:getx_map/src/screen/widget/common_chip.dart';
+import 'package:getx_map/src/screen/widget/custom_badges.dart';
 import 'package:getx_map/src/screen/widget/loading_widget.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -113,6 +114,10 @@ class MapScreen extends GetView<MapController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            FavoriteShopBadge(),
+            SizedBox(
+              height: 20,
+            ),
             CupertinoButton(
               color: Colors.black87,
               padding: const EdgeInsets.all(10),

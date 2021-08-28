@@ -63,9 +63,11 @@ class MainBarController extends GetxController {
     mapController.zoomStation(station);
   }
 
-  void pushShopScreen() {
+  void pushShopScreen() async {
     final value = currentNearStation;
-    Get.toNamed(ShopsScreen.routeName, arguments: value);
+    final _ = await Get.toNamed(ShopsScreen.routeName, arguments: value);
+
+    print("back");
   }
 
   void openUrl(int index) async {
