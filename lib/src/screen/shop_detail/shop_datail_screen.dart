@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:getx_map/src/screen/shop_detail/shop_detail_controller.dart';
 import 'package:get/get.dart';
+import 'package:getx_map/src/utils/common_icon.dart';
 
 class ShopDetailScreen extends GetView<ShopDetailController> {
   const ShopDetailScreen({Key? key}) : super(key: key);

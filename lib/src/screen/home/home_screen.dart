@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/home/home_controller.dart';
 import 'package:getx_map/src/screen/widget/animated_widget.dart';
+import 'package:getx_map/src/utils/common_icon.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 
 class HomeScreen extends StatelessWidget {

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:getx_map/src/screen/map/main_bar/main_bar_controller.dart';
 import 'package:getx_map/src/screen/map/map_controller.dart';
 import 'package:getx_map/src/screen/map/map_screen.dart';
+import 'package:getx_map/src/utils/common_icon.dart';
 
 class MainBar extends GetView<MainBarController> {
   const MainBar({

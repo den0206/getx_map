@@ -7,6 +7,7 @@ import 'package:getx_map/src/screen/shops/shops_controller.dart';
 import 'package:getx_map/src/screen/widget/custom_badges.dart';
 import 'package:getx_map/src/screen/widget/common_chip.dart';
 import 'package:getx_map/src/screen/widget/loading_widget.dart';
+import 'package:getx_map/src/utils/common_icon.dart';
 
 class ShopsScreen extends GetView<ShopsController> {
   const ShopsScreen({Key? key}) : super(key: key);
