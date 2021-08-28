@@ -19,7 +19,9 @@ class MainBarController extends GetxController {
   final Map<Station, List<String>> routes = {};
 
   final stationAPI = StaionAPI();
-  final RxInt currentIndex = 0.obs;
+
+  ///To Do RXn
+  final RxnInt currentIndex = RxnInt(0);
   final Rx<MenuBarState> currentState = MenuBarState.root.obs;
 
   RxList<Station> get nearStations {
@@ -27,7 +29,10 @@ class MainBarController extends GetxController {
   }
 
   Station get currentNearStation {
-    return nearStations[currentIndex.value];
+    if (currentIndex.value == null) {
+      return nearStations[0];
+    }
+    return nearStations[currentIndex.value!];
   }
 
   MainBarController(this.mapController);
@@ -41,7 +46,7 @@ class MainBarController extends GetxController {
 
   void reset() {
     currentState.value = MenuBarState.root;
-    currentIndex.value = 0;
+    currentIndex.value = null;
   }
 
   void selectStation(Station station) {

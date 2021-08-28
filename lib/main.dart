@@ -9,10 +9,13 @@ import 'package:getx_map/src/screen/map/map_screen.dart';
 
 import 'package:getx_map/src/screen/search/search_controller.dart';
 import 'package:getx_map/src/screen/search/search_screen.dart';
+import 'package:getx_map/src/screen/shop_detail/shop_datail_screen.dart';
+import 'package:getx_map/src/screen/shop_detail/shop_detail_controller.dart';
 import 'package:getx_map/src/screen/shops/shops_controller.dart';
 import 'package:getx_map/src/screen/shops/shops_screen.dart';
 import 'package:getx_map/src/service/api/token_service.dart';
 import 'package:getx_map/src/service/database_service.dart';
+import 'package:getx_map/src/service/favorite_shop_service.dart';
 import 'package:getx_map/src/service/markers_service.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 
@@ -67,6 +70,11 @@ class MyApp extends StatelessWidget {
           page: () => ShopsScreen(),
           binding: ShopsBinding(),
         ),
+        GetPage(
+          name: ShopDetailScreen.routeName,
+          page: () => ShopDetailScreen(),
+          binding: ShopDetailBindings(),
+        ),
       ],
       // initialRoute: MapScreen.routeName,
       initialRoute: HomeScreen.routeName,
@@ -78,6 +86,7 @@ class InitialBindings extends Bindings {
   @override
   void dependencies() {
     Get.put(MarkersSearvice());
+    Get.lazyPut(() => FavoriteShopService());
   }
 }
 

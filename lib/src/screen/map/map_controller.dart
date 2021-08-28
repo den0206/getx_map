@@ -68,21 +68,6 @@ class MapController extends GetxController {
     // update();
   }
 
-  Future<void> onMapLongPress(LatLng latLng) async {
-    print(latLng);
-
-    /// clear markers
-    await Future.forEach(nearStations,
-        (Station station) async => mapService.removeStationMarker(station));
-    nearStations.clear();
-
-    centerLatLng = latLng;
-    mapService.addCenterMarker(centerLatLng);
-    await getNearStations();
-    mainBarController.reset();
-    update();
-  }
-
   Future<void> getNearStations() async {
     final temp = await stationAPI.getNearStations(centerLatLng);
     final names = temp.map((n) => n.name).toSet();
@@ -99,6 +84,21 @@ class MapController extends GetxController {
     });
   }
 
+  Future<void> onMapLongPress(LatLng latLng) async {
+    print(latLng);
+
+    /// clear markers
+    await Future.forEach(nearStations,
+        (Station station) async => mapService.removeStationMarker(station));
+    nearStations.clear();
+
+    centerLatLng = latLng;
+    mapService.addCenterMarker(centerLatLng);
+    await getNearStations();
+    mainBarController.reset();
+    update();
+  }
+
   void selectedChip(int index) async {
     selectedIndex = index;
 
@@ -113,18 +113,6 @@ class MapController extends GetxController {
     mapService.showInfoService(station.id);
   }
 
-  void editNearStation(Station newStation, Station oldStation) {
-    nearStations[mainBarController.currentIndex.value] = newStation;
-    mapService.editStationMarker(
-      newStation,
-      oldStation,
-      icon: markerService.stationIcon,
-      onTap: () => selectStation(newStation),
-    );
-
-    update();
-  }
-
   Future<void> zoomUp() async {
     await mapService.setZoom(true);
   }
@@ -134,9 +122,10 @@ class MapController extends GetxController {
   }
 }
 
-extension MapControllerEXT on MapController {
-  /// use main bar controller
+/// use main bar controller
 
+extension MapControllerEXT on MapController {
+  ///constroctor
   void setMainBar(MainBarController controller) {
     this.mainBarController = controller;
   }
@@ -144,5 +133,20 @@ extension MapControllerEXT on MapController {
   void selectStation(Station nearStation) {
     mainBarController.selectStation(nearStation);
     mainBarController.currentState.value = MenuBarState.showMenu;
+  }
+
+  void editNearStation(Station newStation, Station oldStation) {
+    if (mainBarController.currentIndex.value == null) {
+      return;
+    }
+    nearStations[mainBarController.currentIndex.value!] = newStation;
+    mapService.editStationMarker(
+      newStation,
+      oldStation,
+      icon: markerService.stationIcon,
+      onTap: () => selectStation(newStation),
+    );
+
+    update();
   }
 }

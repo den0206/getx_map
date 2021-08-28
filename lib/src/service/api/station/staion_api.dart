@@ -117,6 +117,8 @@ class StaionAPI {
       queryParametes,
     );
 
+    print(uri);
+
     final response = await http.get(uri);
     if (response.statusCode != 200) {
       final Exception error = Exception("StatusCode is ${response.statusCode}");

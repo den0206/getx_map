@@ -315,7 +315,7 @@ class BoxCell extends GetView<MainBarController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Container(
         margin: EdgeInsets.all(8),
         width: ksheetHeight * 0.5,

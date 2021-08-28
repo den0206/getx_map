@@ -1,3 +1,4 @@
+import 'package:getx_map/src/service/favorite_shop_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Shop {
@@ -6,6 +7,7 @@ class Shop {
   final String address;
   final String charter;
   final String name;
+  final String headerPhoto;
 
   final LatLng latLng;
   final String photo;
@@ -15,6 +17,10 @@ class Shop {
 
   final Genre genre;
 
+  bool get isFavorite {
+    return FavoriteShopService.to.favoriteShop.contains(this);
+  }
+
   Shop({
     required this.id,
     required this.access,
@@ -23,6 +29,7 @@ class Shop {
     required this.name,
     required this.latLng,
     required this.photo,
+    required this.headerPhoto,
     required this.shopDetailMemo,
     required this.stationName,
     required this.urls,
@@ -38,6 +45,7 @@ class Shop {
       name: json['name'],
       latLng: LatLng(json['lat'], json['lng']),
       photo: json['photo']["mobile"]["l"],
+      headerPhoto: json['photo']["pc"]["l"],
       shopDetailMemo: json['shop_detail_memo'],
       stationName: json['station_name'],
       urls: json['urls']["pc"],
@@ -49,13 +57,19 @@ class Shop {
 class Genre {
   final String code;
   final String name;
+  final String copy;
 
-  Genre({required this.code, required this.name});
+  Genre({
+    required this.code,
+    required this.name,
+    required this.copy,
+  });
 
   factory Genre.fromJson(Map<String, dynamic> json) {
     return Genre(
       code: json['code'],
       name: json['name'],
+      copy: json['catch'],
     );
   }
 
