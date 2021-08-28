@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:getx_map/src/screen/shop_detail/shop_detail_controller.dart';
 import 'package:get/get.dart';
+import 'package:getx_map/src/screen/widget/icon_text.dart';
 import 'package:getx_map/src/utils/common_icon.dart';
 
 class ShopDetailScreen extends GetView<ShopDetailController> {
@@ -10,6 +11,7 @@ class ShopDetailScreen extends GetView<ShopDetailController> {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
@@ -19,19 +21,64 @@ class ShopDetailScreen extends GetView<ShopDetailController> {
         body: Column(
           children: [
             Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(40),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.white,
-                      spreadRadius: 1.0,
-                      blurRadius: 20,
-                      offset: Offset(5, 3))
+              constraints: BoxConstraints(
+                  maxWidth: responsive.width - 20,
+                  minHeight: responsive.height / 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(40),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.white,
+                            spreadRadius: 1.0,
+                            blurRadius: 20,
+                            offset: Offset(5, 3))
+                      ],
+                    ),
+                    child: Image.network(
+                      controller.shop.photo,
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Chip(
+                        label: Text(controller.shop.stationName),
+                        labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                        avatar: Icon(
+                          CommonIcon.stationIcon,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            color: Colors.redAccent,
+                          ),
+                          Container(
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width / 3,
+                            ),
+                            child: Text(
+                              controller.shop.address,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  )
                 ],
-              ),
-              child: Image.network(
-                controller.shop.photo,
-                // height: MediaQuery.of(context).size.height * 0.25,
               ),
             ),
             SizedBox(
@@ -42,7 +89,8 @@ class ShopDetailScreen extends GetView<ShopDetailController> {
               padding: EdgeInsets.all(20),
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.grey,
+                color: Colors.white38,
+                border: Border.all(color: Colors.white, width: 2),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
@@ -51,87 +99,120 @@ class ShopDetailScreen extends GetView<ShopDetailController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 10,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Text(
+                      controller.shop.catchCopy,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            controller.shop.name,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w800, fontSize: 30),
+                          ),
+                        ),
+                        Obx(
+                          () => IconButton(
+                            onPressed: () {
+                              controller.toggeleFavorite();
+                            },
+                            icon: Icon(
+                              Icons.favorite,
+                              color: controller.shop.isFavorite
+                                  ? Colors.redAccent
+                                  : Colors.white,
+                              size: 40,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Row(
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              icon: Icon(Icons.arrow_back_ios)),
-                          Chip(
-                            label: Text(controller.shop.stationName),
-                            labelStyle: TextStyle(fontWeight: FontWeight.w600),
-                            avatar: Icon(
-                              CommonIcon.stationIcon,
-                            ),
-                          ),
-                        ],
+                      Chip(
+                        padding: EdgeInsets.symmetric(horizontal: 4),
+                        label: Text(controller.shop.avarage),
+                        labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                        avatar: Icon(
+                          Icons.payments_outlined,
+                        ),
                       ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_on,
-                            color: Colors.redAccent,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(controller.shop.address)
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              controller.shop.name,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w800, fontSize: 30),
-                            ),
-                          ),
-                          Obx(
-                            () => IconButton(
-                              onPressed: () {
-                                controller.toggeleFavorite();
-                              },
-                              icon: Icon(
-                                Icons.favorite,
-                                color: controller.shop.isFavorite
-                                    ? Colors.redAccent
-                                    : Colors.white,
-                                size: 40,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Text(
-                        controller.shop.shopDetailMemo,
-                        style: TextStyle(height: 1.5),
-                      ),
-                      Text(
-                        controller.shop.charter,
-                        style: TextStyle(height: 1.5),
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          "ホームページ",
-                          style: TextStyle(color: Colors.black),
+                      Chip(
+                        padding: EdgeInsets.symmetric(horizontal: 4),
+                        label: Text(controller.shop.genre.name),
+                        labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                        avatar: Icon(
+                          Icons.restaurant_menu_rounded,
                         ),
                       ),
                     ],
+                  ),
+                  IconText(
+                    icon: Icons.no_meals,
+                    text: controller.shop.close,
+                    iconColor: Colors.red,
+                  ),
+                  _divider(),
+                  IconText(
+                    icon: Icons.directions_walk_outlined,
+                    text: controller.shop.access,
+                    iconColor: Colors.green,
+                  ),
+                  _divider(),
+                  if (controller.shop.shopDetailMemo.isNotEmpty) ...[
+                    IconText(
+                      icon: Icons.message_outlined,
+                      text: controller.shop.shopDetailMemo,
+                      iconColor: Colors.orange,
+                    ),
+                    _divider(),
+                  ],
+                  IconText(
+                    icon: Icons.smoking_rooms_outlined,
+                    text: controller.shop.smoking,
+                    iconColor: Colors.black,
+                  ),
+                  _divider(),
+                  IconText(
+                    icon: Icons.wifi,
+                    text: controller.shop.wifi,
+                    iconColor: Colors.blue,
+                  ),
+                  _divider(),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "ホームページ",
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
                 ],
               ),
             ))
           ],
         ));
+  }
+
+  Padding _divider() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 70),
+      child: Divider(
+        color: Colors.black,
+        height: 2,
+      ),
+    );
   }
 }

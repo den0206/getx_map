@@ -18,6 +18,14 @@ class Shop {
   final String stationName;
   final String urls;
 
+  final String catchCopy;
+  final String avarage;
+  final int capacity;
+  final String couponUrls;
+  final String wifi;
+  final String smoking;
+  final String close;
+
   final Genre genre;
 
   bool get isFavorite {
@@ -33,12 +41,19 @@ class Shop {
     required this.address,
     required this.charter,
     required this.name,
+    required this.headerPhoto,
     required this.latLng,
     required this.photo,
-    required this.headerPhoto,
     required this.shopDetailMemo,
     required this.stationName,
     required this.urls,
+    required this.catchCopy,
+    required this.avarage,
+    required this.capacity,
+    required this.couponUrls,
+    required this.wifi,
+    required this.smoking,
+    required this.close,
     required this.genre,
   });
 
@@ -48,7 +63,7 @@ class Shop {
     final LatLng latLng = LatLng(lat, lng);
     return Shop(
       id: json['id'],
-      access: json['access'],
+      access: json['mobile_access'],
       address: json['address'],
       charter: json['charter'],
       name: json['name'],
@@ -59,6 +74,13 @@ class Shop {
       stationName: json['station_name'],
       urls: json['urls']["pc"],
       genre: Genre.fromJson(json['genre']),
+      avarage: json["budget"]["name"],
+      capacity: json["capacity"],
+      catchCopy: json["catch"],
+      couponUrls: json["coupon_urls"]["sp"],
+      wifi: json["wifi"],
+      smoking: json["non_smoking"],
+      close: json["close"],
     );
   }
 
@@ -79,6 +101,13 @@ class Shop {
       stationName: map['stationName'],
       urls: map['urls'],
       genre: Genre.fromJson(map['genre']),
+      avarage: map['avarage'],
+      capacity: map['capacity'],
+      catchCopy: map['catchCopy'],
+      couponUrls: map['couponUrls'],
+      close: map['close'],
+      smoking: map['smoking'],
+      wifi: map['wifi'],
     );
   }
 
@@ -97,6 +126,13 @@ class Shop {
       'stationName': stationName,
       'urls': urls,
       'genre': genre.toMap(),
+      'avarage': avarage,
+      'capacity': capacity,
+      'catchCopy': catchCopy,
+      'couponUrls': couponUrls,
+      'open': close,
+      'smoking': smoking,
+      'wifi': wifi,
     };
   }
 

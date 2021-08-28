@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/home/home_controller.dart';
 import 'package:getx_map/src/screen/widget/animated_widget.dart';
+import 'package:getx_map/src/screen/widget/custom_badges.dart';
 import 'package:getx_map/src/utils/common_icon.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 
@@ -18,112 +19,111 @@ class HomeScreen extends StatelessWidget {
       init: HomeController(),
       builder: (controller) {
         return Scaffold(
-          body: Stack(
-            children: [
-              SafeArea(
-                child: Column(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height / 6.5,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    child: Icon(
-                                      Icons.group,
-                                      size: 35,
-                                    ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: "現在の人数",
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Obx(
-                            () => Text(
-                              "${controller.completeStations.length.toString()} 人",
-                              style: TextStyle(
-                                  fontSize: 30, fontWeight: FontWeight.w800),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    if (controller.stations.length < 5)
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: CircleAvatar(
-                            backgroundColor: Colors.black,
-                            radius: 25,
-                            child: IconButton(
-                              padding: EdgeInsets.zero,
-                              icon: Icon(Icons.add),
-                              color: ColorsConsts.themeYellow,
-                              onPressed: () {
-                                /// add empty cell;
-                                controller.stations.add(null);
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    Flexible(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: controller.stations.length,
-                        itemBuilder: (context, index) {
-                          final staion = controller.stations.elementAt(index);
-                          if (staion != null) {
-                            return StationCell(
-                              station: staion,
-                              index: index,
-                            );
-                          } else {
-                            return EmptyCell(
-                              index: index,
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                    // if (controller.stations.length <= 5) CommonCell(),
-                  ],
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            actions: [
+              FavoriteShopBadge(),
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: TextStyle(
+                      fontWeight: FontWeight.w500, color: Colors.black),
                 ),
-              ),
-              Positioned(
-                top: 30,
-                right: 20,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: TextStyle(
-                        fontWeight: FontWeight.w500, color: Colors.black),
-                  ),
-                  child: Text(
-                    "検索",
-                  ),
-                  onPressed: controller.completeStations.length < 2
-                      ? null
-                      : () {
-                          controller.pushMapScreen();
-                        },
+                child: Text(
+                  "検索",
                 ),
+                onPressed: controller.completeStations.length < 2
+                    ? null
+                    : () {
+                        controller.pushMapScreen();
+                      },
               ),
             ],
+          ),
+          body: SafeArea(
+            child: Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height / 6.5,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            WidgetSpan(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: Icon(
+                                  Icons.group,
+                                  size: 35,
+                                ),
+                              ),
+                            ),
+                            TextSpan(
+                              text: "現在の人数",
+                              style: TextStyle(
+                                fontSize: 25,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Obx(
+                        () => Text(
+                          "${controller.completeStations.length.toString()} 人",
+                          style: TextStyle(
+                              fontSize: 40, fontWeight: FontWeight.w800),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                if (controller.stations.length < 5)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.black,
+                        radius: 25,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          icon: Icon(Icons.add),
+                          color: ColorsConsts.themeYellow,
+                          onPressed: () {
+                            /// add empty cell;
+                            controller.stations.add(null);
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                Flexible(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: controller.stations.length,
+                    itemBuilder: (context, index) {
+                      final staion = controller.stations.elementAt(index);
+                      if (staion != null) {
+                        return StationCell(
+                          station: staion,
+                          index: index,
+                        );
+                      } else {
+                        return EmptyCell(
+                          index: index,
+                        );
+                      }
+                    },
+                  ),
+                ),
+                // if (controller.stations.length <= 5) CommonCell(),
+              ],
+            ),
           ),
         );
       },

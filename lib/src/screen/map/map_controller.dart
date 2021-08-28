@@ -26,7 +26,7 @@ class MapController extends GetxController {
   final stationAPI = StaionAPI();
   late MainBarController mainBarController;
 
-  int? selectedIndex;
+  int? chipIndex;
   RxBool overlayLoading = false.obs;
 
   late LatLng centerLatLng;
@@ -104,8 +104,13 @@ class MapController extends GetxController {
     update();
   }
 
+  Future<void> degaultMap() async {
+    chipIndex = null;
+    await mapService.fitMarkerBounds();
+  }
+
   void selectedChip(int index) async {
-    selectedIndex = index;
+    chipIndex = index;
 
     final sta = stations[index];
     await zoomStation(sta);
@@ -163,7 +168,7 @@ extension MapControllerEXT on MapController {
     update();
   }
 
-  void addShopMarkers({bool oninit = false}) {
+  void addShopMarkers({bool oninit = false}) async {
     bool isUpdate = false;
 
     final FavoriteShopService shopService = FavoriteShopService.to;
@@ -202,6 +207,7 @@ extension MapControllerEXT on MapController {
 
     if (isUpdate) {
       update();
+      await mapService.fitMarkerBounds();
     } else {
       print("Not Update");
     }

@@ -47,54 +47,7 @@ class MapScreen extends GetView<MapController> {
                     await controller.onMapLongPress(latLng);
                   },
                 ),
-                Positioned(
-                  top: 0.0,
-                  left: 0.0,
-                  right: 0.0,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AppBar(
-                        leading: new IconButton(
-                          iconSize: 32,
-                          icon: new Icon(Icons.arrow_back_ios,
-                              color: Colors.black),
-                          onPressed: () => Get.back(),
-                        ),
-                        backgroundColor:
-                            Colors.transparent, //You can make this transparent
-                        elevation: 0.0,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Container(
-                          margin: EdgeInsets.only(left: 10.0),
-                          height: MediaQuery.of(context).size.height * 0.05,
-                          // height: 50,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            primary: true,
-                            itemCount: controller.stations.length,
-                            itemBuilder: (context, index) {
-                              final station = controller.stations[index];
-                              return CommonChip(
-                                label: station.name,
-                                selected: controller.selectedIndex == index,
-                                leadingIcon: Icon(
-                                  Icons.person,
-                                  color: ColorsConsts.iconColors[index],
-                                ),
-                                onselected: (selected) =>
-                                    controller.selectedChip(index),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                _chipArea(context, controller),
                 _defaultButton(),
                 _zoomButtons(),
                 MainBar(mapController: controller),
@@ -102,6 +55,54 @@ class MapScreen extends GetView<MapController> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Positioned _chipArea(BuildContext context, MapController controller) {
+    return Positioned(
+      top: 0.0,
+      left: 0.0,
+      right: 0.0,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppBar(
+            leading: new IconButton(
+              iconSize: 32,
+              icon: new Icon(Icons.arrow_back_ios, color: Colors.black),
+              onPressed: () => Get.back(),
+            ),
+            backgroundColor: Colors.transparent, //You can make this transparent
+            elevation: 0.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Container(
+              margin: EdgeInsets.only(left: 10.0),
+              height: MediaQuery.of(context).size.height * 0.05,
+              // height: 50,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                primary: true,
+                itemCount: controller.stations.length,
+                itemBuilder: (context, index) {
+                  final station = controller.stations[index];
+                  return CommonChip(
+                    label: station.name,
+                    selected: controller.chipIndex == index,
+                    leadingIcon: Icon(
+                      Icons.person,
+                      color: ColorsConsts.iconColors[index],
+                    ),
+                    onselected: (selected) => controller.selectedChip(index),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -160,7 +161,7 @@ class MapScreen extends GetView<MapController> {
           backgroundColor: ColorsConsts.themeYellow,
           // backgroundColor: Colors.green[300],
           onPressed: () {
-            controller.mapService.fitMarkerBounds();
+            controller.degaultMap();
           },
           label: Text(
             'Default Position',

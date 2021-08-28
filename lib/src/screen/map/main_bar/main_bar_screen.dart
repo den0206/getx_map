@@ -162,7 +162,7 @@ class FavoriteShopState extends GetView<MainBarController> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 8),
@@ -183,7 +183,7 @@ class FavoriteShopState extends GetView<MainBarController> {
                   Icons.close,
                 ),
                 onPressed: () {
-                  controller.currentState.value = MenuBarState.root;
+                  controller.currentState.value = MenuBarState.showMenu;
                 },
               )
             ],
@@ -202,27 +202,28 @@ class FavoriteShopState extends GetView<MainBarController> {
                 child: Obx(
                   () => Transform.scale(
                     scale: controller.currentIndex.value == index ? 1 : 0.8,
-                    child: BoxCell(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Image.network(
-                            shop.photo,
-                            width: 60,
-                            height: 60,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              shop.name,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 12,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                            height: 120,
+                            width: 120,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 2),
+                              image: DecorationImage(
+                                image: NetworkImage(shop.photo),
+                                fit: BoxFit.cover,
                               ),
-                            ),
+                            )),
+                        Text(
+                          shop.name,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 12,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
