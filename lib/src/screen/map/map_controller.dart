@@ -7,6 +7,7 @@ import 'package:getx_map/src/screen/map/main_bar/main_bar_controller.dart';
 import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
 import 'package:getx_map/src/service/favorite_shop_service.dart';
+import 'package:getx_map/src/service/generate_probability.dart';
 import 'package:getx_map/src/service/map_service.dart';
 import 'package:getx_map/src/service/markers_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -55,9 +56,17 @@ class MapController extends GetxController {
     }
   }
 
-  Future<void> showInterstitialAd() async {
+  Future<void> showInterstitialAd({bool useFrequency = true}) async {
     final interAd = AdmobInterstialService.to;
-    await interAd.showInterstitialAd();
+
+    if (!useFrequency) {
+      await interAd.showInterstitialAd();
+      return;
+    }
+
+    if (GenerateProbability.to.probability(frequency: 3)) {
+      await interAd.showInterstitialAd();
+    }
   }
 
   Future addStationMarkers() async {
@@ -96,8 +105,6 @@ class MapController extends GetxController {
 
   Future<void> onMapLongPress(LatLng latLng) async {
     print(latLng);
-
-    FavoriteShopService.to.clearFavorite();
 
     /// clear markers
     await Future.forEach(nearStations,
@@ -152,6 +159,9 @@ extension MapControllerEXT on MapController {
   }
 
   void selectStation(Station nearStation) {
+    if (mainBarController.currentState.value == MenuBarState.showMenu) {
+      mainBarController.pushShopScreen();
+    }
     mainBarController.selectStation(nearStation);
     mainBarController.currentState.value = MenuBarState.showMenu;
   }

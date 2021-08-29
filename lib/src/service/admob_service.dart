@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:getx_map/src/screen/widget/loading_widget.dart';
+import 'package:getx_map/src/service/generate_probability.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:get/get.dart';
 
@@ -98,6 +99,23 @@ class AdmobInterstialService extends GetxController {
     }
   }
 
+  static String get interstitialVideoAdUnitId {
+    if (useTestId) {
+      /// Test
+      return Platform.isAndroid
+          ? "ca-app-pub-3940256099942544/8691691433"
+          : "ca-app-pub-3940256099942544/5135589807";
+    } else {
+      if (Platform.isAndroid) {
+        return "";
+      } else if (Platform.isIOS) {
+        return FlutterConfig.get("INSTESTIAL_VIDEO_IOS");
+      } else {
+        throw new UnsupportedError("Unsupported platform");
+      }
+    }
+  }
+
   Future<void> showInterstitialAd(
       {bool useList = false, Function()? onDismissAd}) async {
     if (myInterstitialAd == null) {
@@ -112,8 +130,11 @@ class AdmobInterstialService extends GetxController {
   }
 
   void _createInterstitialAd() {
+    final id = GenerateProbability.to.probability(frequency: 3)
+        ? interstitialVideoAdUnitId
+        : interstitialAdUnitId;
     var _ = InterstitialAd.load(
-      adUnitId: interstitialAdUnitId,
+      adUnitId: id,
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {

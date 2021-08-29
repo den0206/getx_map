@@ -4,6 +4,7 @@ import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/map/map_controller.dart';
 import 'package:get/get.dart';
+import 'package:getx_map/src/screen/shop_detail/shop_datail_screen.dart';
 import 'package:getx_map/src/screen/shops/shops_screen.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
 import 'package:getx_map/src/service/favorite_shop_service.dart';
@@ -67,13 +68,19 @@ class MainBarController extends GetxController {
   }
 
   void selectFavorite() {
+    currentIndex.value = null;
     currentState.value = MenuBarState.favoriteShop;
   }
 
-  void selectFavoriteShop(Shop shop) {
+  void selectFavoriteShop(Shop shop) async {
     final index = favorites.indexWhere((favorite) => favorite.id == shop.id);
-    currentIndex.value = index;
 
+    if (index == currentIndex.value) {
+      final _ = await Get.toNamed(ShopDetailScreen.routeName, arguments: shop);
+      mapController.addShopMarkers();
+      return;
+    }
+    currentIndex.value = index;
     currentState.value = MenuBarState.favoriteShop;
     mapController.zoomShop(shop);
   }
@@ -81,7 +88,7 @@ class MainBarController extends GetxController {
   void pushShopScreen() async {
     final value = currentNearStation;
     final _ = await Get.toNamed(ShopsScreen.routeName, arguments: value);
-
+    await mapController.showInterstitialAd();
     mapController.addShopMarkers();
   }
 
@@ -114,6 +121,9 @@ class MainBarController extends GetxController {
         currentState.value = MenuBarState.route;
         return;
       }
+
+      /// show Ad(every time)
+      await mapController.showInterstitialAd(useFrequency: false);
 
       await Future.forEach(
         stations,
