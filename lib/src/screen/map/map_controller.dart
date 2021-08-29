@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/map/main_bar/main_bar_controller.dart';
+import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
 import 'package:getx_map/src/service/favorite_shop_service.dart';
 import 'package:getx_map/src/service/map_service.dart';
@@ -40,6 +41,7 @@ class MapController extends GetxController {
     overlayLoading.value = true;
     try {
       mapService.init(controller);
+      await showInterstitialAd();
       await addStationMarkers();
       await Future.delayed(Duration(seconds: 1));
       await setCenterCircle();
@@ -51,6 +53,11 @@ class MapController extends GetxController {
       update();
       overlayLoading.value = false;
     }
+  }
+
+  Future<void> showInterstitialAd() async {
+    final interAd = AdmobInterstialService.to;
+    await interAd.showInterstitialAd();
   }
 
   Future addStationMarkers() async {

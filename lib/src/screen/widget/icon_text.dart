@@ -36,7 +36,10 @@ class IconText extends StatelessWidget {
             text,
             overflow: TextOverflow.ellipsis,
             maxLines: 3,
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white,
+            ),
           ),
         )
       ]),

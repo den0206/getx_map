@@ -4,6 +4,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/screen/get_station/get_station_controller.dart';
+import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/utils/common_icon.dart';
 
 class GetStationScreen extends GetView<GetStationController> {
@@ -95,7 +96,8 @@ class GetStationScreen extends GetView<GetStationController> {
                     },
                   ),
                 ),
-              )
+              ),
+              AdmobBannerService.to.myBannerAd,
             ],
           ),
         ),

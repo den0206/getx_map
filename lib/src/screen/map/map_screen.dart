@@ -7,6 +7,7 @@ import 'package:getx_map/src/screen/map/main_bar/main_bar_screen.dart';
 import 'package:getx_map/src/screen/widget/common_chip.dart';
 import 'package:getx_map/src/screen/widget/custom_badges.dart';
 import 'package:getx_map/src/screen/widget/loading_widget.dart';
+import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -73,6 +74,7 @@ class MapScreen extends GetView<MapController> {
               icon: new Icon(Icons.arrow_back_ios, color: Colors.black),
               onPressed: () => Get.back(),
             ),
+            title: AdmobBannerService.to.myBannerAd,
             backgroundColor: Colors.transparent, //You can make this transparent
             elevation: 0.0,
           ),

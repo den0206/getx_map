@@ -8,16 +8,12 @@ class Shop {
   final String id;
   final String access;
   final String address;
-  final String charter;
   final String name;
-  final String headerPhoto;
-
   final LatLng latLng;
   final String photo;
   final String shopDetailMemo;
   final String stationName;
   final String urls;
-
   final String catchCopy;
   final String avarage;
   final int capacity;
@@ -39,9 +35,7 @@ class Shop {
     required this.id,
     required this.access,
     required this.address,
-    required this.charter,
     required this.name,
-    required this.headerPhoto,
     required this.latLng,
     required this.photo,
     required this.shopDetailMemo,
@@ -65,11 +59,9 @@ class Shop {
       id: json['id'],
       access: json['mobile_access'],
       address: json['address'],
-      charter: json['charter'],
       name: json['name'],
       latLng: latLng,
       photo: json['photo']["mobile"]["l"],
-      headerPhoto: json['photo']["pc"]["l"],
       shopDetailMemo: json['shop_detail_memo'],
       stationName: json['station_name'],
       urls: json['urls']["pc"],
@@ -92,9 +84,7 @@ class Shop {
       id: map['id'],
       access: map['access'],
       address: map['address'],
-      charter: map['charter'],
       name: map['name'],
-      headerPhoto: map['headerPhoto'],
       latLng: latLng,
       photo: map['photo'],
       shopDetailMemo: map['shopDetailMemo'],
@@ -116,9 +106,7 @@ class Shop {
       'id': id,
       'access': access,
       'address': address,
-      'charter': charter,
       'name': name,
-      'headerPhoto': headerPhoto,
       "lat": latLng.latitude,
       "lng": latLng.longitude,
       'photo': photo,
@@ -130,7 +118,7 @@ class Shop {
       'capacity': capacity,
       'catchCopy': catchCopy,
       'couponUrls': couponUrls,
-      'open': close,
+      'close': close,
       'smoking': smoking,
       'wifi': wifi,
     };

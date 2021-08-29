@@ -18,6 +18,7 @@ class FavoriteShopService extends GetxService {
   }
 
   void loadFavorite() {
+    // databse.deleteKey(DatabaseKey.favoriteShop);
     final temp = databse.loadShops(DatabaseKey.favoriteShop);
 
     favoriteShop.addAll(temp);

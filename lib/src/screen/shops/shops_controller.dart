@@ -2,6 +2,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/shop_detail/shop_datail_screen.dart';
+import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/service/api/shop/shop_api.dart';
 import 'package:getx_map/src/service/favorite_shop_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -56,15 +57,33 @@ class ShopsController extends GetxController with ShopsBase {
   bool reachLast = false;
   bool isLoading = false;
 
+  bool get showInterAd {
+    if (shopAPI.currentIndex == 1) {
+      return false;
+    } else if (((shopAPI.currentIndex - 1) / 10) % 2 == 0) {
+      return true;
+    }
+    return false;
+  }
+
   @override
   void onInit() async {
     super.onInit();
     await fetchShops();
   }
 
+  Future<void> showInterstitialAd() async {
+    final interAd = AdmobInterstialService.to;
+    await interAd.showInterstitialAd(useList: true);
+  }
+
   Future<void> fetchShops() async {
     if (reachLast) {
       return;
+    }
+
+    if (showInterAd) {
+      await showInterstitialAd();
     }
 
     isLoading = true;

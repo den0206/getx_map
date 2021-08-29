@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:getx_map/src/screen/shop_detail/shop_detail_controller.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/screen/widget/icon_text.dart';
+import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/utils/common_icon.dart';
 
 class ShopDetailScreen extends GetView<ShopDetailController> {
@@ -16,6 +17,7 @@ class ShopDetailScreen extends GetView<ShopDetailController> {
         backgroundColor: Colors.black,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          title: AdmobBannerService.to.myBannerAd,
           elevation: 0,
         ),
         body: Column(
@@ -96,110 +98,114 @@ class ShopDetailScreen extends GetView<ShopDetailController> {
                   topRight: Radius.circular(30),
                 ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Text(
-                      controller.shop.catchCopy,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Text(
+                        controller.shop.catchCopy,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            controller.shop.name,
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: true,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w800, fontSize: 30),
-                          ),
-                        ),
-                        Obx(
-                          () => IconButton(
-                            onPressed: () {
-                              controller.toggeleFavorite();
-                            },
-                            icon: Icon(
-                              Icons.favorite,
-                              color: controller.shop.isFavorite
-                                  ? Colors.redAccent
-                                  : Colors.white,
-                              size: 40,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              controller.shop.name,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w800, fontSize: 30),
                             ),
                           ),
-                        )
+                          Obx(
+                            () => IconButton(
+                              onPressed: () {
+                                controller.toggeleFavorite();
+                              },
+                              icon: Icon(
+                                Icons.favorite,
+                                color: controller.shop.isFavorite
+                                    ? Colors.redAccent
+                                    : Colors.white,
+                                size: 40,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Chip(
+                          padding: EdgeInsets.symmetric(horizontal: 4),
+                          label: Text(controller.shop.avarage),
+                          labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                          avatar: Icon(
+                            Icons.payments_outlined,
+                          ),
+                        ),
+                        Chip(
+                          padding: EdgeInsets.symmetric(horizontal: 4),
+                          label: Text(controller.shop.genre.name),
+                          labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                          avatar: Icon(
+                            Icons.restaurant_menu_rounded,
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Chip(
-                        padding: EdgeInsets.symmetric(horizontal: 4),
-                        label: Text(controller.shop.avarage),
-                        labelStyle: TextStyle(fontWeight: FontWeight.w600),
-                        avatar: Icon(
-                          Icons.payments_outlined,
-                        ),
-                      ),
-                      Chip(
-                        padding: EdgeInsets.symmetric(horizontal: 4),
-                        label: Text(controller.shop.genre.name),
-                        labelStyle: TextStyle(fontWeight: FontWeight.w600),
-                        avatar: Icon(
-                          Icons.restaurant_menu_rounded,
-                        ),
-                      ),
-                    ],
-                  ),
-                  IconText(
-                    icon: Icons.no_meals,
-                    text: controller.shop.close,
-                    iconColor: Colors.red,
-                  ),
-                  _divider(),
-                  IconText(
-                    icon: Icons.directions_walk_outlined,
-                    text: controller.shop.access,
-                    iconColor: Colors.green,
-                  ),
-                  _divider(),
-                  if (controller.shop.shopDetailMemo.isNotEmpty) ...[
                     IconText(
-                      icon: Icons.message_outlined,
-                      text: controller.shop.shopDetailMemo,
-                      iconColor: Colors.orange,
+                      icon: Icons.no_meals,
+                      text: controller.shop.close,
+                      iconColor: Colors.red,
                     ),
                     _divider(),
-                  ],
-                  IconText(
-                    icon: Icons.smoking_rooms_outlined,
-                    text: controller.shop.smoking,
-                    iconColor: Colors.black,
-                  ),
-                  _divider(),
-                  IconText(
-                    icon: Icons.wifi,
-                    text: controller.shop.wifi,
-                    iconColor: Colors.blue,
-                  ),
-                  _divider(),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "ホームページ",
-                      style: TextStyle(color: Colors.black),
+                    IconText(
+                      icon: Icons.directions_walk_outlined,
+                      text: controller.shop.access,
+                      iconColor: Colors.green,
                     ),
-                  ),
-                ],
+                    _divider(),
+                    if (controller.shop.shopDetailMemo.isNotEmpty) ...[
+                      IconText(
+                        icon: Icons.message_outlined,
+                        text: controller.shop.shopDetailMemo,
+                        iconColor: Colors.orange,
+                      ),
+                      _divider(),
+                    ],
+                    IconText(
+                      icon: Icons.smoking_rooms_outlined,
+                      text: controller.shop.smoking,
+                      iconColor: Colors.black,
+                    ),
+                    _divider(),
+                    IconText(
+                      icon: Icons.wifi,
+                      text: controller.shop.wifi,
+                      iconColor: Colors.blue,
+                    ),
+                    _divider(),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        "ホームページ",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ))
           ],

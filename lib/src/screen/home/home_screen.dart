@@ -5,6 +5,7 @@ import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/home/home_controller.dart';
 import 'package:getx_map/src/screen/widget/animated_widget.dart';
 import 'package:getx_map/src/screen/widget/custom_badges.dart';
+import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/utils/common_icon.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 
@@ -82,26 +83,30 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (controller.stations.length < 5)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.black,
-                        radius: 25,
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          icon: Icon(Icons.add),
-                          color: ColorsConsts.themeYellow,
-                          onPressed: () {
-                            /// add empty cell;
-                            controller.stations.add(null);
-                          },
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AdmobBannerService.to.myBannerAd,
+                    if (controller.stations.length < 5)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.black,
+                          radius: 25,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            icon: Icon(Icons.add),
+                            color: ColorsConsts.themeYellow,
+                            onPressed: () {
+                              /// add empty cell;
+                              controller.stations.add(null);
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                  ],
+                ),
                 Flexible(
                   child: ListView.builder(
                     shrinkWrap: true,
