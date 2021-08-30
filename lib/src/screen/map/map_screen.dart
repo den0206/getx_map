@@ -8,6 +8,7 @@ import 'package:getx_map/src/screen/widget/common_chip.dart';
 import 'package:getx_map/src/screen/widget/custom_badges.dart';
 import 'package:getx_map/src/screen/widget/loading_widget.dart';
 import 'package:getx_map/src/service/admob_service.dart';
+import 'package:getx_map/src/utils/common_icon.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -94,10 +95,7 @@ class MapScreen extends GetView<MapController> {
                   return CommonChip(
                     label: station.name,
                     selected: controller.chipIndex == index,
-                    leadingIcon: Icon(
-                      Icons.person,
-                      color: ColorsConsts.iconColors[index],
-                    ),
+                    leadingIcon: CommonIcon.getPersonIcon(index),
                     onselected: (selected) => controller.selectedChip(index),
                   );
                 },

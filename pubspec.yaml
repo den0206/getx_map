@@ -13,7 +13,6 @@ dependencies:
   convert: ^3.0.1
   crypto: ^3.0.1
   cupertino_icons: ^1.0.2
-  dio: ^4.0.0
   flexible_polyline:
     git:
       url: https://github.com/heremaps/flexible-polyline.git
@@ -30,6 +29,7 @@ dependencies:
   get_storage: ^2.0.3
   google_maps_flutter: ^2.0.6
   google_mobile_ads: ^0.13.4
+  html: ^0.15.0
   jp_prefecture: ^2.0.0
   permission_handler: ^8.1.4+2
   url_launcher: ^6.0.9

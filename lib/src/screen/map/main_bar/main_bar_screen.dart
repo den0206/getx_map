@@ -345,22 +345,23 @@ class RouteState extends GetView<MainBarController> {
 
               return BoxCell(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Flexible(
                         child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        Icon(
-                          CommonIcon.stationIcon,
-                        ),
-                        Text(
-                          "${station.name}駅 ",
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: true,
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 20,
+                        CommonIcon.getPersonIcon(index),
+                        Container(
+                          constraints: BoxConstraints(maxWidth: 100),
+                          child: Text(
+                            "${station.name}駅 ",
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 17,
+                            ),
                           ),
                         ),
                       ],
@@ -375,14 +376,18 @@ class RouteState extends GetView<MainBarController> {
                     TextButton(
                       child: Text(
                         "行き方",
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
+                        style: TextStyle(fontSize: 20, color: Colors.yellow),
                       ),
                       onPressed: () {
                         controller.openUrl(index);
                       },
                     ),
+                    Text(
+                      controller.requireTimeString(index),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )
                   ],
                 ),
               );

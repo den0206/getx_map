@@ -242,7 +242,7 @@ class ShopCell extends StatelessWidget {
                         ),
                         Flexible(
                           child: Text(
-                            shop.shopDetailMemo,
+                            shop.catchCopy,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             style: TextStyle(

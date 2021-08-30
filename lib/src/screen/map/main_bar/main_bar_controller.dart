@@ -8,6 +8,7 @@ import 'package:getx_map/src/screen/shop_detail/shop_datail_screen.dart';
 import 'package:getx_map/src/screen/shops/shops_screen.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
 import 'package:getx_map/src/service/favorite_shop_service.dart';
+import 'package:getx_map/src/service/scraper_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum MenuBarState {
@@ -21,6 +22,7 @@ class MainBarController extends GetxController {
   final MapController mapController;
 
   final Map<Station, List<String>> routes = {};
+  final Map<Station, List<String>> requireTimes = {};
 
   final stationAPI = StaionAPI();
 
@@ -105,7 +107,6 @@ class MainBarController extends GetxController {
     mapController.overlayLoading.value = true;
 
     try {
-      List<String> urls = [];
       if (!currentNearStation.isExpertType) {
         final oldStation = currentNearStation;
 
@@ -125,24 +126,54 @@ class MainBarController extends GetxController {
       /// show Ad(every time)
       await mapController.showInterstitialAd(useFrequency: false);
 
-      await Future.forEach(
-        stations,
-        (Station station) async {
-          await Future.delayed(Duration(seconds: 2));
-          print("delay");
-          final url = await stationAPI.getRouteUrl(
-              from: station, to: currentNearStation);
-          urls.add(url);
-        },
-      );
+      /// urls
+      routes[currentNearStation] = await getRouterUrls(stations);
 
-      routes[currentNearStation] = urls;
+      /// Require times
+      requireTimes[currentNearStation] =
+          await getRequireTimesViaUrls(routes[currentNearStation] ?? []);
+
       currentState.value = MenuBarState.route;
     } catch (e) {
       print(e);
     } finally {
       mapController.overlayLoading.value = false;
     }
+  }
+
+  Future<List<String>> getRouterUrls(List<Station> stations) async {
+    List<String> urls = [];
+    await Future.forEach(
+      stations,
+      (Station station) async {
+        await Future.delayed(Duration(seconds: 2));
+        print("delay");
+        final url =
+            await stationAPI.getRouteUrl(from: station, to: currentNearStation);
+
+        urls.add(url);
+      },
+    );
+
+    return urls;
+  }
+
+  Future<List<String>> getRequireTimesViaUrls(List<String> urls) async {
+    final scraper = ScraperService();
+    List<String> times = [];
+    await Future.forEach(
+      urls,
+      (String url) async {
+        await Future.delayed(Duration(milliseconds: 500));
+        final time = await scraper.getRequireTimeViaUrl(url);
+        times.add(time);
+      },
+    );
+    return times;
+  }
+
+  String requireTimeString(int index) {
+    return "約 ${requireTimes[currentNearStation]?[index]}";
   }
 
   void backRoot() {
