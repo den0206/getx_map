@@ -5,6 +5,7 @@ import 'package:getx_map/src/utils/common_icon.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:getx_map/src/utils/marker_generator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sizer/sizer.dart';
 
 class MarkersSearvice extends GetxService {
   static MarkersSearvice get to => Get.find();
@@ -12,7 +13,7 @@ class MarkersSearvice extends GetxService {
   List<BitmapDescriptor> userIcons = [];
   late BitmapDescriptor stationIcon;
   late BitmapDescriptor restaurnatIcon;
-  final generator = MarkerGenerator(200);
+  final generator = MarkerGenerator(15.h);
 
   @override
   void onInit() async {

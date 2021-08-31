@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:getx_map/src/model/shop.dart';
@@ -6,10 +7,12 @@ import 'package:getx_map/src/screen/map/map_controller.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/screen/shop_detail/shop_datail_screen.dart';
 import 'package:getx_map/src/screen/shops/shops_screen.dart';
+import 'package:getx_map/src/screen/widget/custom_dialog.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
 import 'package:getx_map/src/service/favorite_shop_service.dart';
+import 'package:getx_map/src/service/open_url_servoice.dart';
 import 'package:getx_map/src/service/scraper_service.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:getx_map/src/utils/common_icon.dart';
 
 enum MenuBarState {
   root,
@@ -99,10 +102,28 @@ class MainBarController extends GetxController {
     if (url == null) {
       throw 'URLが見つかりません';
     }
-    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+
+    final openURL = OepnUrlService(url);
+    await openURL.showUrlDialog();
   }
 
-  void searchRoute() async {
+  void confirmRoute() {
+    if (routes.containsKey(currentNearStation)) {
+      currentState.value = MenuBarState.route;
+      return;
+    }
+    Get.dialog(CustomDialog(
+      title: "経路確認",
+      descripon: "確認しても宜しいでしょうか？",
+      icon: CommonIcon.stationIcon,
+      mainColor: Colors.blue[400]!,
+      onSuceed: () async {
+        await searchRoute();
+      },
+    ));
+  }
+
+  Future<void> searchRoute() async {
     final stations = mapController.stations;
     mapController.overlayLoading.value = true;
 
@@ -116,11 +137,6 @@ class MainBarController extends GetxController {
         mapController.editNearStation(newStation, oldStation);
 
         await Future.delayed(Duration(milliseconds: 500));
-      }
-
-      if (routes.containsKey(currentNearStation)) {
-        currentState.value = MenuBarState.route;
-        return;
       }
 
       /// show Ad(every time)

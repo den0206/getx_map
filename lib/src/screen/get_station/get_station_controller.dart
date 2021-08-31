@@ -5,7 +5,6 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/model/suggestion.dart';
-import 'package:getx_map/src/screen/home/home_controller.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
 import 'package:getx_map/src/service/database_service.dart';
 
@@ -24,7 +23,7 @@ class GetStationController extends GetxController {
   final TextEditingController tX = TextEditingController();
   final FocusNode focusNode = FocusNode();
 
-  final int? selectedIndex = Get.arguments ?? null;
+  final Station? selectedStation = Get.arguments ?? null;
 
   final database = DatabaseService.to;
   final stationAPI = StaionAPI();
@@ -53,9 +52,8 @@ class GetStationController extends GetxController {
   }
 
   void _setSelectedIndex() {
-    if (selectedIndex != null) {
-      final selectStation = HomeController.to.stations[selectedIndex!];
-      tX.text = selectStation!.name;
+    if (selectedStation != null) {
+      tX.text = selectedStation!.name;
     }
   }
 

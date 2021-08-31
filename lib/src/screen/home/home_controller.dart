@@ -40,7 +40,8 @@ class HomeController extends GetxController {
   }
 
   Future<void> pushGetScreen(Station? station, int index) async {
-    final newStation = await Get.toNamed(GetStationScreen.routeName);
+    final newStation =
+        await Get.toNamed(GetStationScreen.routeName, arguments: station);
 
     if (newStation is Station) {
       if (!completeStations

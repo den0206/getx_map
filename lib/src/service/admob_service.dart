@@ -6,6 +6,7 @@ import 'package:getx_map/src/screen/widget/loading_widget.dart';
 import 'package:getx_map/src/service/generate_probability.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 var useTestId = true;
 
@@ -51,7 +52,7 @@ class AdmobBannerService {
       color: Colors.yellow[50],
       margin: EdgeInsets.symmetric(vertical: 10),
       alignment: Alignment.center,
-      width: bannerAd.size.width.toDouble(),
+      width: 70.w,
       height: bannerAd.size.height.toDouble(),
       child: AdWidget(ad: bannerAd),
     );
@@ -59,9 +60,9 @@ class AdmobBannerService {
 
   BannerAdListener get bannerAdlistner {
     return BannerAdListener(
-      onAdLoaded: (ad) => print("Banner Load"),
-      onAdOpened: (ad) => print("Banner open"),
-      onAdImpression: (Ad ad) => print('Ad impression.'),
+      onAdLoaded: (ad) {},
+      onAdOpened: (ad) {},
+      onAdImpression: (Ad ad) {},
       onAdClosed: (ad) => print("Bannar close"),
       onAdFailedToLoad: (Ad ad, LoadAdError error) {
         print("Banner failed");
@@ -168,7 +169,7 @@ class AdmobInterstialService extends GetxController {
     myInterstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdShowedFullScreenContent: (InterstitialAd ad) {},
       onAdDismissedFullScreenContent: (InterstitialAd ad) {
-        print('$ad onAdDismissedFullScreenContent.');
+        // print('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
         if (onDismissAd != null) onDismissAd();
         _createInterstitialAd();

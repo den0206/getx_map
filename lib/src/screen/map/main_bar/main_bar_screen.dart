@@ -1,9 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/screen/map/main_bar/main_bar_controller.dart';
 import 'package:getx_map/src/screen/map/map_controller.dart';
-import 'package:getx_map/src/screen/map/map_screen.dart';
 import 'package:getx_map/src/utils/common_icon.dart';
+import 'package:sizer/sizer.dart';
 
 class MainBar extends GetView<MainBarController> {
   const MainBar({
@@ -20,7 +22,7 @@ class MainBar extends GetView<MainBarController> {
       right: 0,
       bottom: 0,
       child: Container(
-        height: ksheetHeight,
+        height: 30.h + MediaQuery.of(context).viewPadding.bottom,
         margin: EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           color: Colors.grey,
@@ -38,7 +40,7 @@ class MainBar extends GetView<MainBarController> {
           ],
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 4.sp),
           child: GetX<MainBarController>(
             init: MainBarController(mapController),
             builder: (_) {
@@ -84,14 +86,14 @@ class MenuState extends GetView<MainBarController> {
         GridView.count(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          mainAxisSpacing: 21.0,
-          crossAxisSpacing: 21.0,
+          mainAxisSpacing: 21.0.sp,
+          crossAxisSpacing: 21.0.sp,
           crossAxisCount: 3,
           children: [
             MenuButton(
               child: Text("経路検索"),
               onPress: () {
-                controller.searchRoute();
+                controller.confirmRoute();
               },
             ),
             MenuButton(
@@ -165,7 +167,7 @@ class FavoriteShopState extends GetView<MainBarController> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 8),
+          padding: EdgeInsets.only(top: 4.sp),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -174,7 +176,7 @@ class FavoriteShopState extends GetView<MainBarController> {
                 "お気に入り",
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
-                  fontSize: 20,
+                  fontSize: 15.sp,
                 ),
               ),
               Spacer(),
@@ -192,6 +194,7 @@ class FavoriteShopState extends GetView<MainBarController> {
         Flexible(
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
             itemCount: controller.favorites.length,
             itemBuilder: (context, index) {
               final shop = controller.favorites[index];
@@ -203,11 +206,11 @@ class FavoriteShopState extends GetView<MainBarController> {
                   () => Transform.scale(
                     scale: controller.currentIndex.value == index ? 1 : 0.8,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      // mainAxisAlignment: MainAxisAlignment.,
                       children: [
                         Container(
-                            height: 120,
-                            width: 120,
+                            height: 30.w,
+                            width: 30.w,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(color: Colors.white, width: 2),
@@ -216,6 +219,9 @@ class FavoriteShopState extends GetView<MainBarController> {
                                 fit: BoxFit.cover,
                               ),
                             )),
+                        SizedBox(
+                          height: 0.5.h,
+                        ),
                         Text(
                           shop.name,
                           overflow: TextOverflow.ellipsis,
@@ -252,7 +258,7 @@ class StationsState extends GetView<MainBarController> {
                 "最寄り駅が${controller.nearStations.length}駅あります。",
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
-                  fontSize: 20,
+                  fontSize: 12.sp,
                 ),
               )),
         ),
@@ -275,7 +281,8 @@ class StationsState extends GetView<MainBarController> {
                         children: [
                           Icon(
                             CommonIcon.stationIcon,
-                            size: 45,
+                            color: Colors.green,
+                            size: 30.sp,
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -283,7 +290,7 @@ class StationsState extends GetView<MainBarController> {
                               station.name,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 14.sp,
                               ),
                             ),
                           ),
@@ -312,7 +319,7 @@ class RouteState extends GetView<MainBarController> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 8),
+          padding: EdgeInsets.only(top: 4.sp),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -321,7 +328,7 @@ class RouteState extends GetView<MainBarController> {
                 "${controller.currentNearStation.name}への経路",
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
-                  fontSize: 20,
+                  fontSize: 15.sp,
                 ),
               ),
               Spacer(),
@@ -345,7 +352,7 @@ class RouteState extends GetView<MainBarController> {
 
               return BoxCell(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Flexible(
                         child: Wrap(
@@ -360,7 +367,7 @@ class RouteState extends GetView<MainBarController> {
                             softWrap: true,
                             maxLines: 1,
                             style: TextStyle(
-                              fontSize: 17,
+                              fontSize: 12.sp,
                             ),
                           ),
                         ),
@@ -370,17 +377,17 @@ class RouteState extends GetView<MainBarController> {
                       "からの",
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 12.sp,
                       ),
                     ),
-                    TextButton(
-                      child: Text(
-                        "行き方",
-                        style: TextStyle(fontSize: 20, color: Colors.yellow),
-                      ),
-                      onPressed: () {
+                    InkWell(
+                      onTap: () {
                         controller.openUrl(index);
                       },
+                      child: Text(
+                        "行き方",
+                        style: TextStyle(fontSize: 13.sp, color: Colors.yellow),
+                      ),
                     ),
                     Text(
                       controller.requireTimeString(index),
@@ -410,10 +417,9 @@ class BoxCell extends GetView<MainBarController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
       child: Container(
-        margin: EdgeInsets.all(8),
-        width: ksheetHeight * 0.5,
+        width: 35.w,
         decoration: BoxDecoration(
           color: Colors.grey[400],
           borderRadius: BorderRadius.circular(8),

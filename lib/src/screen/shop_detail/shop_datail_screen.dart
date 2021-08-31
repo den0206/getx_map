@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:getx_map/src/screen/shop_detail/shop_detail_controller.dart';
 import 'package:getx_map/src/screen/widget/icon_text.dart';
@@ -147,20 +148,33 @@ class ShopDetailScreen extends GetView<ShopDetailController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Chip(
-                        padding: EdgeInsets.symmetric(horizontal: 4),
-                        label: Text(controller.shop.avarage),
-                        labelStyle: TextStyle(fontWeight: FontWeight.w600),
-                        avatar: Icon(
-                          Icons.payments_outlined,
+                      if (controller.shop.avarage.isNotEmpty) ...[
+                        Chip(
+                          padding: EdgeInsets.symmetric(horizontal: 4),
+                          label: Text(
+                            controller.shop.avarage,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                          avatar: Icon(
+                            Icons.payments_outlined,
+                          ),
                         ),
-                      ),
-                      Chip(
-                        padding: EdgeInsets.symmetric(horizontal: 4),
-                        label: Text(controller.shop.genre.name),
-                        labelStyle: TextStyle(fontWeight: FontWeight.w600),
-                        avatar: Icon(
-                          Icons.restaurant_menu_rounded,
+                        SizedBox(
+                          width: 2.w,
+                        ),
+                      ],
+                      Flexible(
+                        child: Chip(
+                          padding: EdgeInsets.symmetric(horizontal: 4),
+                          label: Text(
+                            controller.shop.genre.name,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          labelStyle: TextStyle(fontWeight: FontWeight.w600),
+                          avatar: Icon(
+                            Icons.restaurant_menu_rounded,
+                          ),
                         ),
                       ),
                     ],

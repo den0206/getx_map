@@ -120,7 +120,7 @@ class MapController extends GetxController {
 
   Future<void> degaultMap() async {
     chipIndex = null;
-    await mapService.fitMarkerBounds();
+    await mapService.updateCamera(centerLatLng, setZoom: 10);
   }
 
   void selectedChip(int index) async {

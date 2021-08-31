@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 import 'package:getx_map/src/screen/map/main_bar/main_bar_screen.dart';
 import 'package:getx_map/src/screen/widget/common_chip.dart';
 import 'package:getx_map/src/screen/widget/custom_badges.dart';
@@ -14,12 +13,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:getx_map/src/screen/map/map_controller.dart';
 
-final double ksheetHeight = (Platform.isIOS) ? 300 : 275;
-
 class MapScreen extends GetView<MapController> {
   MapScreen({Key? key}) : super(key: key);
 
   static const routeName = "/MapScreen";
+  final mainBarHeigh = 30.h;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +33,7 @@ class MapScreen extends GetView<MapController> {
                 GoogleMap(
                   initialCameraPosition:
                       controller.mapService.initialCameraPosition,
-                  padding: EdgeInsets.only(bottom: ksheetHeight - 30),
+                  padding: EdgeInsets.only(bottom: 30.h),
                   mapType: MapType.normal,
                   myLocationButtonEnabled: false,
                   myLocationEnabled: false,
@@ -71,7 +69,7 @@ class MapScreen extends GetView<MapController> {
         children: [
           AppBar(
             leading: new IconButton(
-              iconSize: 32,
+              iconSize: 28.sp,
               icon: new Icon(Icons.arrow_back_ios, color: Colors.black),
               onPressed: () => Get.back(),
             ),
@@ -80,10 +78,10 @@ class MapScreen extends GetView<MapController> {
             elevation: 0.0,
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20),
+            padding: EdgeInsets.only(left: 8.w),
             child: Container(
-              margin: EdgeInsets.only(left: 10.0),
-              height: MediaQuery.of(context).size.height * 0.05,
+              margin: EdgeInsets.only(left: 10.w),
+              height: 5.h,
               // height: 50,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -109,7 +107,7 @@ class MapScreen extends GetView<MapController> {
 
   Widget _zoomButtons() {
     return Positioned(
-      bottom: ksheetHeight + 10,
+      bottom: mainBarHeigh + 30,
       left: 20,
       child: SafeArea(
         child: Column(
@@ -154,7 +152,7 @@ class MapScreen extends GetView<MapController> {
 
   Positioned _defaultButton() {
     return Positioned(
-      bottom: ksheetHeight - 10,
+      bottom: mainBarHeigh + 10,
       right: 20,
       child: SafeArea(
         child: FloatingActionButton.extended(

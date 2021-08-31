@@ -5,9 +5,9 @@ import 'package:getx_map/src/screen/shop_detail/shop_datail_screen.dart';
 import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/service/api/shop/shop_api.dart';
 import 'package:getx_map/src/service/favorite_shop_service.dart';
+import 'package:getx_map/src/service/open_url_servoice.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 enum CellType { list, row }
 
@@ -30,9 +30,8 @@ abstract class ShopsBase {
   }
 
   void openUrl(Shop shop) async {
-    final url = shop.urls;
-
-    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+    final openUrl = OepnUrlService(shop.urls);
+    await openUrl.showUrlDialog();
   }
 }
 

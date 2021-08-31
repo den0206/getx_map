@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/home/home_controller.dart';
@@ -90,7 +91,7 @@ class HomeScreen extends StatelessWidget {
                     AdmobBannerService.to.myBannerAd,
                     if (controller.stations.length < 5)
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        padding: EdgeInsets.symmetric(horizontal: 2.w),
                         child: CircleAvatar(
                           backgroundColor: Colors.black,
                           radius: 25,
@@ -107,7 +108,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                   ],
                 ),
-                Flexible(
+                Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: controller.stations.length,
@@ -161,8 +162,8 @@ class StationCell extends GetView<HomeController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: MediaQuery.of(context).size.width - 180,
-              height: MediaQuery.of(context).size.height / 6.3,
+              width: 70.w,
+              height: 20.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40),
                 boxShadow: [
@@ -198,16 +199,16 @@ class StationCell extends GetView<HomeController> {
                               // color: Colors.grey[400],
                             ),
                             SizedBox(
-                              width: 5,
+                              width: 5.sp,
                             ),
                             Container(
-                              constraints: BoxConstraints(maxWidth: 120),
+                              constraints: BoxConstraints(maxWidth: 120.sp),
                               child: Text(
                                 "${station.name} 駅",
                                 softWrap: true,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 16.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -267,7 +268,7 @@ class StationCell extends GetView<HomeController> {
                                           line.name,
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 10,
+                                            fontSize: 12.sp,
                                           ),
                                         ),
                                       ),
@@ -329,8 +330,8 @@ class EmptyCell extends GetView<HomeController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width - 180,
-                  height: MediaQuery.of(context).size.height / 6.3,
+                  width: 70.w,
+                  height: 20.h,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40),
                     boxShadow: [
@@ -350,20 +351,20 @@ class EmptyCell extends GetView<HomeController> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 10),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Icon(
-                              Icons.person,
-                              size: 40,
-                              color: ColorsConsts.iconColors[index]
-                                  .withOpacity(0.8),
-                            ),
+                          Icon(
+                            Icons.person,
+                            size: 30.sp,
+                            color:
+                                ColorsConsts.iconColors[index].withOpacity(0.8),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Icon(
                                   CommonIcon.stationIcon,
@@ -373,7 +374,10 @@ class EmptyCell extends GetView<HomeController> {
                                 ),
                                 Text(
                                   "駅名を入力してください",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13.sp,
+                                  ),
                                 ),
                               ],
                             ),

@@ -22,6 +22,7 @@ import 'package:getx_map/src/service/favorite_shop_service.dart';
 import 'package:getx_map/src/service/markers_service.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:sizer/sizer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,55 +40,59 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'getx-map',
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(backgroundColor: Colors.grey),
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        scaffoldBackgroundColor: ColorsConsts.themeYellow,
-        cardColor: Colors.grey,
-        // scaffoldBackgroundColor: hexToColor("#f7b611"),
-      ),
-      initialBinding: InitialBindings(),
-      getPages: [
-        GetPage(
-          name: HomeScreen.routeName,
-          page: () => HomeScreen(),
-        ),
-        GetPage(
-          name: GetStationScreen.routeName,
-          page: () => GetStationScreen(),
-          binding: GetStationBinding(),
-        ),
-        GetPage(
-          name: MapScreen.routeName,
-          page: () => MapScreen(),
-          // binding: MapBinding(),
-        ),
-        GetPage(
-          name: SearchScreen.routeName,
-          page: () => SearchScreen(),
-          binding: SearchBinding(),
-        ),
-        GetPage(
-          name: ShopsScreen.routeName,
-          page: () => ShopsScreen(),
-          binding: ShopsBinding(),
-        ),
-        GetPage(
-          name: ShopDetailScreen.routeName,
-          page: () => ShopDetailScreen(),
-          binding: ShopDetailBindings(),
-        ),
-        GetPage(
-          name: FavoriteShopScreen.routeName,
-          page: () => FavoriteShopScreen(),
-          binding: FavoriteShopBinding(),
-        ),
-      ],
-      // initialRoute: MapScreen.routeName,
-      initialRoute: HomeScreen.routeName,
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return GetMaterialApp(
+          title: 'getx-map',
+          theme: ThemeData(
+            appBarTheme: AppBarTheme(backgroundColor: Colors.grey),
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            scaffoldBackgroundColor: ColorsConsts.themeYellow,
+            cardColor: Colors.grey,
+            // scaffoldBackgroundColor: hexToColor("#f7b611"),
+          ),
+          initialBinding: InitialBindings(),
+          getPages: [
+            GetPage(
+              name: HomeScreen.routeName,
+              page: () => HomeScreen(),
+            ),
+            GetPage(
+              name: GetStationScreen.routeName,
+              page: () => GetStationScreen(),
+              binding: GetStationBinding(),
+            ),
+            GetPage(
+              name: MapScreen.routeName,
+              page: () => MapScreen(),
+              // binding: MapBinding(),
+            ),
+            GetPage(
+              name: SearchScreen.routeName,
+              page: () => SearchScreen(),
+              binding: SearchBinding(),
+            ),
+            GetPage(
+              name: ShopsScreen.routeName,
+              page: () => ShopsScreen(),
+              binding: ShopsBinding(),
+            ),
+            GetPage(
+              name: ShopDetailScreen.routeName,
+              page: () => ShopDetailScreen(),
+              binding: ShopDetailBindings(),
+            ),
+            GetPage(
+              name: FavoriteShopScreen.routeName,
+              page: () => FavoriteShopScreen(),
+              binding: FavoriteShopBinding(),
+            ),
+          ],
+          // initialRoute: MapScreen.routeName,
+          initialRoute: HomeScreen.routeName,
+        );
+      },
     );
   }
 }
