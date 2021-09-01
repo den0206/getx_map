@@ -23,7 +23,7 @@ class MainBar extends GetView<MainBarController> {
       bottom: 0,
       child: Container(
         height: 30.h + MediaQuery.of(context).viewPadding.bottom,
-        margin: EdgeInsets.symmetric(horizontal: 8),
+        margin: EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
           color: Colors.grey,
           borderRadius: BorderRadius.only(
@@ -74,56 +74,75 @@ class DistanceState extends GetView<MainBarController> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: Obx(() => Text(
-                "中間地点への距離　\n 約 ${controller.distanceText}",
-                textAlign: TextAlign.center,
+          padding: EdgeInsets.only(top: 4.sp),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Spacer(),
+              Text(
+                "中間移転への距離",
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 15.sp,
                 ),
-              )),
-        ),
-        GridView.count(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          mainAxisSpacing: 21.0.sp,
-          crossAxisSpacing: 21.0.sp,
-          crossAxisCount: controller.mapController.stations.length,
-          children: [
-            // MenuButton(
-            //   child: Text("経路検索"),
-            //   onPress: () {
-            //     controller.confirmRoute();
-            //   },
-            // ),
-            // MenuButton(
-            //   image: DecorationImage(
-            //       fit: BoxFit.cover,
-            //       image: AssetImage(
-            //         "assets/icon/get_map_icon_0.png",
-            //       )),
-            //   child: Container(),
-            //   onPress: () {
-            //     controller.pushShopScreen();
-            //   },
-            // ),
-            MenuButton(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.undo,
-                    size: 40,
-                  ),
-                  Text("戻る"),
-                ],
               ),
-              onPress: () {
-                controller.backRoot();
-              },
-            ),
-          ],
+              Spacer(),
+              IconButton(
+                icon: Icon(
+                  Icons.close,
+                ),
+                onPressed: () {
+                  controller.backRoot();
+                },
+              )
+            ],
+          ),
+        ),
+        Flexible(
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: controller.mapController.stations.length,
+            itemBuilder: (context, index) {
+              final station = controller.mapController.stations[index];
+              return InkResponse(
+                onTap: () {
+                  controller.selectpolyline(index);
+                },
+                child: Obx(
+                  () => Transform.scale(
+                    scale: controller.currentIndex.value == index ? 1 : 0.8,
+                    child: BoxCell(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CommonIcon.getPersonIcon(index, size: 7.h),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(
+                              station.name,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                              ),
+                            ),
+                          ),
+                          if (station.distanceFromCenter != null)
+                            Text("約 ${station.distanceFromCenter!} ",
+                                style: TextStyle(
+                                  fontSize: 13.sp,
+                                  fontWeight:
+                                      controller.currentIndex.value == index
+                                          ? FontWeight.w700
+                                          : null,
+                                )),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ],
     );
@@ -361,8 +380,8 @@ class StationsState extends GetView<MainBarController> {
                               ),
                             ),
                           ),
-                          if (station.distance != null)
-                            Text("約 ${station.distance!} "),
+                          if (station.distanceFromCenter != null)
+                            Text("約 ${station.distanceFromCenter!} "),
                         ],
                       ),
                     ),
@@ -418,60 +437,55 @@ class RouteState extends GetView<MainBarController> {
             itemBuilder: (context, index) {
               final station = controller.mapController.stations[index];
 
-              return InkResponse(
-                onTap: () {
-                  controller.zoomStationsDuration(from: station);
-                },
-                child: BoxCell(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Flexible(
-                          child: Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          CommonIcon.getPersonIcon(index),
-                          Container(
-                            constraints: BoxConstraints(maxWidth: 100),
-                            child: Text(
-                              "${station.name}駅 ",
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true,
-                              maxLines: 1,
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                              ),
+              return BoxCell(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                        child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        CommonIcon.getPersonIcon(index),
+                        Container(
+                          constraints: BoxConstraints(maxWidth: 100),
+                          child: Text(
+                            "${station.name}駅 ",
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 12.sp,
                             ),
                           ),
-                        ],
-                      )),
-                      Text(
-                        "からの",
-                        overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    )),
+                    Text(
+                      "からの",
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        controller.openUrl(index);
+                      },
+                      child: Text(
+                        "行き方",
+                        style: TextStyle(fontSize: 13.sp, color: Colors.blue),
+                      ),
+                    ),
+                    Flexible(
+                      child: Text(
+                        controller.requireTimeString(index),
+                        maxLines: 1,
                         style: TextStyle(
-                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          controller.openUrl(index);
-                        },
-                        child: Text(
-                          "行き方",
-                          style: TextStyle(fontSize: 13.sp, color: Colors.blue),
-                        ),
-                      ),
-                      Flexible(
-                        child: Text(
-                          controller.requireTimeString(index),
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
               );
             },

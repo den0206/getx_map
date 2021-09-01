@@ -33,7 +33,9 @@ class MapScreen extends GetView<MapController> {
                 GoogleMap(
                   initialCameraPosition:
                       controller.mapService.initialCameraPosition,
-                  padding: EdgeInsets.only(bottom: 30.h),
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + kToolbarHeight,
+                      bottom: 30.h),
                   mapType: MapType.normal,
                   myLocationButtonEnabled: false,
                   myLocationEnabled: false,
@@ -114,13 +116,6 @@ class MapScreen extends GetView<MapController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {},
-                icon: Icon(
-                  Icons.search_outlined,
-                  color: Colors.black,
-                )),
             FavoriteShopBadge(
               onTap: () {
                 controller.selectFavorite();
@@ -161,24 +156,42 @@ class MapScreen extends GetView<MapController> {
   Positioned _defaultButton() {
     return Positioned(
       bottom: mainBarHeigh + 10,
-      right: 20,
+      right: 2.w,
       child: SafeArea(
-        child: FloatingActionButton.extended(
-          backgroundColor: ColorsConsts.themeYellow,
-          // backgroundColor: Colors.green[300],
-          onPressed: () {
-            controller.degaultMap();
-          },
-          label: Text(
-            'Default Position',
-            style: TextStyle(
-              color: Colors.black,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Container(
+              decoration:
+                  BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+              child: IconButton(
+                  color: Colors.black,
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.search,
+                  )),
             ),
-          ),
-          icon: Icon(
-            Icons.location_on,
-            color: Colors.red,
-          ),
+            SizedBox(
+              height: 1.h,
+            ),
+            FloatingActionButton.extended(
+              backgroundColor: ColorsConsts.themeYellow,
+              // backgroundColor: Colors.green[300],
+              onPressed: () {
+                controller.degaultMap();
+              },
+              label: Text(
+                'Default Position',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              icon: Icon(
+                Icons.location_on,
+                color: Colors.red,
+              ),
+            ),
+          ],
         ),
       ),
     );

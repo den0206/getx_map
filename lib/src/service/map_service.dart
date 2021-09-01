@@ -9,6 +9,7 @@ import 'package:getx_map/src/model/place.dart';
 import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
+import 'package:getx_map/src/utils/distance_format.dart';
 import 'package:getx_map/src/utils/image_to_bytes.dart';
 import 'package:getx_map/src/utils/map_style.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -96,6 +97,30 @@ class MapService {
     final zoomBounds = getCameraZoom(from, to);
     await controller
         .animateCamera((CameraUpdate.newLatLngBounds(zoomBounds, 90)));
+  }
+
+  String getDistanceString({required LatLng from, required LatLng to}) {
+    final distanceInMeters = Geolocator.distanceBetween(
+        from.latitude, from.longitude, to.latitude, to.longitude);
+    final distance = meterFormatKm(distanceInMeters);
+
+    return distance;
+  }
+
+  double getDistanceCircleRadius(List<Station> stations, LatLng center) {
+    final List<double> meters = [];
+    stations.forEach((Station staion) {
+      final distanceInMeters = Geolocator.distanceBetween(
+          staion.latLng.latitude,
+          staion.latLng.longitude,
+          center.latitude,
+          center.longitude);
+
+      meters.add(distanceInMeters);
+    });
+    var aMax = meters.reduce(max);
+
+    return aMax;
   }
 
   Future<void> presentRout(
@@ -387,6 +412,20 @@ extension MapServiceEXT on MapService {
     );
 
     _markers[markerId] = marker;
+
+    _circles[circleId] = circle;
+  }
+
+  void addCircumference(LatLng latLng, double radius) {
+    final circleId = CircleId("circumference");
+    final circle = Circle(
+      circleId: circleId,
+      strokeColor: Colors.blue,
+      strokeWidth: 1,
+      radius: radius,
+      center: latLng,
+      fillColor: Colors.blue.withOpacity(0.1),
+    );
 
     _circles[circleId] = circle;
   }

@@ -27,13 +27,19 @@ class MainBarController extends GetxController {
 
   final Map<Station, List<String>> routes = {};
   final Map<Station, List<String>> requireTimes = {};
-  final RxString distanceText = "".obs;
 
   final stationAPI = StaionAPI();
 
   final RxnInt currentIndex = RxnInt(0);
   final Rx<MenuBarState> currentState = MenuBarState.root.obs;
   final List<Shop> favorites = FavoriteShopService.to.favoriteShop;
+
+  RxInt? get selectChipIndex {
+    if (mapController.chipIndex == null) {
+      return null;
+    }
+    return mapController.chipIndex!.obs;
+  }
 
   RxList<Station> get nearStations {
     return mapController.nearStations.obs;
@@ -109,11 +115,6 @@ class MainBarController extends GetxController {
     await openURL.showUrlDialog();
   }
 
-  void zoomStationsDuration({required Station from}) {
-    mapController.fitPointsDuration(
-        from: from.latLng, to: currentNearStation.latLng);
-  }
-
   void confirmRoute() {
     if (routes.containsKey(currentNearStation)) {
       currentState.value = MenuBarState.route;
@@ -156,7 +157,6 @@ class MainBarController extends GetxController {
       requireTimes[currentNearStation] =
           await getRequireTimesViaUrls(routes[currentNearStation] ?? []);
 
-      currentIndex.value = null;
       currentState.value = MenuBarState.route;
     } catch (e) {
       print(e);
@@ -200,9 +200,12 @@ class MainBarController extends GetxController {
     return "約 ${requireTimes[currentNearStation]?[index]}";
   }
 
-  void setDistance(String distance) {
-    currentState.value = MenuBarState.distance;
-    this.distanceText.value = distance;
+  void selectpolyline(int index) {
+    if (currentIndex.value == index) {
+      return;
+    }
+    currentIndex.value = index;
+    mapController.selectPolylines(index: index);
   }
 
   void backRoot() {

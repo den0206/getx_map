@@ -58,6 +58,24 @@ class AdmobBannerService {
     );
   }
 
+  Widget get myDialogAd {
+    var bannerAd = BannerAd(
+      adUnitId: bannerAdUnitId1,
+      size: AdSize.banner,
+      listener: bannerAdlistner,
+      request: AdRequest(),
+    )..load();
+
+    return Container(
+      color: Colors.yellow[50],
+      margin: EdgeInsets.symmetric(vertical: 10),
+      alignment: Alignment.center,
+      width: bannerAd.size.width.toDouble(),
+      height: 50.w,
+      child: AdWidget(ad: bannerAd),
+    );
+  }
+
   BannerAdListener get bannerAdlistner {
     return BannerAdListener(
       onAdLoaded: (ad) {},

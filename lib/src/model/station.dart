@@ -16,7 +16,7 @@ class Station implements StationBase {
 
   final RxList<Stationline> lines = RxList<Stationline>();
 
-  String? distance;
+  String? distanceFromCenter;
 
   bool get isExpertType {
     return id != name;
@@ -27,7 +27,7 @@ class Station implements StationBase {
     required this.name,
     required this.prefecture,
     required this.latLng,
-    this.distance,
+    this.distanceFromCenter,
   });
 
   ///https://docs.ekispert.com/v1/
@@ -59,7 +59,7 @@ class Station implements StationBase {
         name: json['name'],
         prefecture: JpPrefecture.findByName(prefStr) ?? errorPrefecture,
         latLng: latlng,
-        distance: json["distance"]);
+        distanceFromCenter: json["distance"]);
   }
 
   factory Station.fromMap(Map<String, dynamic> map) {
@@ -124,7 +124,7 @@ class Station implements StationBase {
 
   @override
   String toString() {
-    return 'Station(id: $id, name: $name, latLng: $latLng, prefecture: $prefecture, distance: $distance)';
+    return 'Station(id: $id, name: $name, latLng: $latLng, prefecture: $prefecture, distance: $distanceFromCenter)';
   }
 }
 

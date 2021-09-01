@@ -163,7 +163,7 @@ class StaionAPI {
         json.decode(response.body)["ResultSet"]["Point"];
     final temp = Station.fromJson(jsonData);
 
-    temp.distance = heartStation.distance;
+    temp.distanceFromCenter = heartStation.distanceFromCenter;
     return temp;
   }
 
