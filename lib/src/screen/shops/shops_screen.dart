@@ -233,11 +233,15 @@ class ShopCell extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          shop.name,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
+                        Flexible(
+                          child: Text(
+                            shop.name,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                         ),
                         Flexible(

@@ -1,3 +1,4 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,8 @@ import 'package:getx_map/src/service/favorite_shop_service.dart';
 import 'package:getx_map/src/service/generate_probability.dart';
 import 'package:getx_map/src/service/map_service.dart';
 import 'package:getx_map/src/service/markers_service.dart';
+import 'package:getx_map/src/utils/consts_color.dart';
+import 'package:getx_map/src/utils/distance_format.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapBinding extends Bindings {
@@ -25,7 +28,7 @@ class MapController extends GetxController {
 
   final MarkersSearvice markerService = MarkersSearvice.to;
   final mapService = MapService();
-  final stationAPI = StaionAPI();
+
   late MainBarController mainBarController;
 
   int? chipIndex;
@@ -42,10 +45,10 @@ class MapController extends GetxController {
     overlayLoading.value = true;
     try {
       mapService.init(controller);
-      await showInterstitialAd();
       await addStationMarkers();
       await Future.delayed(Duration(seconds: 1));
       await setCenterCircle();
+      addCenterPolyLine();
       await getNearStations();
       addShopMarkers(oninit: true);
     } catch (e) {
@@ -84,10 +87,28 @@ class MapController extends GetxController {
     centerLatLng = center;
 
     mapService.addCenterMarker(center);
+
     // update();
   }
 
+  void addCenterPolyLine() {
+    stations.asMap().forEach(
+      (int i, Station station) {
+        mapService.addStationToCenterPolyline(
+          station: station,
+          center: centerLatLng,
+          color: ColorsConsts.iconColors[i].withOpacity(0.6),
+          onTap: () {
+            fitPointsDuration(from: station.latLng, to: centerLatLng);
+          },
+        );
+      },
+    );
+  }
+
   Future<void> getNearStations() async {
+    final stationAPI = StaionAPI();
+
     final temp = await stationAPI.getNearStations(centerLatLng);
     final names = temp.map((n) => n.name).toSet();
     temp.retainWhere((x) => names.remove(x.name));
@@ -106,12 +127,15 @@ class MapController extends GetxController {
   Future<void> onMapLongPress(LatLng latLng) async {
     print(latLng);
 
+    await showInterstitialAd();
+
     /// clear markers
     await Future.forEach(nearStations,
         (Station station) async => mapService.removeStationMarker(station));
     nearStations.clear();
 
     centerLatLng = latLng;
+    addCenterPolyLine();
     mapService.addCenterMarker(centerLatLng);
     await getNearStations();
     mainBarController.reset();
@@ -124,16 +148,30 @@ class MapController extends GetxController {
   }
 
   void selectedChip(int index) async {
-    chipIndex = index;
-
     final sta = stations[index];
-    await zoomStation(sta);
+    if (chipIndex == index) {
+      // await zoomStation(sta);
+      return;
+    }
+
+    chipIndex = index;
+    fitPointsDuration(from: sta.latLng, to: centerLatLng);
+
     update();
   }
 
   Future<void> zoomStation(Station station) async {
     await mapService.updateCamera(station.latLng, setZoom: 15);
     mapService.showInfoService(station.id);
+  }
+
+  void fitPointsDuration({required LatLng from, required LatLng to}) {
+    mapService.fitPointsDuration(from: from, to: to);
+    final distanceInMeters = Geolocator.distanceBetween(
+        from.latitude, from.longitude, to.latitude, to.longitude);
+
+    final distance = meterFormatKm(distanceInMeters);
+    mainBarController.setDistance(distance);
   }
 
   Future<void> zoomShop(Shop shop) async {
@@ -224,6 +262,7 @@ extension MapControllerEXT on MapController {
 
     if (isUpdate) {
       update();
+      await showInterstitialAd();
       await mapService.fitMarkerBounds();
     } else {
       print("Not Update");

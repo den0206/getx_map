@@ -92,6 +92,12 @@ class MapService {
         .animateCamera((CameraUpdate.newLatLngBounds(zoomBounds, 70)));
   }
 
+  Future fitPointsDuration({required LatLng from, required LatLng to}) async {
+    final zoomBounds = getCameraZoom(from, to);
+    await controller
+        .animateCamera((CameraUpdate.newLatLngBounds(zoomBounds, 90)));
+  }
+
   Future<void> presentRout(
       Place origin, Place destination, List<LatLng> points) async {
     resetMap();
@@ -190,6 +196,34 @@ extension MapServiceEXT on MapService {
 
     _polyLines[polylineId] = polyline;
     print(_polyLines.length);
+  }
+
+  void addStationToCenterPolyline(
+      {required Station station,
+      required LatLng center,
+      Color? color,
+      Function()? onTap}) {
+    final id = station.id;
+    final polylineId = PolylineId(id);
+
+    final points = [station.latLng, center];
+
+    Polyline polyline;
+
+    polyline = Polyline(
+      polylineId: polylineId,
+      color: color ?? Color.fromARGB(255, 95, 109, 237),
+      points: points,
+      jointType: JointType.round,
+      consumeTapEvents: true,
+      width: 5,
+      startCap: Cap.roundCap,
+      endCap: Cap.roundCap,
+      geodesic: true,
+      onTap: onTap,
+    );
+
+    _polyLines[polylineId] = polyline;
   }
 
   void addMarker(Place place, {String? snippet, BitmapDescriptor? icon}) {

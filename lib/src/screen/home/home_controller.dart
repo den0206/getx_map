@@ -7,6 +7,7 @@ import 'package:getx_map/src/screen/get_station/get_station_screen.dart';
 import 'package:getx_map/src/screen/map/map_screen.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
 import 'package:getx_map/src/service/database_service.dart';
+import 'package:getx_map/src/service/network_service.dart';
 
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
@@ -59,8 +60,14 @@ class HomeController extends GetxController {
     /// save local
   }
 
-  void pushMapScreen() {
+  void pushMapScreen() async {
     if (completeStations.length < 2) {
+      return;
+    }
+
+    final res = await NetworkService.to.checkNetwork();
+
+    if (!res) {
       return;
     }
 

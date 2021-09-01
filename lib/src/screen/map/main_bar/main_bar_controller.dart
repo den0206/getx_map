@@ -19,6 +19,7 @@ enum MenuBarState {
   showMenu,
   route,
   favoriteShop,
+  distance,
 }
 
 class MainBarController extends GetxController {
@@ -26,6 +27,7 @@ class MainBarController extends GetxController {
 
   final Map<Station, List<String>> routes = {};
   final Map<Station, List<String>> requireTimes = {};
+  final RxString distanceText = "".obs;
 
   final stationAPI = StaionAPI();
 
@@ -93,7 +95,7 @@ class MainBarController extends GetxController {
   void pushShopScreen() async {
     final value = currentNearStation;
     final _ = await Get.toNamed(ShopsScreen.routeName, arguments: value);
-    await mapController.showInterstitialAd();
+
     mapController.addShopMarkers();
   }
 
@@ -105,6 +107,11 @@ class MainBarController extends GetxController {
 
     final openURL = OepnUrlService(url);
     await openURL.showUrlDialog();
+  }
+
+  void zoomStationsDuration({required Station from}) {
+    mapController.fitPointsDuration(
+        from: from.latLng, to: currentNearStation.latLng);
   }
 
   void confirmRoute() {
@@ -149,6 +156,7 @@ class MainBarController extends GetxController {
       requireTimes[currentNearStation] =
           await getRequireTimesViaUrls(routes[currentNearStation] ?? []);
 
+      currentIndex.value = null;
       currentState.value = MenuBarState.route;
     } catch (e) {
       print(e);
@@ -190,6 +198,11 @@ class MainBarController extends GetxController {
 
   String requireTimeString(int index) {
     return "約 ${requireTimes[currentNearStation]?[index]}";
+  }
+
+  void setDistance(String distance) {
+    currentState.value = MenuBarState.distance;
+    this.distanceText.value = distance;
   }
 
   void backRoot() {

@@ -13,7 +13,7 @@ class MarkersSearvice extends GetxService {
   List<BitmapDescriptor> userIcons = [];
   late BitmapDescriptor stationIcon;
   late BitmapDescriptor restaurnatIcon;
-  final generator = MarkerGenerator(15.h);
+  final generator = MarkerGenerator(20.h);
 
   @override
   void onInit() async {

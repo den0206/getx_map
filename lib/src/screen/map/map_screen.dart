@@ -39,6 +39,7 @@ class MapScreen extends GetView<MapController> {
                   myLocationEnabled: false,
                   markers: controller.mapService.markers,
                   circles: controller.mapService.circles,
+                  polylines: controller.mapService.polylines,
                   onMapCreated: (map) async {
                     await controller.onMapCreate(map);
                   },
@@ -113,13 +114,20 @@ class MapScreen extends GetView<MapController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {},
+                icon: Icon(
+                  Icons.search_outlined,
+                  color: Colors.black,
+                )),
             FavoriteShopBadge(
               onTap: () {
                 controller.selectFavorite();
               },
             ),
             SizedBox(
-              height: 20,
+              height: 1.h,
             ),
             CupertinoButton(
               color: Colors.black87,

@@ -15,6 +15,7 @@ import 'package:getx_map/src/screen/shop_detail/shop_datail_screen.dart';
 import 'package:getx_map/src/screen/shop_detail/shop_detail_controller.dart';
 import 'package:getx_map/src/screen/shops/shops_controller.dart';
 import 'package:getx_map/src/screen/shops/shops_screen.dart';
+import 'package:getx_map/src/service/network_service.dart';
 import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/service/api/token_service.dart';
 import 'package:getx_map/src/service/database_service.dart';
@@ -88,9 +89,13 @@ class MyApp extends StatelessWidget {
               page: () => FavoriteShopScreen(),
               binding: FavoriteShopBinding(),
             ),
+            GetPage(
+              name: NetworkBranchScreen.routeName,
+              page: () => NetworkBranchScreen(),
+            )
           ],
           // initialRoute: MapScreen.routeName,
-          initialRoute: HomeScreen.routeName,
+          initialRoute: NetworkBranchScreen.routeName,
         );
       },
     );

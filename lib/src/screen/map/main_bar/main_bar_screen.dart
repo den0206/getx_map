@@ -47,6 +47,8 @@ class MainBar extends GetView<MainBarController> {
               switch (controller.currentState.value) {
                 case MenuBarState.root:
                   return StationsState();
+                case MenuBarState.distance:
+                  return DistanceState();
                 case MenuBarState.showMenu:
                   return MenuState();
                 case MenuBarState.route:
@@ -64,6 +66,70 @@ class MainBar extends GetView<MainBarController> {
   }
 }
 
+class DistanceState extends GetView<MainBarController> {
+  const DistanceState({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Obx(() => Text(
+                "中間地点への距離　\n 約 ${controller.distanceText}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.sp,
+                ),
+              )),
+        ),
+        GridView.count(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          mainAxisSpacing: 21.0.sp,
+          crossAxisSpacing: 21.0.sp,
+          crossAxisCount: controller.mapController.stations.length,
+          children: [
+            // MenuButton(
+            //   child: Text("経路検索"),
+            //   onPress: () {
+            //     controller.confirmRoute();
+            //   },
+            // ),
+            // MenuButton(
+            //   image: DecorationImage(
+            //       fit: BoxFit.cover,
+            //       image: AssetImage(
+            //         "assets/icon/get_map_icon_0.png",
+            //       )),
+            //   child: Container(),
+            //   onPress: () {
+            //     controller.pushShopScreen();
+            //   },
+            // ),
+            MenuButton(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.undo,
+                    size: 40,
+                  ),
+                  Text("戻る"),
+                ],
+              ),
+              onPress: () {
+                controller.backRoot();
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 class MenuState extends GetView<MainBarController> {
   const MenuState({
     Key? key,
@@ -77,6 +143,7 @@ class MenuState extends GetView<MainBarController> {
           padding: const EdgeInsets.only(top: 8),
           child: Obx(() => Text(
                 "${controller.currentNearStation.name} 駅",
+                maxLines: 1,
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
                   fontSize: 28,
@@ -209,8 +276,8 @@ class FavoriteShopState extends GetView<MainBarController> {
                       // mainAxisAlignment: MainAxisAlignment.,
                       children: [
                         Container(
-                            height: 30.w,
-                            width: 30.w,
+                            height: 15.h,
+                            width: 15.h,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(color: Colors.white, width: 2),
@@ -282,7 +349,7 @@ class StationsState extends GetView<MainBarController> {
                           Icon(
                             CommonIcon.stationIcon,
                             color: Colors.green,
-                            size: 30.sp,
+                            size: 35.sp,
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -316,6 +383,7 @@ class RouteState extends GetView<MainBarController> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Padding(
@@ -328,7 +396,7 @@ class RouteState extends GetView<MainBarController> {
                 "${controller.currentNearStation.name}への経路",
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
-                  fontSize: 15.sp,
+                  fontSize: 12.sp,
                 ),
               ),
               Spacer(),
@@ -350,52 +418,60 @@ class RouteState extends GetView<MainBarController> {
             itemBuilder: (context, index) {
               final station = controller.mapController.stations[index];
 
-              return BoxCell(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Flexible(
-                        child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        CommonIcon.getPersonIcon(index),
-                        Container(
-                          constraints: BoxConstraints(maxWidth: 100),
-                          child: Text(
-                            "${station.name}駅 ",
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: true,
-                            maxLines: 1,
-                            style: TextStyle(
-                              fontSize: 12.sp,
+              return InkResponse(
+                onTap: () {
+                  controller.zoomStationsDuration(from: station);
+                },
+                child: BoxCell(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Flexible(
+                          child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          CommonIcon.getPersonIcon(index),
+                          Container(
+                            constraints: BoxConstraints(maxWidth: 100),
+                            child: Text(
+                              "${station.name}駅 ",
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                              ),
                             ),
                           ),
+                        ],
+                      )),
+                      Text(
+                        "からの",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12.sp,
                         ),
-                      ],
-                    )),
-                    Text(
-                      "からの",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 12.sp,
                       ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        controller.openUrl(index);
-                      },
-                      child: Text(
-                        "行き方",
-                        style: TextStyle(fontSize: 13.sp, color: Colors.yellow),
+                      InkWell(
+                        onTap: () {
+                          controller.openUrl(index);
+                        },
+                        child: Text(
+                          "行き方",
+                          style: TextStyle(fontSize: 13.sp, color: Colors.blue),
+                        ),
                       ),
-                    ),
-                    Text(
-                      controller.requireTimeString(index),
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    )
-                  ],
+                      Flexible(
+                        child: Text(
+                          controller.requireTimeString(index),
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               );
             },
@@ -417,7 +493,9 @@ class BoxCell extends GetView<MainBarController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(
+          horizontal: 4.w,
+          vertical: 3.w + MediaQuery.of(context).viewPadding.bottom),
       child: Container(
         width: 35.w,
         decoration: BoxDecoration(
