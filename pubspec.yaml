@@ -34,6 +34,7 @@ dependencies:
   jp_prefecture: ^2.0.0
   permission_handler: ^8.1.4+2
   sizer: ^2.0.13
+  sliding_up_panel: ^2.0.0+1
   url_launcher: ^6.0.9
   video_player: ^2.1.14
 

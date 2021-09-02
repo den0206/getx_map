@@ -20,6 +20,7 @@ enum MenuBarState {
   route,
   favoriteShop,
   distance,
+  search,
 }
 
 class MainBarController extends GetxController {

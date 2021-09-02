@@ -31,7 +31,7 @@ class AdmobBannerService {
           : "ca-app-pub-3940256099942544/2934735716";
     } else {
       if (Platform.isAndroid) {
-        return "";
+        return FlutterConfig.get("BANNER_ANDROID");
       } else if (Platform.isIOS) {
         return FlutterConfig.get("BANNER_IOS");
       } else {
@@ -109,7 +109,7 @@ class AdmobInterstialService extends GetxController {
           : "ca-app-pub-3940256099942544/4411468910";
     } else {
       if (Platform.isAndroid) {
-        return "";
+        return FlutterConfig.get("INSTESTIAL_ANDROID");
       } else if (Platform.isIOS) {
         return FlutterConfig.get("INSTESTIAL_IOS");
       } else {
@@ -126,7 +126,7 @@ class AdmobInterstialService extends GetxController {
           : "ca-app-pub-3940256099942544/5135589807";
     } else {
       if (Platform.isAndroid) {
-        return "";
+        return FlutterConfig.get("INSTESTIAL_VIDEO_ANDROID");
       } else if (Platform.isIOS) {
         return FlutterConfig.get("INSTESTIAL_VIDEO_IOS");
       } else {

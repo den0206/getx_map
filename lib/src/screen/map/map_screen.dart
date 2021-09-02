@@ -1,17 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
+
 import 'package:getx_map/src/screen/map/main_bar/main_bar_screen.dart';
+import 'package:getx_map/src/screen/map/map_controller.dart';
 import 'package:getx_map/src/screen/widget/common_chip.dart';
 import 'package:getx_map/src/screen/widget/custom_badges.dart';
 import 'package:getx_map/src/screen/widget/loading_widget.dart';
 import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/utils/common_icon.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:getx_map/src/screen/map/map_controller.dart';
+import 'search_panel/search_panel_screen.dart';
 
 class MapScreen extends GetView<MapController> {
   MapScreen({Key? key}) : super(key: key);
@@ -54,6 +56,7 @@ class MapScreen extends GetView<MapController> {
                 _defaultButton(),
                 _zoomButtons(),
                 MainBar(mapController: controller),
+                SearchPanel()
               ],
             ),
           );
@@ -166,7 +169,9 @@ class MapScreen extends GetView<MapController> {
                   BoxDecoration(shape: BoxShape.circle, color: Colors.white),
               child: IconButton(
                   color: Colors.black,
-                  onPressed: () {},
+                  onPressed: () {
+                    controller.togglePannel();
+                  },
                   icon: Icon(
                     Icons.search,
                   )),

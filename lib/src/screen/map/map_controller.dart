@@ -1,8 +1,10 @@
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/model/station.dart';
+import 'package:getx_map/src/model/suggestion.dart';
+import 'package:getx_map/src/screen/get_station/search_station_abstract/search_abstract.dart';
 import 'package:getx_map/src/screen/map/main_bar/main_bar_controller.dart';
 import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
@@ -12,6 +14,7 @@ import 'package:getx_map/src/service/map_service.dart';
 import 'package:getx_map/src/service/markers_service.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class MapBinding extends Bindings {
   @override
@@ -20,12 +23,15 @@ class MapBinding extends Bindings {
   }
 }
 
-class MapController extends GetxController {
+class MapController extends GetxSearchController {
   final List<Station> stations = Get.arguments;
   final List<Station> nearStations = [];
 
   final MarkersSearvice markerService = MarkersSearvice.to;
   final mapService = MapService();
+
+  final showPanel = false.obs;
+  final panelController = PanelController();
 
   late MainBarController mainBarController;
 
@@ -38,6 +44,8 @@ class MapController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    loadDatabse();
   }
 
   Future onMapCreate(GoogleMapController controller) async {
@@ -62,7 +70,7 @@ class MapController extends GetxController {
     final interAd = AdmobInterstialService.to;
 
     if (!useFrequency) {
-      await interAd.showInterstitialAd();
+      await interAd.showInterstitialAd(useList: true);
       return;
     }
 
@@ -126,10 +134,10 @@ class MapController extends GetxController {
     });
   }
 
-  Future<void> onMapLongPress(LatLng latLng) async {
+  Future<void> onMapLongPress(LatLng latLng, {useAD = true}) async {
     print(latLng);
 
-    await showInterstitialAd();
+    if (useAD) await showInterstitialAd();
 
     /// clear markers
     await Future.forEach(nearStations,
@@ -183,6 +191,10 @@ class MapController extends GetxController {
 
   Future<void> zoomDown() async {
     await mapService.setZoom(false);
+  }
+
+  void togglePannel() {
+    showPanel.value = !showPanel.value;
   }
 }
 
@@ -265,5 +277,35 @@ extension MapControllerEXT on MapController {
     } else {
       print("Not Update");
     }
+  }
+}
+
+extension SearcPanelController on MapController {
+  void closePanel() {
+    tX.clear();
+    panelController.hide();
+    showPanel.toggle();
+
+    FocusScope.of(Get.context!).unfocus();
+  }
+
+  Future selectSuggest(StationBase base) async {
+    await showInterstitialAd(useFrequency: false);
+    late Station station;
+    if (base is Suggest) {
+      station = await stationAPI.getStationDetail(base.id);
+    } else if (base is Station) {
+      station = base;
+    }
+
+    saveDatabase(station);
+
+    tX.text = station.name;
+
+    await panelController.hide();
+    FocusScope.of(Get.context!).unfocus();
+    // showPanel.toggle();
+
+    await onMapLongPress(station.latLng, useAD: false);
   }
 }
