@@ -110,7 +110,9 @@ class DistanceState extends GetView<MainBarController> {
                 },
                 child: Obx(
                   () => Transform.scale(
-                    scale: controller.currentIndex.value == index ? 1 : 0.8,
+                    scale: controller.mapController.chipIndex.value == index
+                        ? 1
+                        : 0.8,
                     child: BoxCell(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -130,10 +132,11 @@ class DistanceState extends GetView<MainBarController> {
                             Text("約 ${station.distanceFromCenter!} ",
                                 style: TextStyle(
                                   fontSize: 13.sp,
-                                  fontWeight:
-                                      controller.currentIndex.value == index
-                                          ? FontWeight.w700
-                                          : null,
+                                  fontWeight: controller
+                                              .mapController.chipIndex.value ==
+                                          index
+                                      ? FontWeight.w700
+                                      : null,
                                 )),
                         ],
                       ),

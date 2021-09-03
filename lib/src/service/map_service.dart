@@ -33,6 +33,11 @@ class MapService {
 
   final topPadding = Get.mediaQuery.size.height * 0.1;
 
+  bool get existcircumferenceCircle {
+    final circumferenceCircle = _circles[CircleId("circumference")];
+    return circumferenceCircle?.visible ?? false;
+  }
+
   void init(GoogleMapController controller) async {
     controller.setMapStyle(mapStyle);
     this.controller = controller;
@@ -418,6 +423,7 @@ extension MapServiceEXT on MapService {
 
   void addCircumference(LatLng latLng, double radius) {
     final circleId = CircleId("circumference");
+
     final circle = Circle(
       circleId: circleId,
       strokeColor: Colors.blue,
@@ -428,6 +434,14 @@ extension MapServiceEXT on MapService {
     );
 
     _circles[circleId] = circle;
+  }
+
+  void togglecircumferenceCircle() {
+    final circleId = CircleId("circumference");
+    final circumferenceCircle = _circles[circleId]!;
+
+    _circles[circleId] = circumferenceCircle.copyWith(
+        visibleParam: !circumferenceCircle.visible);
   }
 }
 

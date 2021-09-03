@@ -96,11 +96,13 @@ class MapScreen extends GetView<MapController> {
                 itemCount: controller.stations.length,
                 itemBuilder: (context, index) {
                   final station = controller.stations[index];
-                  return CommonChip(
-                    label: station.name,
-                    selected: controller.chipIndex == index,
-                    leadingIcon: CommonIcon.getPersonIcon(index),
-                    onselected: (selected) => controller.selectedChip(index),
+                  return Obx(
+                    () => CommonChip(
+                      label: station.name,
+                      selected: controller.chipIndex.value == index,
+                      leadingIcon: CommonIcon.getPersonIcon(index),
+                      onselected: (selected) => controller.selectedChip(index),
+                    ),
                   );
                 },
               ),
@@ -159,43 +161,79 @@ class MapScreen extends GetView<MapController> {
   Positioned _defaultButton() {
     return Positioned(
       bottom: mainBarHeigh + 10,
-      right: 2.w,
+      right: 0,
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Container(
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-              child: IconButton(
-                  color: Colors.black,
-                  onPressed: () {
-                    controller.togglePannel();
-                  },
-                  icon: Icon(
-                    Icons.search,
-                  )),
-            ),
-            SizedBox(
-              height: 1.h,
-            ),
-            FloatingActionButton.extended(
-              backgroundColor: ColorsConsts.themeYellow,
-              // backgroundColor: Colors.green[300],
-              onPressed: () {
-                controller.degaultMap();
+            InkWell(
+              onTap: () {
+                controller.togglecircumferenceCircle();
               },
-              label: Text(
-                'Default Position',
-                style: TextStyle(
-                  color: Colors.black,
+              child: Container(
+                height: 5.h,
+                width: 10.h,
+                decoration: BoxDecoration(
+                  color: controller.mapService.existcircumferenceCircle
+                      ? Colors.blue
+                      : Colors.white,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.horizontal(
+                    left: Radius.circular(50.0),
+                  ),
+                ),
+                child: Icon(
+                  controller.mapService.existcircumferenceCircle
+                      ? Icons.hide_source_outlined
+                      : Icons.public,
+                  color: controller.mapService.existcircumferenceCircle
+                      ? Colors.white
+                      : Colors.blue,
                 ),
               ),
-              icon: Icon(
-                Icons.location_on,
-                color: Colors.red,
-              ),
             ),
+            SizedBox(
+              height: 2.h,
+            ),
+            Padding(
+                padding: EdgeInsets.only(right: 2.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: Colors.white),
+                      child: IconButton(
+                          color: Colors.black,
+                          onPressed: () {
+                            controller.togglePannel();
+                          },
+                          icon: Icon(
+                            Icons.search,
+                          )),
+                    ),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    FloatingActionButton.extended(
+                      backgroundColor: ColorsConsts.themeYellow,
+                      // backgroundColor: Colors.green[300],
+                      onPressed: () {
+                        controller.degaultMap();
+                      },
+                      label: Text(
+                        'Default Position',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      icon: Icon(
+                        Icons.location_on,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                )),
           ],
         ),
       ),

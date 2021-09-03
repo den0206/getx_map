@@ -35,13 +35,6 @@ class MainBarController extends GetxController {
   final Rx<MenuBarState> currentState = MenuBarState.root.obs;
   final List<Shop> favorites = FavoriteShopService.to.favoriteShop;
 
-  RxInt? get selectChipIndex {
-    if (mapController.chipIndex == null) {
-      return null;
-    }
-    return mapController.chipIndex!.obs;
-  }
-
   RxList<Station> get nearStations {
     return mapController.nearStations.obs;
   }
@@ -202,11 +195,7 @@ class MainBarController extends GetxController {
   }
 
   void selectpolyline(int index) {
-    if (currentIndex.value == index) {
-      return;
-    }
-    currentIndex.value = index;
-    mapController.selectPolylines(index: index);
+    mapController.selectedChip(index);
   }
 
   void backRoot() {

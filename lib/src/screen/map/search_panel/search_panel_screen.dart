@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:getx_map/src/screen/get_station/search_station_abstract/search_abstract.dart';
+import 'package:getx_map/src/screen/widget/animated_widget.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../map_controller.dart';
 import 'package:sizer/sizer.dart';
@@ -14,8 +15,9 @@ class SearchPanel extends GetView<MapController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (controller.showPanel.value) {
-        return SlidingUpPanel(
+      return SlidUpWidget(
+        show: controller.showPanel.value,
+        child: SlidingUpPanel(
           controller: controller.panelController,
           color: Colors.grey[400]!,
           borderRadius: BorderRadius.only(
@@ -70,9 +72,8 @@ class SearchPanel extends GetView<MapController> {
               },
             );
           },
-        );
-      }
-      return Container();
+        ),
+      );
     });
   }
 }

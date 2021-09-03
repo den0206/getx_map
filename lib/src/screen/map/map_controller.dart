@@ -35,11 +35,12 @@ class MapController extends GetxSearchController {
 
   late MainBarController mainBarController;
 
-  int? chipIndex;
+  RxnInt chipIndex = RxnInt();
 
   RxBool overlayLoading = false.obs;
 
   late LatLng centerLatLng;
+  late double circumferenceRadius;
 
   @override
   void onInit() {
@@ -90,10 +91,11 @@ class MapController extends GetxSearchController {
   Future setCenterCircle() async {
     final center = await mapService.getCenter();
     centerLatLng = center;
-    final radius = mapService.getDistanceCircleRadius(stations, centerLatLng);
+    circumferenceRadius =
+        mapService.getDistanceCircleRadius(stations, centerLatLng);
 
     mapService.addCenterMarker(center);
-    mapService.addCircumference(centerLatLng, radius);
+    mapService.addCircumference(centerLatLng, circumferenceRadius);
   }
 
   void addToCenterPolyLine() {
@@ -109,7 +111,7 @@ class MapController extends GetxSearchController {
           center: centerLatLng,
           color: ColorsConsts.iconColors[i].withOpacity(0.6),
           onTap: () {
-            selectPolylines(index: i);
+            selectedChip(i);
           },
         );
       },
@@ -153,31 +155,26 @@ class MapController extends GetxSearchController {
   }
 
   Future<void> degaultMap() async {
-    chipIndex = null;
+    chipIndex.value = null;
     await mapService.fitMarkerBounds();
   }
 
   void selectedChip(int index) async {
-    if (chipIndex == index) {
+    if (chipIndex.value == index) {
       return;
     }
 
-    chipIndex = index;
-    selectPolylines(index: index);
+    chipIndex.value = index;
 
-    update();
+    final station = stations[index];
+
+    mapService.fitPointsDuration(from: station.latLng, to: centerLatLng);
+    mainBarController.currentState.value = MenuBarState.distance;
   }
 
   Future<void> zoomStation(Station station) async {
     await mapService.updateCamera(station.latLng, setZoom: 15);
     mapService.showInfoService(station.id);
-  }
-
-  void selectPolylines({required int index}) {
-    final station = stations[index];
-
-    mapService.fitPointsDuration(from: station.latLng, to: centerLatLng);
-    mainBarController.currentState.value = MenuBarState.distance;
   }
 
   Future<void> zoomShop(Shop shop) async {
@@ -193,8 +190,9 @@ class MapController extends GetxSearchController {
     await mapService.setZoom(false);
   }
 
-  void togglePannel() {
-    showPanel.value = !showPanel.value;
+  void togglecircumferenceCircle() {
+    mapService.togglecircumferenceCircle();
+    update();
   }
 }
 
@@ -283,10 +281,14 @@ extension MapControllerEXT on MapController {
 extension SearcPanelController on MapController {
   void closePanel() {
     tX.clear();
-    panelController.hide();
-    showPanel.toggle();
+    panelController.close();
+    togglePannel();
 
     FocusScope.of(Get.context!).unfocus();
+  }
+
+  void togglePannel() {
+    showPanel.value = !showPanel.value;
   }
 
   Future selectSuggest(StationBase base) async {
