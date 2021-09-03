@@ -1,7 +1,7 @@
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/instance_manager.dart';
 import 'package:getx_map/src/screen/shops/shops_controller.dart';
-import 'package:getx_map/src/service/favorite_shop_service.dart';
+import 'package:getx_map/src/service/database/storage_service.dart';
 import 'package:get/get.dart';
 
 class FavoriteShopBinding extends Bindings {
@@ -12,7 +12,7 @@ class FavoriteShopBinding extends Bindings {
 }
 
 class FavoriteShopController extends GetxController with ShopsBase {
-  final favoritShops = FavoriteShopService.to.favoriteShop;
+  final favoritShops = StorageService.to.favoriteShop;
 
   RxBool get canDelete {
     return favoritShops.isNotEmpty.obs;
@@ -24,6 +24,6 @@ class FavoriteShopController extends GetxController with ShopsBase {
   }
 
   void deleteFavorite() {
-    FavoriteShopService.to.clearFavorite();
+    StorageService.to.clearFavorite();
   }
 }

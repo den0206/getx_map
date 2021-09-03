@@ -24,6 +24,7 @@ class HomeScreen extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
+            leading: HistoryBadge(),
             actions: [
               FavoriteShopBadge(),
               TextButton(

@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:getx_map/src/model/route_history.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:getx_map/src/service/favorite_shop_service.dart';
+import 'package:getx_map/src/service/database/storage_service.dart';
 
-class Shop {
+class Shop implements Identifiable {
   final String id;
   final String access;
   final String address;
@@ -25,7 +26,7 @@ class Shop {
   final Genre genre;
 
   bool get isFavorite {
-    return FavoriteShopService.to.favoriteShop
+    return StorageService.to.favoriteShop
         .map((favorite) => favorite.id)
         .toList()
         .contains(this.id);

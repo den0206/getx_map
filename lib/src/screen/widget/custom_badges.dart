@@ -1,10 +1,11 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:getx_map/src/screen/favorite_shop/favorite_shop_screen.dart';
-import 'package:getx_map/src/service/favorite_shop_service.dart';
-import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+
+import 'package:getx_map/src/screen/favorite_shop/favorite_shop_screen.dart';
+import 'package:getx_map/src/service/database/storage_service.dart';
+import 'package:getx_map/src/utils/consts_color.dart';
 
 class FavoriteShopBadge extends StatelessWidget {
   const FavoriteShopBadge({
@@ -28,7 +29,7 @@ class FavoriteShopBadge extends StatelessWidget {
         toAnimate: true,
         badgeContent: Obx(
           () => Text(
-            FavoriteShopService.to.favoriteShop.length.toString(),
+            StorageService.to.favoriteShop.length.toString(),
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -38,6 +39,27 @@ class FavoriteShopBadge extends StatelessWidget {
           color: ColorsConsts.favoritebadgeColor,
           size: 35,
         ),
+      ),
+    );
+  }
+}
+
+class HistoryBadge extends StatelessWidget {
+  const HistoryBadge({
+    Key? key,
+    this.onTap,
+  }) : super(key: key);
+
+  final Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      child: Icon(
+        Icons.history,
+        color: Colors.green.shade400,
+        size: 35,
       ),
     );
   }

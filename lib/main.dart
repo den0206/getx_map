@@ -18,8 +18,8 @@ import 'package:getx_map/src/screen/shops/shops_screen.dart';
 import 'package:getx_map/src/service/network_service.dart';
 import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/service/api/token_service.dart';
-import 'package:getx_map/src/service/database_service.dart';
-import 'package:getx_map/src/service/favorite_shop_service.dart';
+import 'package:getx_map/src/service/database/database_service.dart';
+import 'package:getx_map/src/service/database/storage_service.dart';
 import 'package:getx_map/src/service/markers_service.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -107,7 +107,7 @@ class InitialBindings extends Bindings {
   void dependencies() {
     Get.put(MarkersSearvice());
     Get.put(AdmobInterstialService());
-    Get.lazyPut(() => FavoriteShopService());
+    Get.lazyPut(() => StorageService());
   }
 }
 

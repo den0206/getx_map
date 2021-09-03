@@ -10,7 +10,7 @@ import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/model/suggestion.dart';
 import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
-import 'package:getx_map/src/service/database_service.dart';
+import 'package:getx_map/src/service/database/database_service.dart';
 import 'package:getx_map/src/utils/common_icon.dart';
 
 abstract class GetxSearchController extends GetxController {

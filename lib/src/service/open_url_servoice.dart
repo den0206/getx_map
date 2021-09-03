@@ -8,7 +8,7 @@ class OepnUrlService {
 
   OepnUrlService(this.url);
 
-  Future<void> showUrlDialog() async {
+  Future<void> showUrlDialog({Function()? beforeLaunchUrl}) async {
     await Get.dialog(
       CustomDialog(
         title: "確認",
@@ -16,6 +16,7 @@ class OepnUrlService {
         icon: Icons.launch,
         mainColor: Colors.green[400]!,
         onSuceed: () async {
+          if (beforeLaunchUrl != null) beforeLaunchUrl();
           await canLaunch(url)
               ? await launch(url)
               : throw 'Could not launch $url';

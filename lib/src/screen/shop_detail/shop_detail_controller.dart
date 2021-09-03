@@ -1,7 +1,7 @@
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:getx_map/src/model/shop.dart';
 import 'package:get/get.dart';
-import 'package:getx_map/src/service/favorite_shop_service.dart';
+import 'package:getx_map/src/service/database/storage_service.dart';
 import 'package:getx_map/src/service/open_url_servoice.dart';
 
 class ShopDetailBindings extends Bindings {
@@ -21,7 +21,7 @@ class ShopDetailController extends GetxController {
   }
 
   void toggeleFavorite() {
-    FavoriteShopService.to.addandRomoveFavorite(shop);
+    StorageService.to.addandRomoveFavorite(shop);
   }
 
   void openUrl(String url) async {

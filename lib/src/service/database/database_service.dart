@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:getx_map/src/model/route_history.dart';
 import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/model/station.dart';
 
-enum DatabaseKey { home, search, lines, favoriteShop }
+enum DatabaseKey { home, search, lines, routeHistory, favoriteShop }
 
 extension DatabaseKeyEXT on DatabaseKey {
   String get keyString {
@@ -15,6 +16,8 @@ extension DatabaseKeyEXT on DatabaseKey {
         return "Search";
       case DatabaseKey.lines:
         return "StationLine";
+      case DatabaseKey.routeHistory:
+        return "RouteHistory";
       case DatabaseKey.favoriteShop:
         return "FavoriteShop";
     }
@@ -35,7 +38,7 @@ class DatabaseService extends GetxService {
       stations.removeAt(0);
     }
 
-    if (key == DatabaseKey.lines && stations.length > 30) {
+    if (key == DatabaseKey.lines && stations.length > 15) {
       stations.remove(0);
     }
 
@@ -74,37 +77,47 @@ class DatabaseService extends GetxService {
   }
 
   /// shop
-  void setShopList(DatabaseKey key, List<Shop> shops) {
-    if (key == DatabaseKey.favoriteShop && shops.length >= 5) {
+  void setShopList(List<Shop> shops) {
+    final key = DatabaseKey.favoriteShop;
+    if (shops.length >= 5) {
       shops.removeAt(0);
     }
 
     final enocode = Shop.encode(shops);
-
-    switch (key) {
-      case DatabaseKey.favoriteShop:
-        box.write(key.keyString, enocode);
-        break;
-      default:
-        print("UN Authorozation Key");
-        return;
-    }
+    box.write(key.keyString, enocode);
 
     print("Update local");
   }
 
-  List<Shop> loadShops(DatabaseKey key) {
+  List<Shop> loadShops() {
+    final key = DatabaseKey.favoriteShop;
     if (box.read(key.keyString) == null) {
       return [];
     } else {
       final String decode = box.read(key.keyString);
+      return Shop.decode(decode);
+    }
+  }
 
-      switch (key) {
-        case DatabaseKey.favoriteShop:
-          return Shop.decode(decode);
-        default:
-          return [];
-      }
+  /// history
+  void setRouteHistory(List<RouteHistory> routes) {
+    final key = DatabaseKey.routeHistory;
+    if (routes.length >= 5) {
+      routes.removeAt(0);
+    }
+
+    final encode = RouteHistory.encode(routes);
+
+    box.write(key.keyString, encode);
+  }
+
+  List<RouteHistory> loadRouteHistory() {
+    final key = DatabaseKey.routeHistory;
+    if (box.read(key.keyString) == null) {
+      return [];
+    } else {
+      final String decode = box.read(key.keyString);
+      return RouteHistory.decode(decode);
     }
   }
 

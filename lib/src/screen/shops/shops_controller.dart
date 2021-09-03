@@ -4,7 +4,7 @@ import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/shop_detail/shop_datail_screen.dart';
 import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/service/api/shop/shop_api.dart';
-import 'package:getx_map/src/service/favorite_shop_service.dart';
+import 'package:getx_map/src/service/database/storage_service.dart';
 import 'package:getx_map/src/service/open_url_servoice.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:get/get.dart';
@@ -26,7 +26,7 @@ abstract class ShopsBase {
   }
 
   void toggeleFavorite(Shop shop) {
-    FavoriteShopService.to.addandRomoveFavorite(shop);
+    StorageService.to.addandRomoveFavorite(shop);
   }
 
   void openUrl(Shop shop) async {

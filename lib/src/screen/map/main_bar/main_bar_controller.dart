@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/state_manager.dart';
+import 'package:getx_map/src/model/route_history.dart';
 import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/map/map_controller.dart';
@@ -9,7 +10,7 @@ import 'package:getx_map/src/screen/shop_detail/shop_datail_screen.dart';
 import 'package:getx_map/src/screen/shops/shops_screen.dart';
 import 'package:getx_map/src/screen/widget/custom_dialog.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
-import 'package:getx_map/src/service/favorite_shop_service.dart';
+import 'package:getx_map/src/service/database/storage_service.dart';
 import 'package:getx_map/src/service/open_url_servoice.dart';
 import 'package:getx_map/src/service/scraper_service.dart';
 import 'package:getx_map/src/utils/common_icon.dart';
@@ -33,7 +34,7 @@ class MainBarController extends GetxController {
 
   final RxnInt currentIndex = RxnInt(0);
   final Rx<MenuBarState> currentState = MenuBarState.root.obs;
-  final List<Shop> favorites = FavoriteShopService.to.favoriteShop;
+  final List<Shop> favorites = StorageService.to.favoriteShop;
 
   RxList<Station> get nearStations {
     return mapController.nearStations.obs;
@@ -106,7 +107,19 @@ class MainBarController extends GetxController {
     }
 
     final openURL = OepnUrlService(url);
-    await openURL.showUrlDialog();
+    await openURL.showUrlDialog(
+      beforeLaunchUrl: () {
+        _saveHistory(index, url);
+      },
+    );
+  }
+
+  void _saveHistory(int index, String url) {
+    final from = mapController.stations[index];
+    final to = currentNearStation;
+    final routeUrl = url;
+    final route = RouteHistory(from: from, to: to, url: routeUrl);
+    StorageService.to.addAndRemoveHistory(route);
   }
 
   void confirmRoute() {

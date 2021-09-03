@@ -6,12 +6,14 @@ import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/model/suggestion.dart';
 import 'package:getx_map/src/screen/get_station/search_station_abstract/search_abstract.dart';
 import 'package:getx_map/src/screen/map/main_bar/main_bar_controller.dart';
+import 'package:getx_map/src/screen/widget/custom_dialog.dart';
 import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
-import 'package:getx_map/src/service/favorite_shop_service.dart';
+import 'package:getx_map/src/service/database/storage_service.dart';
 import 'package:getx_map/src/service/generate_probability.dart';
 import 'package:getx_map/src/service/map_service.dart';
 import 'package:getx_map/src/service/markers_service.dart';
+import 'package:getx_map/src/utils/common_icon.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -234,7 +236,7 @@ extension MapControllerEXT on MapController {
   void addShopMarkers({bool oninit = false}) async {
     bool isUpdate = false;
 
-    final FavoriteShopService shopService = FavoriteShopService.to;
+    final StorageService shopService = StorageService.to;
 
     /// Delete
     if (shopService.deletedIds.isNotEmpty) {
@@ -292,7 +294,18 @@ extension SearcPanelController on MapController {
   }
 
   Future selectSuggest(StationBase base) async {
-    await showInterstitialAd(useFrequency: false);
+    await Get.dialog(CustomDialog(
+      title: "${base.name}",
+      descripon: "中間に設定しますか？",
+      icon: CommonIcon.stationIcon,
+      onSuceed: () async {
+        await successSearch(base);
+      },
+    ));
+    // await showInterstitialAd(useFrequency: false);
+  }
+
+  Future<void> successSearch(StationBase base) async {
     late Station station;
     if (base is Suggest) {
       station = await stationAPI.getStationDetail(base.id);
@@ -304,7 +317,7 @@ extension SearcPanelController on MapController {
 
     tX.text = station.name;
 
-    await panelController.hide();
+    await panelController.close();
     FocusScope.of(Get.context!).unfocus();
     // showPanel.toggle();
 
