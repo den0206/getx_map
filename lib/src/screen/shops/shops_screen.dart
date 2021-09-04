@@ -167,7 +167,7 @@ class ShopCell extends StatelessWidget {
     required this.shop,
   }) : super(key: key);
 
-  final ShopsBase controller;
+  final ShopsScreenAbstract controller;
 
   final Shop shop;
 

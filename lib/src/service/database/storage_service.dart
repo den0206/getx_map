@@ -31,7 +31,7 @@ class StorageService extends GetxService {
   }
 
   void addandRomoveFavorite(Shop shop) {
-    if (!existStorage(shop)) {
+    if (!existStorage(favoriteShop, shop)) {
       if (favoriteShop.length >= 5) {
         favoriteShop.removeAt(0);
       }
@@ -53,7 +53,7 @@ class StorageService extends GetxService {
   }
 
   void addAndRemoveHistory(RouteHistory history) {
-    if (!existStorage(history)) {
+    if (!existStorage(histories, history)) {
       if (histories.length >= 5) {
         histories.removeAt(0);
       }
@@ -65,13 +65,18 @@ class StorageService extends GetxService {
     databse.setRouteHistory(histories);
   }
 
-  bool existStorage(Identifiable object) {
-    return favoriteShop.map((ex) => ex.id).toList().contains(object.id);
+  bool existStorage(List<Identifiable> lists, Identifiable object) {
+    return lists.map((ex) => ex.id).toList().contains(object.id);
   }
 
   void clearFavorite() {
     favoriteShop.clear();
     deletedIds.clear();
     databse.deleteKey(DatabaseKey.favoriteShop);
+  }
+
+  void clearHistory() {
+    histories.clear();
+    databse.deleteKey(DatabaseKey.routeHistory);
   }
 }

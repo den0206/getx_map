@@ -8,6 +8,7 @@ import 'package:getx_map/src/screen/get_station/get_station_controller.dart';
 import 'package:getx_map/src/screen/get_station/get_station_screen.dart';
 import 'package:getx_map/src/screen/home/home_screen.dart';
 import 'package:getx_map/src/screen/map/map_screen.dart';
+import 'package:getx_map/src/screen/route_history/route_history_screen.dart';
 
 import 'package:getx_map/src/screen/search/search_controller.dart';
 import 'package:getx_map/src/screen/search/search_screen.dart';
@@ -46,7 +47,14 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           title: 'getx-map',
           theme: ThemeData(
-            appBarTheme: AppBarTheme(backgroundColor: Colors.grey),
+            appBarTheme: AppBarTheme(
+                backgroundColor: Colors.grey,
+                toolbarTextStyle: TextStyle(
+                  color: Colors.black,
+                ),
+                titleTextStyle: TextStyle(
+                  color: Colors.black,
+                )),
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             scaffoldBackgroundColor: ColorsConsts.themeYellow,
@@ -92,6 +100,11 @@ class MyApp extends StatelessWidget {
             GetPage(
               name: NetworkBranchScreen.routeName,
               page: () => NetworkBranchScreen(),
+            ),
+            GetPage(
+              name: RouteHistoryScreen.routeName,
+              page: () => RouteHistoryScreen(),
+              fullscreenDialog: true,
             )
           ],
           // initialRoute: MapScreen.routeName,

@@ -55,7 +55,7 @@ class HistoryBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Icon(
         Icons.history,
         color: Colors.green.shade400,

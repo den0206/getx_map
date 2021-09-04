@@ -47,12 +47,14 @@ class MapScreen extends GetView<MapController> {
                   onMapCreated: (map) async {
                     await controller.onMapCreate(map);
                   },
+                  onCameraMoveStarted: () => controller.onCameraMoveStarted(),
+                  onCameraIdle: () => controller.onCameraIdle(),
                   onLongPress: (latLng) async {
                     /// change center circle;
                     await controller.onMapLongPress(latLng);
                   },
                 ),
-                _chipArea(context, controller),
+                _chipArea(),
                 _defaultButton(),
                 _zoomButtons(),
                 MainBar(mapController: controller),
@@ -65,7 +67,7 @@ class MapScreen extends GetView<MapController> {
     );
   }
 
-  Positioned _chipArea(BuildContext context, MapController controller) {
+  Positioned _chipArea() {
     return Positioned(
       top: 0.0,
       left: 0.0,
@@ -108,6 +110,45 @@ class MapScreen extends GetView<MapController> {
               ),
             ),
           ),
+          SizedBox(
+            height: 3.h,
+          ),
+          Obx(() => controller.showTapLabel.value
+              ? Center(
+                  child: Container(
+                    height: 5.h,
+                    width: 40.w,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      color: Colors.white.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+                    child: Center(
+                        child: Text.rich(
+                      TextSpan(
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: "長押しで",
+                          ),
+                          WidgetSpan(
+                            child: Icon(
+                              Icons.pin_drop_outlined,
+                              size: 16.sp,
+                              color: ColorsConsts.themeYellow.withOpacity(0.7),
+                            ),
+                          ),
+                          TextSpan(
+                            text: "を変更",
+                          ),
+                        ],
+                      ),
+                    )),
+                  ),
+                )
+              : Container())
         ],
       ),
     );

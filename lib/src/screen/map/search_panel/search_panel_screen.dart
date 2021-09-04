@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/screen/get_station/search_station_abstract/search_abstract.dart';
 import 'package:getx_map/src/screen/widget/animated_widget.dart';
+import 'package:getx_map/src/utils/common_icon.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../map_controller.dart';
 import 'package:sizer/sizer.dart';
@@ -33,6 +34,7 @@ class SearchPanel extends GetView<MapController> {
                     icon: Icon(Icons.arrow_back_ios),
                     onPressed: () {
                       FocusScope.of(context).unfocus();
+                      controller.panelController.close();
                     },
                   ),
                   Container(
@@ -41,6 +43,7 @@ class SearchPanel extends GetView<MapController> {
                     child: TextField(
                       controller: controller.tX,
                       decoration: InputDecoration(
+                        icon: Icon(CommonIcon.stationIcon, color: Colors.black),
                         labelText: "駅名を検索",
                         fillColor: Colors.white,
                         filled: true,
@@ -67,8 +70,9 @@ class SearchPanel extends GetView<MapController> {
                   ),
                 ],
               ),
-              onSelect: (base) {
-                controller.selectSuggest(base);
+              onSelect: (base) async {
+                FocusScope.of(context).unfocus();
+                await controller.selectSuggest(base);
               },
             );
           },

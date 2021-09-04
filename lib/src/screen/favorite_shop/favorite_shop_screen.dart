@@ -17,19 +17,20 @@ class FavoriteShopScreen extends GetView<FavoriteShopController> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
-          Obx(() => IconButton(
-                icon: Icon(
-                  Icons.delete_outline,
-                  size: 30,
-                  color:
-                      !controller.canDelete.value ? Colors.grey : Colors.blue,
-                ),
-                onPressed: !controller.canDelete.value
-                    ? null
-                    : () {
-                        controller.deleteFavorite();
-                      },
-              ))
+          Obx(
+            () => IconButton(
+              icon: Icon(
+                Icons.delete_outline,
+                size: 30,
+                color: !controller.canDelete.value ? Colors.grey : Colors.blue,
+              ),
+              onPressed: !controller.canDelete.value
+                  ? null
+                  : () {
+                      controller.deleteFavorite();
+                    },
+            ),
+          )
         ],
       ),
       body: SafeArea(

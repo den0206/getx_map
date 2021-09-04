@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_map/src/screen/route_history/route_history_screen.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:getx_map/src/model/station.dart';
@@ -24,7 +25,11 @@ class HomeScreen extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            leading: HistoryBadge(),
+            leading: HistoryBadge(
+              onTap: () {
+                Get.toNamed(RouteHistoryScreen.routeName);
+              },
+            ),
             actions: [
               FavoriteShopBadge(),
               TextButton(

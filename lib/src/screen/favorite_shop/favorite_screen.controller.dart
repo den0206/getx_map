@@ -1,4 +1,3 @@
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/instance_manager.dart';
 import 'package:getx_map/src/screen/shops/shops_controller.dart';
 import 'package:getx_map/src/service/database/storage_service.dart';
@@ -11,7 +10,7 @@ class FavoriteShopBinding extends Bindings {
   }
 }
 
-class FavoriteShopController extends GetxController with ShopsBase {
+class FavoriteShopController extends ShopsScreenAbstract {
   final favoritShops = StorageService.to.favoriteShop;
 
   RxBool get canDelete {

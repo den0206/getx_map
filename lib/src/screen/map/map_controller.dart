@@ -6,14 +6,12 @@ import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/model/suggestion.dart';
 import 'package:getx_map/src/screen/get_station/search_station_abstract/search_abstract.dart';
 import 'package:getx_map/src/screen/map/main_bar/main_bar_controller.dart';
-import 'package:getx_map/src/screen/widget/custom_dialog.dart';
 import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/service/api/station/staion_api.dart';
 import 'package:getx_map/src/service/database/storage_service.dart';
 import 'package:getx_map/src/service/generate_probability.dart';
 import 'package:getx_map/src/service/map_service.dart';
 import 'package:getx_map/src/service/markers_service.dart';
-import 'package:getx_map/src/utils/common_icon.dart';
 import 'package:getx_map/src/utils/consts_color.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -33,6 +31,7 @@ class MapController extends GetxSearchController {
   final mapService = MapService();
 
   final showPanel = false.obs;
+  final showTapLabel = false.obs;
   final panelController = PanelController();
 
   late MainBarController mainBarController;
@@ -40,6 +39,7 @@ class MapController extends GetxSearchController {
   RxnInt chipIndex = RxnInt();
 
   RxBool overlayLoading = false.obs;
+  bool mapInitialized = false;
 
   late LatLng centerLatLng;
   late double circumferenceRadius;
@@ -64,7 +64,9 @@ class MapController extends GetxSearchController {
     } catch (e) {
       print(e);
     } finally {
+      mapInitialized = true;
       update();
+
       overlayLoading.value = false;
     }
   }
@@ -192,6 +194,18 @@ class MapController extends GetxSearchController {
     await mapService.setZoom(false);
   }
 
+  void onCameraMoveStarted() {
+    if (!showTapLabel.value && mapInitialized) {
+      showTapLabel.value = true;
+    }
+  }
+
+  void onCameraIdle() {
+    if (showTapLabel.value) {
+      showTapLabel.value = false;
+    }
+  }
+
   void togglecircumferenceCircle() {
     mapService.togglecircumferenceCircle();
     update();
@@ -294,15 +308,17 @@ extension SearcPanelController on MapController {
   }
 
   Future selectSuggest(StationBase base) async {
-    await Get.dialog(CustomDialog(
-      title: "${base.name}",
-      descripon: "中間に設定しますか？",
-      icon: CommonIcon.stationIcon,
-      onSuceed: () async {
-        await successSearch(base);
-      },
-    ));
-    // await showInterstitialAd(useFrequency: false);
+    await showInterstitialAd(useFrequency: false);
+
+    // await Get.dialog(CustomDialog(
+    //   title: "${base.name}",
+    //   descripon: "中間に設定しますか？",
+    //   icon: CommonIcon.stationIcon,
+    //   onSuceed: () async {
+    //     await successSearch(base);
+    //   },
+    // ));
+    await successSearch(base);
   }
 
   Future<void> successSearch(StationBase base) async {
@@ -313,14 +329,13 @@ extension SearcPanelController on MapController {
       station = base;
     }
 
+    await panelController.close();
+
+    tX.text = base.name;
+
     saveDatabase(station);
 
-    tX.text = station.name;
-
-    await panelController.close();
-    FocusScope.of(Get.context!).unfocus();
-    // showPanel.toggle();
-
     await onMapLongPress(station.latLng, useAD: false);
+    await mapService.updateCamera(station.latLng);
   }
 }

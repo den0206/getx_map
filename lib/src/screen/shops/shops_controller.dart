@@ -18,7 +18,7 @@ class ShopsBinding extends Bindings {
   }
 }
 
-abstract class ShopsBase {
+abstract class ShopsScreenAbstract extends GetxController {
   void pushShopDetail(Shop shop) {
     final arg = shop;
 
@@ -35,7 +35,7 @@ abstract class ShopsBase {
   }
 }
 
-class ShopsController extends GetxController with ShopsBase {
+class ShopsController extends ShopsScreenAbstract {
   final Station station = Get.arguments;
   RxList<Shop> shops = RxList<Shop>();
 
