@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/service/admob_service.dart';
@@ -49,7 +51,7 @@ class CustomDialog extends StatelessWidget {
                     fontSize: 12.sp,
                   ),
                 ),
-                AdmobBannerService.to.myDialogAd,
+                if (Platform.isIOS) AdmobBannerService.to.myDialogAd,
                 SizedBox(
                   height: 2.h,
                 ),

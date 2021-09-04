@@ -19,6 +19,7 @@ class SearchPanel extends GetView<MapController> {
       return SlidUpWidget(
         show: controller.showPanel.value,
         child: SlidingUpPanel(
+          minHeight: 100 + MediaQuery.of(context).padding.bottom,
           controller: controller.panelController,
           color: Colors.grey[400]!,
           borderRadius: BorderRadius.only(

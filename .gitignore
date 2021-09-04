@@ -50,6 +50,6 @@ app.*.map.json
 /lib/src/screen/request_permisson
 /lib/src/utils/.gitignore
 /web
-/assets
+
 /test
 .env*

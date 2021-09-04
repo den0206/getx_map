@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.getx_map">
-   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> 
+    <uses-permission android:name="android.permission.INTERNET" /> 
+
    <application
         android:label="getx_map"
         android:icon="@mipmap/ic_launcher">
@@ -41,5 +43,9 @@
             android:value="2" />
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="@string/GOOGLE_MAPS_IOS_KEY"/>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/APPID_ANDROID"/>
     </application>
 </manifest>

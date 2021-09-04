@@ -28,7 +28,7 @@ dependencies:
   geolocator: ^7.4.0
   get: ^4.3.7
   get_storage: ^2.0.3
-  google_maps_flutter: ^2.0.6
+  google_maps_flutter: ^2.0.8
   google_mobile_ads: ^0.13.4
   html: ^0.15.0
   internet_connection_checker: ^0.0.1+2

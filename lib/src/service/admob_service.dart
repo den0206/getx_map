@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 var useTestId = true;
+var showAd = true;
 
 class AdmobBannerService {
   static AdmobBannerService get to => AdmobBannerService();
@@ -48,14 +49,18 @@ class AdmobBannerService {
       request: AdRequest(),
     )..load();
 
-    return Container(
-      color: Colors.yellow[50],
-      margin: EdgeInsets.symmetric(vertical: 10),
-      alignment: Alignment.center,
-      width: 70.w,
-      height: bannerAd.size.height.toDouble(),
-      child: AdWidget(ad: bannerAd),
-    );
+    return showAd
+        ? Container(
+            color: Colors.yellow[50],
+            margin: EdgeInsets.symmetric(vertical: 10),
+            alignment: Alignment.center,
+            width: 70.w,
+            height: bannerAd.size.height.toDouble(),
+            child: AdWidget(ad: bannerAd),
+          )
+        : Container(
+            width: 70.w,
+          );
   }
 
   Widget get myDialogAd {
@@ -66,14 +71,16 @@ class AdmobBannerService {
       request: AdRequest(),
     )..load();
 
-    return Container(
-      color: Colors.yellow[50],
-      margin: EdgeInsets.symmetric(vertical: 10),
-      alignment: Alignment.center,
-      width: bannerAd.size.width.toDouble(),
-      height: 50.w,
-      child: AdWidget(ad: bannerAd),
-    );
+    return showAd
+        ? Container(
+            color: Colors.yellow[50],
+            margin: EdgeInsets.symmetric(vertical: 10),
+            alignment: Alignment.center,
+            width: bannerAd.size.width.toDouble(),
+            height: 60.w,
+            child: AdWidget(ad: bannerAd),
+          )
+        : Container();
   }
 
   BannerAdListener get bannerAdlistner {

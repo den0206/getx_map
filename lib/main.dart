@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
       builder: (context, orientation, deviceType) {
         return GetMaterialApp(
           title: 'getx-map',
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
             appBarTheme: AppBarTheme(
                 backgroundColor: Colors.grey,
