@@ -121,7 +121,7 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geolocator_apple: 60a1c3f5930c090d2f5164ba8bf25f4f89121e3c
   Google-Mobile-Ads-SDK: 6f5c41bf73db1656e5b203ba9c31e3d0899a128d
-  google_maps_flutter: df4e7de95264aa0a2f11aac0fc7e313acb8ffc7e
+  google_maps_flutter: 279865bd07e2d8751f43a3bc64bac7f6075d0c93
   google_mobile_ads: b3a22ee82112a9f06eea4435c71a97d104e0d271
   GoogleAppMeasurement: 2c0c6e2a7ab3fe730ade6379f732bdefb46f50b0
   GoogleMaps: 008e2c80e38605b56b560e8deb73d4194ff30bef
@@ -137,4 +137,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
-COCOAPODS: 1.10.2
+COCOAPODS: 1.10.1

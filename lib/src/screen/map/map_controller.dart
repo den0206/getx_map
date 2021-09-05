@@ -135,7 +135,7 @@ class MapController extends GetxSearchController {
       mapService.addStationMarker(
         station,
         icon: markerService.stationIcon,
-        onTap: () => selectStation(station),
+        onTap: () => mainBarController.selectStation(station),
       );
     });
   }
@@ -169,8 +169,11 @@ class MapController extends GetxSearchController {
     }
 
     chipIndex.value = index;
+    if (mainBarController.pageController.hasClients)
+      mainBarController.pageController.jumpToPage(index);
 
     final station = stations[index];
+    mapService.showInfoService(station.id);
 
     mapService.fitPointsDuration(from: station.latLng, to: centerLatLng);
     mainBarController.currentState.value = MenuBarState.distance;
@@ -220,14 +223,6 @@ extension MapControllerEXT on MapController {
     this.mainBarController = controller;
   }
 
-  void selectStation(Station nearStation) {
-    if (mainBarController.currentState.value == MenuBarState.showMenu) {
-      mainBarController.pushShopScreen();
-    }
-    mainBarController.selectStation(nearStation);
-    mainBarController.currentState.value = MenuBarState.showMenu;
-  }
-
   void selectFavorite() {
     mainBarController.selectFavorite();
   }
@@ -241,7 +236,7 @@ extension MapControllerEXT on MapController {
       newStation,
       oldStation,
       icon: markerService.stationIcon,
-      onTap: () => selectStation(newStation),
+      onTap: () => mainBarController.selectStation(newStation),
     );
 
     update();
@@ -298,7 +293,8 @@ extension SearcPanelController on MapController {
   void closePanel() {
     tX.clear();
     panelController.close();
-    togglePannel();
+    showPanel.value = false;
+    // togglePannel();
 
     FocusScope.of(Get.context!).unfocus();
   }

@@ -35,6 +35,7 @@ class MainBarController extends GetxController {
   final RxnInt currentIndex = RxnInt(0);
   final Rx<MenuBarState> currentState = MenuBarState.root.obs;
   final List<Shop> favorites = StorageService.to.favoriteShop;
+  final pageController = PageController(initialPage: 0, viewportFraction: 0.6);
 
   RxList<Station> get nearStations {
     return mapController.nearStations.obs;
@@ -56,6 +57,12 @@ class MainBarController extends GetxController {
     mapController.setMainBar(this);
   }
 
+  @override
+  void onClose() {
+    super.onClose();
+    pageController.dispose();
+  }
+
   void reset() {
     currentState.value = MenuBarState.root;
     currentIndex.value = null;
@@ -68,10 +75,12 @@ class MainBarController extends GetxController {
 
     if (index == currentIndex.value) {
       currentState.value = MenuBarState.showMenu;
+      mapController.zoomStation(station);
       return;
     }
-
+    if (pageController.hasClients) pageController.jumpToPage(index);
     currentIndex.value = index;
+
     mapController.zoomStation(station);
   }
 
@@ -90,6 +99,7 @@ class MainBarController extends GetxController {
     }
     currentIndex.value = index;
     currentState.value = MenuBarState.favoriteShop;
+    if (pageController.hasClients) pageController.jumpToPage(index);
     mapController.zoomShop(shop);
   }
 
@@ -205,10 +215,6 @@ class MainBarController extends GetxController {
 
   String requireTimeString(int index) {
     return "約 ${requireTimes[currentNearStation]?[index]}";
-  }
-
-  void selectpolyline(int index) {
-    mapController.selectedChip(index);
   }
 
   void backRoot() {

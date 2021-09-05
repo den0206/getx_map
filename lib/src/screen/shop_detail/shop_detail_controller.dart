@@ -17,7 +17,6 @@ class ShopDetailController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    print(shop.name);
   }
 
   void toggeleFavorite() {

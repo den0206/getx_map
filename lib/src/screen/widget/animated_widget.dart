@@ -59,10 +59,12 @@ class SlidUpWidget extends StatefulWidget {
     Key? key,
     required this.show,
     required this.child,
+    this.swipeDetecter,
   }) : super(key: key);
 
   final bool show;
   final Widget child;
+  final Function(DragUpdateDetails details)? swipeDetecter;
 
   @override
   _SlidUpWidgetState createState() => _SlidUpWidgetState();
@@ -115,7 +117,8 @@ class _SlidUpWidgetState extends State<SlidUpWidget>
   Widget build(BuildContext context) {
     return SlideTransition(
       position: _offsetAnimation,
-      child: widget.child,
+      child: GestureDetector(
+          onVerticalDragUpdate: widget.swipeDetecter, child: widget.child),
     );
   }
 }

@@ -26,8 +26,6 @@ class StorageService extends GetxService {
 
     final history = databse.loadRouteHistory();
     histories.addAll(history);
-
-    print(histories.length);
   }
 
   void addandRomoveFavorite(Shop shop) {

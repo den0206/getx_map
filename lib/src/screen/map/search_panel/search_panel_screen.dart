@@ -18,6 +18,13 @@ class SearchPanel extends GetView<MapController> {
     return Obx(() {
       return SlidUpWidget(
         show: controller.showPanel.value,
+        swipeDetecter: (details) {
+          if (details.delta.dy > 20) {
+            if (controller.panelController.isPanelClosed) {
+              controller.closePanel();
+            }
+          }
+        },
         child: SlidingUpPanel(
           minHeight: 100 + MediaQuery.of(context).padding.bottom,
           controller: controller.panelController,
