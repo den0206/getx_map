@@ -24,7 +24,7 @@ class DistanceState extends GetView<MainBarController> {
           controller: controller.pageController,
           itemCount: controller.mapController.stations.length,
           onChange: (index) {
-            controller.mapController.chipIndex.value = index;
+            controller.mapController.selectedChip(index);
           },
           itemBuilder: (context, index) {
             final station = controller.mapController.stations[index];

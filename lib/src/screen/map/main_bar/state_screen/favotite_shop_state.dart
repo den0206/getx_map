@@ -28,6 +28,7 @@ class FavoriteShopState extends GetView<MainBarController> {
           itemCount: controller.favorites.length,
           onChange: (index) {
             controller.currentIndex.value = index;
+            controller.mapController.zoomShop(controller.favorites[index]);
           },
           itemBuilder: (context, index) {
             final shop = controller.favorites[index];

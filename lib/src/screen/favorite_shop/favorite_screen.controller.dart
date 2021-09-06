@@ -1,5 +1,6 @@
 import 'package:get/instance_manager.dart';
 import 'package:getx_map/src/screen/shops/shops_controller.dart';
+import 'package:getx_map/src/service/database/database_service.dart';
 import 'package:getx_map/src/service/database/storage_service.dart';
 import 'package:get/get.dart';
 
@@ -23,6 +24,6 @@ class FavoriteShopController extends ShopsScreenAbstract {
   }
 
   void deleteFavorite() {
-    StorageService.to.clearFavorite();
+    StorageService.to.shoeDeleteDialog(DatabaseKey.favoriteShop);
   }
 }

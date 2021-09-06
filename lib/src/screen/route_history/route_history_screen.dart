@@ -4,6 +4,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 
 import 'package:getx_map/src/model/route_history.dart';
 import 'package:getx_map/src/service/admob_service.dart';
+import 'package:getx_map/src/service/database/database_service.dart';
 import 'package:getx_map/src/service/database/storage_service.dart';
 import 'package:getx_map/src/service/open_url_servoice.dart';
 import 'package:getx_map/src/utils/common_icon.dart';
@@ -40,7 +41,7 @@ class RouteHistoryScreen extends GetView<StorageService> {
               onPressed: controller.histories.isEmpty
                   ? null
                   : () {
-                      controller.clearHistory();
+                      controller.shoeDeleteDialog(DatabaseKey.routeHistory);
                     },
             ),
           ),

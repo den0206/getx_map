@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:getx_map/src/model/route_history.dart';
 import 'package:getx_map/src/model/shop.dart';
+import 'package:getx_map/src/screen/widget/custom_dialog.dart';
 import 'package:getx_map/src/service/database/database_service.dart';
+import 'package:get/get.dart';
 
 class StorageService extends GetxService {
   static StorageService get to => Get.find();
@@ -65,6 +68,27 @@ class StorageService extends GetxService {
 
   bool existStorage(List<Identifiable> lists, Identifiable object) {
     return lists.map((ex) => ex.id).toList().contains(object.id);
+  }
+
+  void shoeDeleteDialog(DatabaseKey key) {
+    Get.dialog(CustomDialog(
+      title: "確認",
+      descripon: "削除しても宜しいですか？",
+      icon: Icons.delete,
+      onSuceed: () {
+        switch (key) {
+          case DatabaseKey.routeHistory:
+            clearHistory();
+            break;
+          case DatabaseKey.favoriteShop:
+            clearFavorite();
+            break;
+
+          default:
+            return;
+        }
+      },
+    ));
   }
 
   void clearFavorite() {
