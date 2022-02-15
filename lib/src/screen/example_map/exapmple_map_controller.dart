@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:getx_map/src/model/place.dart';
 import 'package:getx_map/src/screen/search/search_controller.dart';
 import 'package:getx_map/src/screen/search/search_screen.dart';
@@ -18,7 +17,7 @@ class ExampleMapController extends GetxController {
 
   Position? currentPosition;
 
-  late BitmapDescriptor _homeIcon;
+  // late BitmapDescriptor _homeIcon;
 
   void onMapCreated(GoogleMapController controller) async {
     service.init(controller);
@@ -29,7 +28,7 @@ class ExampleMapController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    _homeIcon = await service.generateIcon("assets/images/car-pin.png");
+    // _homeIcon = await service.generateIcon("assets/images/car-pin.png");
   }
 
   Future<void> checkPermission() async {

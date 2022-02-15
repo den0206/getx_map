@@ -3,10 +3,10 @@ description: A new Flutter project.
 
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   badges: ^2.0.1
@@ -44,7 +44,6 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
-
   uses-material-design: true
 
   assets:
@@ -55,8 +54,8 @@ flutter:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icon/get_map_icon_0.png"
+  image_path: 'assets/icon/get_map_icon_0.png'
 
 flutter_native_splash:
-  image: "assets/icon/get_map_icon_0.png"
-  color: "ffbe41"
+  image: 'assets/icon/get_map_icon_0.png'
+  color: 'ffbe41'

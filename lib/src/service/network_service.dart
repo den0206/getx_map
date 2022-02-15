@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:getx_map/src/screen/home/home_screen.dart';
 import 'package:getx_map/src/screen/widget/animated_widget.dart';
 import 'package:getx_map/src/screen/widget/custom_dialog.dart';

@@ -1,4 +1,4 @@
-package com.example.getx_map
+package com.yuuki.getx_map
 
 import io.flutter.embedding.android.FlutterActivity
 

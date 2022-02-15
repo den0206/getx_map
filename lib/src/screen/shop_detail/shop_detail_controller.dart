@@ -1,4 +1,3 @@
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:getx_map/src/model/shop.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/service/database/storage_service.dart';
