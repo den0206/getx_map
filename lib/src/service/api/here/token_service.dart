@@ -4,12 +4,12 @@ import 'dart:async';
 
 import 'package:crypto/crypto.dart';
 import 'package:convert/convert.dart';
-import 'package:flutter_config/flutter_config.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class TokenService {
-  final String key = FlutterConfig.get("ACCESS_KEY");
-  final String secretKey = FlutterConfig.get("SECRET_KEY");
+  final String key = dotenv.env["ACCESS_KEY"]!;
+  final String secretKey = dotenv.env["SECRET_KEY"]!;
 
   Future<void> getToken() async {
     Uri requestUrl = Uri.https("account.api.here.com", "oauth2/token");

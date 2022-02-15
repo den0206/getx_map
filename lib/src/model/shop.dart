@@ -178,6 +178,10 @@ enum RestautantGenre {
   italian,
   europian,
   washoku,
+  sousaku,
+  china,
+  ethnic,
+  diningbar,
 }
 
 extension RestautantGenreEXT on RestautantGenre {
@@ -201,6 +205,14 @@ extension RestautantGenreEXT on RestautantGenre {
         return "洋食";
       case RestautantGenre.washoku:
         return "和食";
+      case RestautantGenre.sousaku:
+        return "創作料理";
+      case RestautantGenre.china:
+        return "中華料理";
+      case RestautantGenre.ethnic:
+        return " エスニック";
+      case RestautantGenre.diningbar:
+        return "バル";
     }
   }
 
@@ -224,6 +236,14 @@ extension RestautantGenreEXT on RestautantGenre {
         return "G005";
       case RestautantGenre.washoku:
         return "G004";
+      case RestautantGenre.sousaku:
+        return "G003";
+      case RestautantGenre.china:
+        return "G007";
+      case RestautantGenre.ethnic:
+        return "G009";
+      case RestautantGenre.diningbar:
+        return "G002";
     }
   }
 }

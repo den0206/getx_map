@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:getx_map/src/model/place.dart';
 import 'package:getx_map/src/screen/example_map/exapmple_map_controller.dart';
-import 'package:getx_map/src/service/api/search_api_service.dart';
+import 'package:getx_map/src/service/api/here/search_api_service.dart';
 
 class OriginAndDestinationResponse {
   final Place origin, destination;

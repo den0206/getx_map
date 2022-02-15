@@ -21,6 +21,7 @@ dependencies:
     sdk: flutter
   flutter_cache_manager: ^3.1.2
   flutter_config: ^2.0.0
+  flutter_dotenv: ^5.0.2
   flutter_launcher_icons: any
   flutter_native_splash: ^1.2.1
   flutter_polyline_points: ^1.0.0
@@ -28,7 +29,7 @@ dependencies:
   geolocator: ^7.4.0
   get: ^4.3.7
   get_storage: ^2.0.3
-  google_maps_flutter: ^2.0.8
+  google_maps_flutter: ^2.1.1
   google_mobile_ads: ^0.13.4
   html: ^0.15.0
   internet_connection_checker: ^0.0.1+2
@@ -50,6 +51,7 @@ flutter:
     - assets/images/
     - assets/videos/
     - assets/icon/
+    - .env
 
 flutter_icons:
   android: true

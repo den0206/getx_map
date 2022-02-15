@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:getx_map/src/model/station_line.dart';
 import 'package:getx_map/src/screen/get_station/get_station_screen.dart';
 import 'package:getx_map/src/screen/map/map_screen.dart';
-import 'package:getx_map/src/service/api/station/staion_api.dart';
+import 'package:getx_map/src/service/api/station/ekiapert_api.dart';
 import 'package:getx_map/src/service/database/database_service.dart';
 import 'package:getx_map/src/service/network_service.dart';
 
@@ -17,7 +17,7 @@ class HomeController extends GetxController {
   }
 
   final database = DatabaseService.to;
-  final stationAPI = StaionAPI();
+  final EkipertApi _ekipertApi = EkipertApi();
   final List<Station> cachedLines = [];
 
   @override
@@ -83,7 +83,7 @@ class HomeController extends GetxController {
 
   Future<void> getStationInfo(Station station) async {
     if (!cachedLines.map((station) => station.id).contains(station.id)) {
-      final lines = await stationAPI.getStationLines(station);
+      final lines = await _ekipertApi.getStationLines(station);
       station.lines.addAll(lines);
       cachedLines.add(station);
       database.setStationList(DatabaseKey.lines, cachedLines);

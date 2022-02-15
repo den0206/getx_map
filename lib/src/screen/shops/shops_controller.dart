@@ -2,7 +2,7 @@ import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/screen/shop_detail/shop_datail_screen.dart';
 import 'package:getx_map/src/service/admob_service.dart';
-import 'package:getx_map/src/service/api/shop/shop_api.dart';
+import 'package:getx_map/src/service/api/shop/pepper_api.dart';
 import 'package:getx_map/src/service/database/storage_service.dart';
 import 'package:getx_map/src/service/open_url_servoice.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -40,9 +40,10 @@ class ShopsController extends ShopsScreenAbstract {
 
   final Rx<CellType> cellType = CellType.list.obs;
 
-  final shopAPI = ShopAPI();
+  final PepperApi _pepperApi = PepperApi();
 
   final currentGenreIndex = 0.obs;
+  int currentIndex = 1;
 
   LatLng get latLng {
     return station.latLng;
@@ -56,9 +57,9 @@ class ShopsController extends ShopsScreenAbstract {
   bool isLoading = false;
 
   bool get showInterAd {
-    if (shopAPI.currentIndex == 1) {
+    if (currentIndex == 1) {
       return false;
-    } else if (((shopAPI.currentIndex - 1) / 10) % 2 == 0) {
+    } else if (((currentIndex - 1) / 10) % 2 == 0) {
       return true;
     }
     return false;
@@ -86,11 +87,14 @@ class ShopsController extends ShopsScreenAbstract {
 
     isLoading = true;
     try {
-      final temp = await shopAPI.getShops(latLng, currentGenre);
+      final temp =
+          await _pepperApi.getShops(latLng, currentGenre, currentIndex);
 
-      if (temp.length < shopAPI.perPage) {
+      if (temp.length < _pepperApi.perPage) {
         reachLast = true;
       }
+
+      currentIndex += temp.length;
 
       shops.addAll(temp);
     } catch (e) {
@@ -105,7 +109,7 @@ class ShopsController extends ShopsScreenAbstract {
     if (reachLast) reachLast = false;
 
     /// reset param;
-    shopAPI.currentIndex = 1;
+    currentIndex = 1;
     shops.clear();
 
     await fetchShops();
