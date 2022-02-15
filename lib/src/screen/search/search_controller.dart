@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
+
 import 'package:get/get.dart';
 import 'package:getx_map/src/model/place.dart';
 import 'package:getx_map/src/screen/example_map/exapmple_map_controller.dart';

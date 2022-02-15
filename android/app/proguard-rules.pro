@@ -1,1 +1,1 @@
--keep class com.example.getx_map.BuildConfig { *; }
+-keep class com.yuuki.getx_map.BuildConfig { *; }

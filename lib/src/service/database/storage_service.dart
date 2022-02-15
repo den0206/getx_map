@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
-import 'package:get/state_manager.dart';
+
 import 'package:getx_map/src/model/route_history.dart';
 import 'package:getx_map/src/model/shop.dart';
 import 'package:getx_map/src/screen/widget/custom_dialog.dart';
