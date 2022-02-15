@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:getx_map/src/screen/shop_detail/shop_datail_screen.dart';
 import 'package:getx_map/src/screen/shops/shops_screen.dart';
 import 'package:getx_map/src/screen/widget/custom_dialog.dart';
-import 'package:getx_map/src/service/api/station/staion_api.dart';
+import 'package:getx_map/src/service/api/station/ekiapert_api.dart';
 import 'package:getx_map/src/service/database/storage_service.dart';
 import 'package:getx_map/src/service/open_url_servoice.dart';
 import 'package:getx_map/src/service/scraper_service.dart';
@@ -29,7 +29,7 @@ class MainBarController extends GetxController {
   final Map<Station, List<String>> routes = {};
   final Map<Station, List<String>> requireTimes = {};
 
-  final stationAPI = StaionAPI();
+  final EkipertApi _ekipertApi = EkipertApi();
 
   final RxnInt currentIndex = RxnInt(0);
   final Rx<MenuBarState> currentState = MenuBarState.root.obs;
@@ -156,8 +156,8 @@ class MainBarController extends GetxController {
         final oldStation = currentNearStation;
 
         /// タイプを合わせる
-        final Station newStation = await stationAPI.heartRailsToExcpertStation(
-            heartStation: currentNearStation);
+        final Station newStation =
+            await _ekipertApi.heartRailsToExpert(currentNearStation);
         mapController.editNearStation(newStation, oldStation);
 
         await Future.delayed(Duration(milliseconds: 500));
@@ -188,8 +188,8 @@ class MainBarController extends GetxController {
       (Station station) async {
         await Future.delayed(Duration(seconds: 2));
         print("delay");
-        final url =
-            await stationAPI.getRouteUrl(from: station, to: currentNearStation);
+        final url = await _ekipertApi.getRouteUrl(
+            from: station, to: currentNearStation);
 
         urls.add(url);
       },

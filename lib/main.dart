@@ -17,13 +17,13 @@ import 'src/service/api/here/token_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await MobileAds.instance.initialize();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await Get.put(DatabaseService()).initStorage();
 
-  await dotenv.load(fileName: ".env");
   runApp(MyApp());
 }
 

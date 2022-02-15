@@ -37,7 +37,7 @@ class GetStationController extends GetxSearchController {
   Future selectSuggest(StationBase base) async {
     late Station station;
     if (base is Suggest) {
-      station = await stationAPI.getStationDetail(base.id);
+      station = await ekispertAPI.getStationDetail(base.id);
     } else if (base is Station) {
       station = base;
     }

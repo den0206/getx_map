@@ -7,7 +7,8 @@ import 'package:get/get.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/model/suggestion.dart';
 import 'package:getx_map/src/service/admob_service.dart';
-import 'package:getx_map/src/service/api/station/staion_api.dart';
+import 'package:getx_map/src/service/api/station/ekiapert_api.dart';
+import 'package:getx_map/src/service/api/station/heartrails_api.dart';
 import 'package:getx_map/src/service/database/database_service.dart';
 import 'package:getx_map/src/utils/common_icon.dart';
 
@@ -18,7 +19,8 @@ abstract class GetxSearchController extends GetxController {
   final FocusNode focusNode = FocusNode();
   final TextEditingController tX = TextEditingController();
 
-  final stationAPI = StaionAPI();
+  final ekispertAPI = EkipertApi();
+  final heartRailsAPI = HeartRailsAPI();
 
   final database = DatabaseService.to;
   String _searchText = "";
@@ -43,7 +45,7 @@ abstract class GetxSearchController extends GetxController {
     try {
       if (_searchText.length >= 2)
         _searchTimer = Timer(Duration(seconds: 1), () async {
-          final temp = await stationAPI.getStationSuggestion(_searchText);
+          final temp = await ekispertAPI.getSuggesion(_searchText);
           suggestions.addAll(temp);
         });
     } catch (e) {

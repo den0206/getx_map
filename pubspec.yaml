@@ -20,6 +20,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_cache_manager: ^3.1.2
+  flutter_config: ^2.0.0
   flutter_dotenv: ^5.0.2
   flutter_launcher_icons: any
   flutter_native_splash: ^1.2.1
@@ -50,6 +51,7 @@ flutter:
     - assets/images/
     - assets/videos/
     - assets/icon/
+    - .env
 
 flutter_icons:
   android: true
