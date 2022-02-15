@@ -1,12 +1,12 @@
-import 'package:flutter_config/flutter_config.dart';
 import 'package:getx_map/src/model/place.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:http/http.dart' as http;
 
 class ReverseAPI {
-  final apiKey = FlutterConfig.get('HERE_API_KEY');
+  final apiKey = dotenv.env["HERE_API_KEY"];
 
   Future<Place?> getDetailPlace({required LatLng at}) async {
     final queryParameters = {

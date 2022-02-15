@@ -4,8 +4,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:getx_map/src/model/place.dart';
 import 'package:getx_map/src/screen/search/search_controller.dart';
 import 'package:getx_map/src/screen/search/search_screen.dart';
-import 'package:getx_map/src/service/api/reverse_api_service.dart';
-import 'package:getx_map/src/service/api/route_api_service.dart';
+import 'package:getx_map/src/service/api/here/reverse_api_service.dart';
+import 'package:getx_map/src/service/api/here/route_api_service.dart';
+
 import 'package:getx_map/src/service/map_service.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';

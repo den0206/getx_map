@@ -1,11 +1,11 @@
-import 'package:flutter_config/flutter_config.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:getx_map/src/model/place.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class SearchAPI {
-  final apiKey = FlutterConfig.get('HERE_API_KEY');
+  final apiKey = dotenv.env["HERE_API_KEY"];
   final perPage = 5;
 
   Future<List<Place>> fetchApi({

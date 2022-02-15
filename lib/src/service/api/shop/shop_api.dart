@@ -1,11 +1,12 @@
-import 'package:flutter_config/flutter_config.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:getx_map/src/model/shop.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ShopAPI {
-  final key = FlutterConfig.get("PEPPER_KEY");
+  final key = dotenv.env["PEPPER_KEY"];
+
   final int perPage = 10;
 
   int currentIndex = 1;

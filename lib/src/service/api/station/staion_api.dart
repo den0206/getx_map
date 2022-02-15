@@ -1,4 +1,4 @@
-import 'package:flutter_config/flutter_config.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:getx_map/src/model/station_line.dart';
 import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/model/suggestion.dart';
@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class StaionAPI {
-  final stationKey = FlutterConfig.get("STATION_KEY");
+  final stationKey = dotenv.env["STATION_KEY"];
 
   Future<List<Suggest>> getStationSuggestion(String q) async {
     List<Suggest> temp = [];
