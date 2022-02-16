@@ -156,8 +156,10 @@ class MainBarController extends GetxController {
         final oldStation = currentNearStation;
 
         /// タイプを合わせる
-        final Station newStation =
+        final newStation =
             await _ekipertApi.heartRailsToExpert(currentNearStation);
+
+        if (newStation == null) return;
         mapController.editNearStation(newStation, oldStation);
 
         await Future.delayed(Duration(milliseconds: 500));
@@ -190,8 +192,7 @@ class MainBarController extends GetxController {
         print("delay");
         final url = await _ekipertApi.getRouteUrl(
             from: station, to: currentNearStation);
-
-        urls.add(url);
+        if (url != null) urls.add(url);
       },
     );
 

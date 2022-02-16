@@ -83,18 +83,20 @@ class RouteCell extends GetView<StorageService> {
   Widget build(BuildContext context) {
     return Slidable(
       key: Key(route.id),
-      actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.25,
-      secondaryActions: [
-        IconSlideAction(
-          caption: 'delete',
-          color: Colors.red,
-          icon: Icons.delete,
-          onTap: () {
-            controller.addAndRemoveHistory(route);
-          },
-        ),
-      ],
+      endActionPane: ActionPane(
+        motion: ScrollMotion(),
+        extentRatio: 0.25,
+        children: [
+          SlidableAction(
+            label: "Delete",
+            icon: Icons.delete,
+            backgroundColor: Colors.red,
+            onPressed: (context) {
+              controller.addAndRemoveHistory(route);
+            },
+          ),
+        ],
+      ),
       child: ListTile(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
