@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 class OriginCrousel extends StatefulWidget {
   OriginCrousel({
@@ -52,5 +54,54 @@ class _OriginCrouselState extends State<OriginCrousel> {
         itemBuilder: widget.itemBuilder,
       ),
     ));
+  }
+}
+
+class OriginCarouselCell extends StatelessWidget {
+  const OriginCarouselCell(
+      {Key? key,
+      required this.child,
+      required this.onTap,
+      required this.currentIndex,
+      required this.index,
+      this.backGroundImage})
+      : super(key: key);
+
+  final Widget child;
+  final RxnInt? currentIndex;
+  final int? index;
+  final VoidCallback onTap;
+  final DecorationImage? backGroundImage;
+
+  double get scale {
+    if (currentIndex != null && index != null) {
+      return currentIndex!.value == index ? 0.7 : 0.5;
+    }
+
+    return 0.7;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 5.h, bottom: 3.h, left: 3.w),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Obx(
+          () => Transform.scale(
+            scale: scale,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[400],
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(width: 1),
+                image: backGroundImage,
+              ),
+              child: child,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -187,28 +187,29 @@ class ShopCell extends StatelessWidget {
           ),
           child: Slidable(
             key: Key(shop.id),
-            actionPane: SlidableDrawerActionPane(),
-            secondaryActions: [
-              Obx(
-                () => IconSlideAction(
-                  caption: shop.isFavorite ? "登録済みです" : "お気に入り",
-                  color: shop.isFavorite ? Colors.red : Colors.grey,
-                  icon: Icons.favorite,
-                  closeOnTap: false,
-                  onTap: () {
-                    controller.toggeleFavorite(shop);
+            endActionPane: ActionPane(
+              motion: ScrollMotion(),
+              extentRatio: 0.25,
+              children: [
+                Obx(() => SlidableAction(
+                      label: shop.isFavorite ? "登録済みです" : "お気に入り",
+                      icon: Icons.favorite,
+                      backgroundColor:
+                          shop.isFavorite ? Colors.red : Colors.grey,
+                      onPressed: (context) {
+                        controller.toggeleFavorite(shop);
+                      },
+                    )),
+                SlidableAction(
+                  label: "URL",
+                  icon: Icons.launch,
+                  backgroundColor: Colors.green,
+                  onPressed: (context) {
+                    controller.openUrl(shop);
                   },
                 ),
-              ),
-              IconSlideAction(
-                caption: "URL",
-                color: Colors.green,
-                icon: Icons.launch,
-                onTap: () {
-                  controller.openUrl(shop);
-                },
-              ),
-            ],
+              ],
+            ),
             child: Container(
               height: MediaQuery.of(context).size.height / 6.3,
               padding: EdgeInsets.all(8),

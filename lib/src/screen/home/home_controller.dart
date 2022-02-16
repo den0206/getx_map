@@ -10,7 +10,6 @@ import 'package:getx_map/src/service/network_service.dart';
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
   RxList<Station?> stations = RxList<Station?>();
-
   RxList<Station> get completeStations {
     final a = stations.whereType<Station>().toList();
     return a.obs;
@@ -69,9 +68,7 @@ class HomeController extends GetxController {
 
     final res = await NetworkService.to.checkNetwork();
 
-    if (!res) {
-      return;
-    }
+    if (!res) return;
 
     final value = completeStations.map((station) => station).toList();
 
@@ -84,6 +81,7 @@ class HomeController extends GetxController {
   Future<void> getStationInfo(Station station) async {
     if (!cachedLines.map((station) => station.id).contains(station.id)) {
       final lines = await _ekipertApi.getStationLines(station);
+      if (lines == null) return;
       station.lines.addAll(lines);
       cachedLines.add(station);
       database.setStationList(DatabaseKey.lines, cachedLines);

@@ -46,7 +46,7 @@ abstract class GetxSearchController extends GetxController {
       if (_searchText.length >= 2)
         _searchTimer = Timer(Duration(seconds: 1), () async {
           final temp = await ekispertAPI.getSuggesion(_searchText);
-          suggestions.addAll(temp);
+          if (temp != null) suggestions.addAll(temp);
         });
     } catch (e) {
       print(e.toString());
@@ -158,20 +158,21 @@ class AbstractSearchScreen extends StatelessWidget {
 
                     return Slidable(
                       key: Key(base.id),
-                      actionPane: SlidableDrawerActionPane(),
-                      actionExtentRatio: 0.25,
-                      secondaryActions: controller.noSuggest
-                          ? [
-                              IconSlideAction(
-                                caption: 'delete',
-                                color: Colors.red,
-                                icon: Icons.delete,
-                                onTap: () {
-                                  controller.deleteDatabase(base);
-                                },
-                              ),
-                            ]
-                          : null,
+                      endActionPane: ActionPane(
+                        motion: ScrollMotion(),
+                        extentRatio: 0.25,
+                        dragDismissible: controller.noSuggest,
+                        children: [
+                          SlidableAction(
+                            label: 'Delete',
+                            icon: Icons.delete,
+                            backgroundColor: Colors.red,
+                            onPressed: (context) {
+                              controller.deleteDatabase(base);
+                            },
+                          ),
+                        ],
+                      ),
                       child: ListTile(
                         leading: Icon(CommonIcon.stationIcon),
                         title: Text(base.name),

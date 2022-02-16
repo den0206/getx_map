@@ -126,10 +126,10 @@ SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_config: 2226c1df19c78fe34a05eb7f1363445f18e76fc1
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  geolocator_apple: b741765c55dc21950e3e106e8b3584e55cf81ce5
+  geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
   Google-Mobile-Ads-SDK: be2192b51b74d74a6ed70590c2e8275412f1b71e
   google_maps_flutter: abdb8dee6c52d4be36ad131ee6ebfacd14417c5a
-  google_mobile_ads: baafda8d037dcea9f51cfa503ab537fc1ed0aaa7
+  google_mobile_ads: a2f8b901601401bf7e691b4224d5992e9a37599a
   GoogleAppMeasurement: ae033c3aad67e68294369373056b4d74cc8ae0d6
   GoogleMaps: 008e2c80e38605b56b560e8deb73d4194ff30bef
   GoogleUserMessagingPlatform: ab890ce5f6620f293a21b6bdd82e416a2c73aeca

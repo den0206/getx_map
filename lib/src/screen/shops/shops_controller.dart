@@ -86,14 +86,16 @@ class ShopsController extends ShopsScreenAbstract {
     }
 
     isLoading = true;
+
     try {
+      if (currentIndex == 1) await Future.delayed(Duration(seconds: 1));
       final temp =
           await _pepperApi.getShops(latLng, currentGenre, currentIndex);
+      if (temp == null) return;
 
       if (temp.length < _pepperApi.perPage) {
         reachLast = true;
       }
-
       currentIndex += temp.length;
 
       shops.addAll(temp);

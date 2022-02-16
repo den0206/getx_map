@@ -40,46 +40,44 @@ class StationsState extends GetView<MainBarController> {
           itemBuilder: (context, index) {
             final station = controller.nearStations[index];
 
-            return Padding(
-              padding: EdgeInsets.only(top: 5.h, bottom: 1.h, left: 3.w),
-              child: InkResponse(
-                onTap: () {
-                  controller.selectStation(station);
-                },
-                child: Obx(() => Transform.scale(
-                      scale: controller.currentIndex.value == index ? 1 : 0.8,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[400],
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(width: 1),
+            return OriginCarouselCell(
+              currentIndex: controller.currentIndex,
+              index: index,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  RichText(
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.sp,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: "${station.name} 駅",
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(
+                        WidgetSpan(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: Icon(
                               CommonIcon.stationIcon,
                               color: Colors.green,
-                              size: 35.sp,
+                              size: 30,
                             ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: Text(
-                                "${station.name} 駅",
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ),
-                            if (station.distanceFromCenter != null)
-                              Text("約 ${station.distanceFromCenter!} ")
-                          ],
+                          ),
                         ),
-                      ),
-                    )),
+                      ],
+                    ),
+                  ),
+                  if (station.distanceFromCenter != null)
+                    Text("約 ${station.distanceFromCenter!} ")
+                ],
               ),
+              onTap: () {
+                controller.selectStation(station);
+              },
             );
           },
         ),

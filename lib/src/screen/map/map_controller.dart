@@ -5,6 +5,7 @@ import 'package:getx_map/src/model/station.dart';
 import 'package:getx_map/src/model/suggestion.dart';
 import 'package:getx_map/src/screen/get_station/search_station_abstract/search_abstract.dart';
 import 'package:getx_map/src/screen/map/main_bar/main_bar_controller.dart';
+import 'package:getx_map/src/screen/widget/custom_dialog.dart';
 import 'package:getx_map/src/service/admob_service.dart';
 import 'package:getx_map/src/service/database/storage_service.dart';
 import 'package:getx_map/src/service/generate_probability.dart';
@@ -60,7 +61,7 @@ class MapController extends GetxSearchController {
       await getNearStations();
       addShopMarkers(oninit: true);
     } catch (e) {
-      print(e);
+      showError(e.toString());
     } finally {
       mapInitialized = true;
       update();
@@ -122,6 +123,7 @@ class MapController extends GetxSearchController {
 
   Future<void> getNearStations() async {
     final temp = await heartRailsAPI.getNearStations(centerLatLng);
+    if (temp == null) return;
     final names = temp.map((n) => n.name).toSet();
     temp.retainWhere((x) => names.remove(x.name));
 
@@ -316,7 +318,9 @@ extension SearcPanelController on MapController {
   Future<void> successSearch(StationBase base) async {
     late Station station;
     if (base is Suggest) {
-      station = await ekispertAPI.getStationDetail(base.id);
+      final temp = await ekispertAPI.getStationDetail(base.id);
+      if (temp == null) return;
+      station = temp;
     } else if (base is Station) {
       station = base;
     }

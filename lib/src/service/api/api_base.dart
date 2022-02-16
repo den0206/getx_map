@@ -13,7 +13,9 @@ abstract class APIBase {
     if (query != null && endPoint.apiKey != null) {
       query["key"] = endPoint.apiKey;
     }
-    return Uri.https(endPoint.host, path, query);
+    final r = Uri.https(endPoint.host, path, query);
+    print(r);
+    return r;
   }
 
   dynamic _filterResponse(http.Response response) {

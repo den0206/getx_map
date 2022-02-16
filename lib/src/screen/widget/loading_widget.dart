@@ -24,7 +24,7 @@ class OverlayLoadingWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Color.fromRGBO(0, 0, 0, 0.6),
               ),
-              child: LoadingCellWidget(),
+              child: PlainLoadingWidget(),
             )
         ],
       ),
